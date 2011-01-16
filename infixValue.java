@@ -1,8 +1,8 @@
 import java.util.*;
 
 /* program to print infix to postfix
- * TODO:	infix can contain ( or )
- * 	evaluate an infix expression using 2 stacks
+ * TODO:1. 	infix can contain ( or )	// done
+ * 	2.	evaluate an infix expression using 2 stacks
  */
 public class infixValue {
 
@@ -17,7 +17,8 @@ public class infixValue {
 
     public static void main(String[] args) {
         //System.out.println("Hello, World");
-        String s = "3+5*6-7*8+5";         // find its value
+        //String s = "3+5*6-7*8+5";         // find its value	part1
+        String s = "3+5*6-7*(8+5)";         // find its value	part2
         Stack soperand = new Stack ();
         Stack soperator = new Stack ();
         String postfix="";
@@ -32,8 +33,14 @@ public class infixValue {
                 postfix+=(c);
             }
             else {  // its an operator
-                if (soperator.isEmpty())
+                if (soperator.isEmpty() || c=='(')
                     soperator.push (c);
+
+		else if (c==')') {
+			while ((soperator.peek()) != (Character)'(')
+				postfix+=(soperator.pop());
+			soperator.pop();
+		}
 
 		else if ((Integer)precedence.get(soperator.peek()) < (Integer)precedence.get(c))
                     soperator.push (c);
@@ -59,4 +66,3 @@ public class infixValue {
 	System.out.println (postfix);
     }
 }
-

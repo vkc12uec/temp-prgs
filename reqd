@@ -1,0 +1,193 @@
+
+P=603, N=-1119
+outer key = cookies
+ sumtuples birth 
+outer key = cheese-snacks
+ current sumtuples has = 
+ cookies -----> 316
+ temp = 453, key = cheese-snacks , key1 = cookies 
+outer key = riding-scooter
+ current sumtuples has = 
+ cookies -----> 316
+ cheese-snacks -----> 137
+ cookies##cheese-snacks -----> 453
+ temp = 274, key = riding-scooter , key1 = cookies 
+ temp = 95, key = riding-scooter , key1 = cheese-snacks 
+ temp = 411, key = riding-scooter , key1 = cookies##cheese-snacks 
+outer key = dropballers-basketball
+ current sumtuples has = 
+ cookies -----> 316
+ cookies##riding-scooter -----> 274
+ cheese-snacks -----> 137
+ riding-scooter -----> -42
+ cookies##cheese-snacks##riding-scooter -----> 411
+ cookies##cheese-snacks -----> 453
+ cheese-snacks##riding-scooter -----> 95
+ temp = -295, key = dropballers-basketball , key1 = cookies 
+ temp = -337, key = dropballers-basketball , key1 = cookies##riding-scooter 
+ temp = -474, key = dropballers-basketball , key1 = cheese-snacks 
+ temp = -653, key = dropballers-basketball , key1 = riding-scooter 
+ temp = -200, key = dropballers-basketball , key1 = cookies##cheese-snacks##riding-scooter 
+ temp = -158, key = dropballers-basketball , key1 = cookies##cheese-snacks 
+ temp = -516, key = dropballers-basketball , key1 = cheese-snacks##riding-scooter 
+outer key = mexican-coke
+ current sumtuples has = 
+ cookies -----> 316
+ dropballers-basketball -----> -611
+ riding-scooter -----> -42
+ cheese-snacks##riding-scooter -----> 95
+ cookies##cheese-snacks##dropballers-basketball -----> -158
+ cookies##riding-scooter##dropballers-basketball -----> -337
+ cheese-snacks -----> 137
+ cookies##riding-scooter -----> 274
+ cookies##dropballers-basketball -----> -295
+ riding-scooter##dropballers-basketball -----> -653
+ cheese-snacks##dropballers-basketball -----> -474
+ cookies##cheese-snacks -----> 453
+ cookies##cheese-snacks##riding-scooter -----> 411
+ cheese-snacks##riding-scooter##dropballers-basketball -----> -516
+ cookies##cheese-snacks##riding-scooter##dropballers-basketball -----> -200
+ temp = 466, key = mexican-coke , key1 = cookies 
+ temp = -461, key = mexican-coke , key1 = dropballers-basketball 
+ temp = 108, key = mexican-coke , key1 = riding-scooter 
+ temp = 245, key = mexican-coke , key1 = cheese-snacks##riding-scooter 
+ temp = -8, key = mexican-coke , key1 = cookies##cheese-snacks##dropballers-basketball 
+ temp = -187, key = mexican-coke , key1 = cookies##riding-scooter##dropballers-basketball 
+ temp = 287, key = mexican-coke , key1 = cheese-snacks 
+ temp = 424, key = mexican-coke , key1 = cookies##riding-scooter 
+ temp = -145, key = mexican-coke , key1 = cookies##dropballers-basketball 
+ temp = -503, key = mexican-coke , key1 = riding-scooter##dropballers-basketball 
+ temp = -324, key = mexican-coke , key1 = cheese-snacks##dropballers-basketball 
+ temp = 603, key = mexican-coke , key1 = cookies##cheese-snacks 
+ temp = 561, key = mexican-coke , key1 = cookies##cheese-snacks##riding-scooter 
+ temp = -366, key = mexican-coke , key1 = cheese-snacks##riding-scooter##dropballers-basketball 
+ temp = -50, key = mexican-coke , key1 = cookies##cheese-snacks##riding-scooter##dropballers-basketball 
+outer key = coding-six-hours
+ current sumtuples has = 
+ mexican-coke -----> 150
+ riding-scooter##mexican-coke -----> 108
+ cheese-snacks##riding-scooter -----> 95
+ cookies##cheese-snacks##dropballers-basketball -----> -158
+ cookies##riding-scooter##dropballers-basketball -----> -337
+ cheese-snacks -----> 137
+ cookies##riding-scooter -----> 274
+ cheese-snacks##riding-scooter##mexican-coke -----> 245
+ riding-scooter##dropballers-basketball -----> -653
+ cheese-snacks##riding-scooter##dropballers-basketball##mexican-coke -----> -366
+ cheese-snacks##dropballers-basketball -----> -474
+ cookies##cheese-snacks##riding-scooter -----> 411
+ cookies##dropballers-basketball##mexican-coke -----> -145
+ cookies##cheese-snacks##dropballers-basketball##mexican-coke -----> -8
+ dropballers-basketball##mexican-coke -----> -461
+ cookies -----> 316
+ cookies##cheese-snacks##mexican-coke -----> 603
+ riding-scooter -----> -42
+ dropballers-basketball -----> -611
+ cookies##mexican-coke -----> 466
+ cheese-snacks##dropballers-basketball##mexican-coke -----> -324
+ riding-scooter##dropballers-basketball##mexican-coke -----> -503
+ cookies##cheese-snacks##riding-scooter##dropballers-basketball##mexican-coke -----> -50
+ cookies##riding-scooter##dropballers-basketball##mexican-coke -----> -187
+ cookies##dropballers-basketball -----> -295
+ cookies##cheese-snacks##riding-scooter##mexican-coke -----> 561
+ cookies##cheese-snacks -----> 453
+ cookies##riding-scooter##mexican-coke -----> 424
+ cheese-snacks##riding-scooter##dropballers-basketball -----> -516
+ cheese-snacks##mexican-coke -----> 287
+ cookies##cheese-snacks##riding-scooter##dropballers-basketball -----> -200
+ temp = -316, key = coding-six-hours , key1 = mexican-coke 
+ temp = -358, key = coding-six-hours , key1 = riding-scooter##mexican-coke 
+ temp = -371, key = coding-six-hours , key1 = cheese-snacks##riding-scooter 
+ temp = -624, key = coding-six-hours , key1 = cookies##cheese-snacks##dropballers-basketball 
+ temp = -803, key = coding-six-hours , key1 = cookies##riding-scooter##dropballers-basketball 
+ temp = -329, key = coding-six-hours , key1 = cheese-snacks 
+ temp = -192, key = coding-six-hours , key1 = cookies##riding-scooter 
+ temp = -221, key = coding-six-hours , key1 = cheese-snacks##riding-scooter##mexican-coke 
+ temp = -1119, key = coding-six-hours , key1 = riding-scooter##dropballers-basketball 
+ temp = -832, key = coding-six-hours , key1 = cheese-snacks##riding-scooter##dropballers-basketball##mexican-coke 
+ temp = -940, key = coding-six-hours , key1 = cheese-snacks##dropballers-basketball 
+ temp = -55, key = coding-six-hours , key1 = cookies##cheese-snacks##riding-scooter 
+ temp = -611, key = coding-six-hours , key1 = cookies##dropballers-basketball##mexican-coke 
+ temp = -474, key = coding-six-hours , key1 = cookies##cheese-snacks##dropballers-basketball##mexican-coke 
+ temp = -927, key = coding-six-hours , key1 = dropballers-basketball##mexican-coke 
+ temp = -150, key = coding-six-hours , key1 = cookies 
+ temp = 137, key = coding-six-hours , key1 = cookies##cheese-snacks##mexican-coke 
+ temp = -508, key = coding-six-hours , key1 = riding-scooter 
+ temp = -1077, key = coding-six-hours , key1 = dropballers-basketball 
+ temp = 0, key = coding-six-hours , key1 = cookies##mexican-coke 
+required key = cookies##mexican-coke##coding-six-hours
+ temp = -790, key = coding-six-hours , key1 = cheese-snacks##dropballers-basketball##mexican-coke 
+ temp = -969, key = coding-six-hours , key1 = riding-scooter##dropballers-basketball##mexican-coke 
+ temp = -516, key = coding-six-hours , key1 = cookies##cheese-snacks##riding-scooter##dropballers-basketball##mexican-coke 
+ temp = -653, key = coding-six-hours , key1 = cookies##riding-scooter##dropballers-basketball##mexican-coke 
+ temp = -761, key = coding-six-hours , key1 = cookies##dropballers-basketball 
+ temp = 95, key = coding-six-hours , key1 = cookies##cheese-snacks##riding-scooter##mexican-coke 
+ temp = -13, key = coding-six-hours , key1 = cookies##cheese-snacks 
+ temp = -42, key = coding-six-hours , key1 = cookies##riding-scooter##mexican-coke 
+ temp = -982, key = coding-six-hours , key1 = cheese-snacks##riding-scooter##dropballers-basketball 
+ temp = -179, key = coding-six-hours , key1 = cheese-snacks##mexican-coke 
+ temp = -666, key = coding-six-hours , key1 = cookies##cheese-snacks##riding-scooter##dropballers-basketball 
+ --------------------- 
+ dropballers-basketball##mexican-coke##coding-six-hours -> -927
+ cheese-snacks##riding-scooter##mexican-coke##coding-six-hours -> -221
+ mexican-coke -> 150
+ riding-scooter##mexican-coke -> 108
+ cookies##mexican-coke##coding-six-hours -> 0
+ cookies##riding-scooter##dropballers-basketball -> -337
+ cookies##cheese-snacks##riding-scooter##coding-six-hours -> -55
+ cookies##cheese-snacks##riding-scooter##dropballers-basketball##coding-six-hours -> -666
+ cheese-snacks -> 137
+ cookies##riding-scooter##coding-six-hours -> -192
+ cheese-snacks##riding-scooter##dropballers-basketball##mexican-coke -> -366
+ cheese-snacks##dropballers-basketball -> -474
+ cookies##cheese-snacks##riding-scooter -> 411
+ cheese-snacks##riding-scooter##coding-six-hours -> -371
+ cookies##cheese-snacks##dropballers-basketball##mexican-coke -> -8
+ dropballers-basketball##mexican-coke -> -461
+ riding-scooter##dropballers-basketball##coding-six-hours -> -1119
+ cookies##cheese-snacks##mexican-coke -> 603
+ cheese-snacks##dropballers-basketball##mexican-coke##coding-six-hours -> -790
+ mexican-coke##coding-six-hours -> -316
+ riding-scooter##mexican-coke##coding-six-hours -> -358
+ dropballers-basketball -> -611
+ dropballers-basketball##coding-six-hours -> -1077
+ riding-scooter##dropballers-basketball##mexican-coke##coding-six-hours -> -969
+ cookies##riding-scooter##dropballers-basketball##mexican-coke -> -187
+ cookies##dropballers-basketball -> -295
+ cookies##cheese-snacks##coding-six-hours -> -13
+ riding-scooter##coding-six-hours -> -508
+ cookies##cheese-snacks -> 453
+ cookies##riding-scooter##mexican-coke -> 424
+ cheese-snacks##riding-scooter##dropballers-basketball -> -516
+ coding-six-hours -> -466
+ cheese-snacks##mexican-coke -> 287
+ cheese-snacks##riding-scooter##dropballers-basketball##mexican-coke##coding-six-hours -> -832
+ cookies##cheese-snacks##riding-scooter##dropballers-basketball##mexican-coke##coding-six-hours -> -516
+ cheese-snacks##riding-scooter -> 95
+ cookies##riding-scooter##dropballers-basketball##coding-six-hours -> -803
+ cookies##cheese-snacks##dropballers-basketball -> -158
+ cookies##riding-scooter##mexican-coke##coding-six-hours -> -42
+ cookies##coding-six-hours -> -150
+ cheese-snacks##riding-scooter##dropballers-basketball##coding-six-hours -> -982
+ cookies##riding-scooter -> 274
+ cookies##cheese-snacks##riding-scooter##mexican-coke##coding-six-hours -> 95
+ riding-scooter##dropballers-basketball -> -653
+ cheese-snacks##riding-scooter##mexican-coke -> 245
+ cheese-snacks##mexican-coke##coding-six-hours -> -179
+ cookies##dropballers-basketball##mexican-coke -> -145
+ cookies##dropballers-basketball##mexican-coke##coding-six-hours -> -611
+ cookies##cheese-snacks##dropballers-basketball##coding-six-hours -> -624
+ cookies##riding-scooter##dropballers-basketball##mexican-coke##coding-six-hours -> -653
+ cookies -> 316
+ cookies##cheese-snacks##dropballers-basketball##mexican-coke##coding-six-hours -> -474
+ riding-scooter -> -42
+ cookies##mexican-coke -> 466
+ cheese-snacks##dropballers-basketball##coding-six-hours -> -940
+ cheese-snacks##coding-six-hours -> -329
+ riding-scooter##dropballers-basketball##mexican-coke -> -503
+ cheese-snacks##dropballers-basketball##mexican-coke -> -324
+ cookies##cheese-snacks##mexican-coke##coding-six-hours -> 137
+ cookies##cheese-snacks##riding-scooter##dropballers-basketball##mexican-coke -> -50
+ cookies##cheese-snacks##riding-scooter##mexican-coke -> 561
+ cookies##dropballers-basketball##coding-six-hours -> -761
+ cookies##cheese-snacks##riding-scooter##dropballers-basketball -> -200

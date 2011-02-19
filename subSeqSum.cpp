@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdio.h>
 using namespace std;
 
 
@@ -46,10 +47,26 @@ int maxSum (int *a, int i, int j) {
 }
 
 int main () {
-	int a[]= {4, -3, 5, -2 , -1, 2, 6,-4};
+	int a[]= {-4, -3, -2, 4, 5, 6, -1, 2 };
+	//int a[]= {4, -3, 5, -2 , -1, 2, 6,-4};
 
 	int max = maxSum (a, 0, 7);
 	printf ("\n max sume = [%d]", max);
 
 return 0;
 }
+
+/*
+
+my code : O(n)
+
+int maxsum ( int a[], int len) {
+	int sufsum =0 , max = 0;
+
+	for (i=0 to len-1)
+	{ 
+		sufsum = Max (0, a[i] + sufsum);
+		max = Max (max, sufsum);
+	}
+}
+*/

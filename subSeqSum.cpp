@@ -1,6 +1,9 @@
 #include <iostream>
 using namespace std;
 
+
+// using diviede and conquer
+
 int maxSum (int *a, int i, int j) {
 
 	int max_sr, max_sl, sr, sl, sum_overlap, sum, mid, s1,s2;

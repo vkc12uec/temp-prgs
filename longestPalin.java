@@ -32,6 +32,7 @@ int maxo =0, maxe=0;
 			}
 	}	// for i
 
+// even case
 		for (int i =0; i< len ;i++) {
 		if (i == len-1) break;
 

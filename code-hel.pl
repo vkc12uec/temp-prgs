@@ -180,13 +180,13 @@ int height(struct node* node)
 # in a binary tree, find the minimum element at a given depth.
 
 Queue Q<int>;
-int g_min=INT_MIN;
+int g_min=INT_MAX;
 
 void getminatd (node *n, int d) {
 	if (n) {
 		if (!d) {
 			#//Q.push(n->data);
-			g_min = (n->data < g_min) ? d : g_min;
+			g_min = (n->data < g_min) n->data  : g_min;
 			return; # quick return, dont call next recurs.
 		}
 		getminatd (n->left, d-1);

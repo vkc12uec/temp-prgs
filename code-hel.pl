@@ -20,9 +20,65 @@ struct node {
 }
 
 ###########################################
+# LCA of bt
+#
+node *LowestCommonAncestor( node *root , node *p , node *q)
+{
+	node *l , *r , *temp;
+	if(root==NULL)
+	{
+		return NULL;
+	}
+
+	if(root->left==p || root->left==q || root->right ==p || root->right ==q)
+	{
+		return root;
+	}
+	else
+	{
+		l=LowestCommonAncestor(root->left , p , q);
+		r=LowestCommonAncestor(root->right , p, q);
+
+		if(l!=NULL && r!=NULL)
+		{
+			return root;
+		}
+		else
+		{
+			temp = (l!=NULL)?l:r;
+			return temp;
+		}
+	}
+}
+
+###########################################
+# make a perfect maze:
+# http://www.mazeworks.com/mazegen/mazetut/index.htm
+
+create a CellStack (LIFO) to hold a list of cell locations
+set TotalCells = number of cells in grid
+choose a cell at random and call it CurrentCell
+set VisitedCells = 1
+
+while VisitedCells < TotalCells
+find all neighbors of CurrentCell with all walls intact
+if one or more found
+choose one at random
+knock down the wall between it and CurrentCell
+push CurrentCell location on the CellStack
+make the new cell CurrentCell
+add 1 to VisitedCells
+else
+pop the most recent cell entry off the CellStack
+make it CurrentCell
+endIf
+endWhile
+
+
+###########################################
 Given a modified BST where each node carries extra information of the total number of nodes below it. Find the Kth smallest number in O(logn) time.
 
-thought: if left child count is < k, then reqd. no. may be root or on right 
+thought: if left child count is < k, then reqd. no. may be root or on right
 	else
 	on left
 
@@ -1440,10 +1496,25 @@ Initial method call should be
 Logger* Logger::Instance()
 12	{
 13	   if (!m_pInstance)   // Only allow one instance of class to be generated.
+		# u can also put here lock.acquire()
 14	      m_pInstance = new Logger;
+		# u can also put here lock.release()
 15
 16	   return m_pInstance;
 17	}
+
+# to make a thread safe version of above ....
+
+Logger* Logger::Instance()
+{
+if (!m_pInstance)   // Only allow one instance of class to be generated.
+	lock.acquire();
+	if (! m_pInstance)
+       		m_pInstance = new Logger;
+	lock.release();
+
+return m_pInstance;
+}
 
 
 ###########################################

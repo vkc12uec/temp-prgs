@@ -244,6 +244,7 @@ Now size is 2, so median = (max(ar1[0], ar2[0]) + min(ar1[1], ar2[1]))/2
                        = (15 + 17)/2
                        = 16
 
+# when u recurse, u search kth then k/2 th , then k/4 ...
 
 ###########################################
 # longest repeated substring
@@ -256,6 +257,15 @@ For L = 1 to n do
                      Determine the longest k such A[L]A[L+1]…A[L+k-1] = A[R]A[R+1]…A[R+k-1]
                      If k>maxLength then maxL=L, maxR=R and maxLength=Length
 
+
+Algorithm 2: longest repeated substring - a sorting solution.
+
+http://cs.fit.edu/~ryan/cse1002/sedgewick/42sort.pdf	slide:38
+
+-Given a string , save all of its suffixes 
+- sort the suffixes
+- the repeated substring will occure adjacent
+- just calculate the max. prefix length
 
 
 ###########################################
@@ -397,7 +407,7 @@ public int calc(char[] input)
 }
 
 ###########################################
-Find the kth largest element in a bst.
+Find the kth smallest element in a bst.
 
 # 1st method:
 You can use iterative inorder traversal:
@@ -417,6 +427,8 @@ void findK(Node* p, int& k) {
   findK(p->right, k);
 }
 
+# if u want to find the kth largest, u move first right and do 'visit' stuff and then left
+#
 
 ###########################################
 # GCD

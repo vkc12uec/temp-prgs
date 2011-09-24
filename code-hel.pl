@@ -1,4 +1,8 @@
 ###########################################
+vids:
+#http://openclassroom.stanford.edu/MainFolder/CoursePage.php?course=IntroToAlgorithms
+###########################################
+
 rough:
 ======
 
@@ -18,6 +22,32 @@ struct node {
 	node *ancestor;
 	bool mylock;
 }
+
+###########################################
+# read a BST preorder string from a file and convert it to tree:
+#
+Remember my post: Determine if a Binary Tree is a Binary Search Tree (BST)?
+
+We use the same idea here. We pass the valid range of the values from the parent node to its child nodes. When we are about to insert a node, we will check if the insert value is in the valid range. If it is, this is the right space to insert. If it is not, we will try the next empty space. Reconstructing the whole BST from a file will take only O(n) time.
+
+void readBSTHelper(int min, int max, int &insertVal,BinaryTree *&p, ifstream &fin) {
+  if (insertVal > min && insertVal < max) {
+    int val = insertVal;
+    p = new BinaryTree(val);
+    if (fin >> insertVal) {
+      readBSTHelper(min, val, insertVal, p->left, fin);
+      readBSTHelper(val, max, insertVal, p->right, fin);
+    }
+  }
+}
+
+void readBST(BinaryTree *&root, ifstream &fin) {
+  int val;
+  fin >> val;
+  readBSTHelper(INT_MIN, INT_MAX, val, root, fin);
+}
+
+
 
 ###########################################
 # LCA of bt
@@ -262,7 +292,7 @@ Algorithm 2: longest repeated substring - a sorting solution.
 
 http://cs.fit.edu/~ryan/cse1002/sedgewick/42sort.pdf	slide:38
 
--Given a string , save all of its suffixes 
+-Given a string , save all of its suffixes
 - sort the suffixes
 - the repeated substring will occure adjacent
 - just calculate the max. prefix length
@@ -504,7 +534,7 @@ void print_layer_top_right(int a[][4], int x1, int y1, int x2, int y2)
       }
 
       // see if  we have more cells left
-      if(x2-x1 > 0)
+      if(x2-x1 > 0)	// this checks the if ther is any column spacing
       {
           // 'recursively' call the function to print the bottom-left layer
           print_layer_bottom_left(a, x1, y1 + 1, x2-1, y2);
@@ -530,7 +560,7 @@ void print_layer_bottom_left(int a[][4], int x1, int y1, int x2, int y2)
                printf("%d,", a[j][x1]);
        }
 
-       if(x2-x1 > 0)
+       if(x2-x1 > 0)	// this also check if there is column spacing
        {
                // 'recursively' call the function to print the top-right layer
                print_layer_top_right(a, x1+1, y1, x2, y2-1);
@@ -776,6 +806,7 @@ else {
         }
     }
 }
+'
 
 
 ###########################################
@@ -870,6 +901,8 @@ return max.pop();
 }
 }
 
+###########################################
+
 
 # construct binary tree from inorder and preorder
 #
@@ -935,6 +968,44 @@ void inOrderIterative(TREEPTR tree){
 }
 
 
+# appealing:
+#
+   bool done;
+   binary_tree_node<Item> *root_ptr, *cursor;
+   stack<binary_tree_node<Item> *> s;
+
+   cursor = root_ptr;             //set cursor to root of binary tree
+   done = false;
+
+   while (!done)
+   {
+      if(cursor != NULL)
+      {
+         s.push(cursor);          //place pointer to node on the stack
+                                  //before traversing the node's left subtree'
+         cursor = cursor->left(); //traverse the left subtree
+      }
+      else                        //backtrack from the empty subtree and
+                                  //visit the node at the top of the stack;
+                                  //however, if the stack is empty, you are
+                                  //done
+      {
+         if (!s.empty())
+         {
+             cursor = s.top();
+	     s.pop();
+             cout << cursor->data();
+             cursor = cursor->right();
+         }
+         else
+             done = true;
+      }
+   }
+
+'
+# '
+###########################################
+
 void preOrderIterative(TREEPTR tree){
 
 	STACKPTR stackTop = NULL;
@@ -954,8 +1025,29 @@ void preOrderIterative(TREEPTR tree){
 	}while(!isEmptyStack(stackTop) || current!=NULL);
 }
 
+# apeealing version
 
->>>>>>>>>
+void preIter (node *n) {
+	Stack s<node*>;
+	node *curr = n;
+	if (!curr) return;
+
+	while (1) {
+		while (curr) {
+			cout << curr->Data;
+			s.push (curr->rC);
+			curr = curr->lc;
+		}
+		if (!s.isempty () )
+			curr = S.pop();
+		else
+			break;
+	}
+}
+
+###########################################
+# very simple ... upside down of pre-orders
+#
 void PostOrder(struct node *T)
 {
 	struct node *temp=T;
@@ -970,13 +1062,13 @@ void PostOrder(struct node *T)
 		if(temp->left)
 			Push(temp->left,s1);
 		if(temp->right)
-			Push(temp->right,s2);
+			Push(temp->right,s1);
 	}
 	while(!isEmpty(s2))
 		printf("%d",(Pop(s2))->data);
 }
 
->>>>>>>>
+###########################################
 
 void postOrderIterative(TREEPTR tree){
 
@@ -1009,6 +1101,43 @@ void postOrderIterative(TREEPTR tree){
 	}while(!isEmptyStack(stackTop) || current!=NULL);
 
 }
+###########################################
+
+# Postorder without visited flag:
+
+public static String postOrderNoflag(Node root) {
+    String s = "";
+    Stack<Node> stack = new Stack<Node>();
+    Node last = null;
+    Node cur = root;
+    stack.push(root);
+    while (!stack.isEmpty()) {
+        while (cur != null) {
+            if (cur.left_ != null) {
+                cur = cur.left_;
+                stack.push(cur);
+            }else{
+                break; //break loop
+            }
+        }
+        cur = stack.peek();
+        if (cur.right_ != null && last != cur.right_) {
+            cur = cur.right_;
+            stack.push(cur);
+        } else {
+            stack.pop();
+            s += cur.value_+", ";
+            last = cur;
+            cur = null;
+        }
+
+    }
+    return s;
+}
+
+Variable "last" record the latest popped up node. If a node has a right node, the latest popped node must be current node's right node. Therefore use last could check whether current's right node visited or not. Thanks konna.
+
+
 ###########################################
 topological sort:
 

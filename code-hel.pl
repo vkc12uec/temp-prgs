@@ -1142,9 +1142,45 @@ Variable "last" record the latest popped up node. If a node has a right node, th
 topological sort:
 
 E:\My eBooks\Algo\Sahni Codes\all\network.h
+	- steps:
+		- compute in-degree
+		- stack 0 in-degress vertices
+		- find topo order
 ###########################################
 
-cicular sorted array search:
+# cicular sorted array search:
+
+public int rotatedSearch(int[] values, int start, int end,
+                          int x){
+    if(values[start] == x){
+        return start;
+    } else if(values[end] == x){
+        return end;
+    } else if(end - start == 1) {
+        return -1;
+    }
+    int middle = (start + end) / 2;
+
+    if(values[start] <= values[middle]){
+        if(x <= values[middle] && x >= values[start]){
+            return rotatedSearch(values, start, middle, x);
+        } else {
+            return rotatedSearch(values, middle, end, x);
+        }
+    } else if(values[middle] <= values[end]){
+        if(x >= values[middle] && x <= values[end] ){
+            return rotatedSearch(values, middle, end, x);
+        } else {
+            return rotatedSearch(values, start, middle, x);
+        }
+    } else {
+        return -1;
+    }
+}
+
+
+*
+http://www.mytechinterviews.com/search-in-a-sorted-circular-array
 
 http://groups.google.com/group/algogeeks/browse_thread/thread/e351d9d5d3ac17db?pli=1
 
@@ -1435,15 +1471,13 @@ look at some dynamic programming code	<todo>
 # coin denonimation problem: Return min. no. of coins which can give u 'amount' Rs. with infinite repetion
 # complexity = nW
 # W is the width or max. amt. of weight a knapsack can have
+	# infinite supply of coins
 #####
 int coins( int[] coins, int amount ) {
 	int[] table = new int[amount+1];
 
-
 Arrays.fill( table, Integer.MAX_VALUE - 100 );
 	table[0] = 0;
-
-
 
 for ( int i = 1; i < table.length; i++ ) {
 		for ( int j = 0; j < coins.length; j++ ) {
@@ -1476,6 +1510,10 @@ Towards a recurrence relation for making change
 #   The recurrence relation is therefore:
 
 #      c(i,j) = min( c(i-1,j), 1 + c(i,j-d(i)) )
+
+###########################################
+# coin change with infinite repetition	good
+http://www.ccs.neu.edu/home/jaa/CSG713.04F/Information/Handouts/dyn_prog.pdf
 
 ###########################################
 
@@ -1593,7 +1631,7 @@ void quicksort (int[] a, int lo, int hi)
     if (i<hi) quicksort(a, i, hi);
 }
 
-reverse link list:
+# reverse link list:
 
 Node *reverseList(Node *current, Node *parent)
 {
@@ -1645,6 +1683,7 @@ Logger* Logger::Instance()
 17	}
 
 # to make a thread safe version of above ....
+#-----------------------------------------------
 
 Logger* Logger::Instance()
 {

@@ -760,7 +760,7 @@ void convert (node *n, int whichchild) {
 
 '#
 
-###########################################
+###########################################'
 # k-way merge
 #
 else {
@@ -795,7 +795,10 @@ else {
             data[i] = a.getKey();
             if (subarrayIndex[a.getWhichSubarray()] < (a.getWhichSubarray()+1)*(subarrSize)/k)
             {
-                heap.insert(new MergesortHeapNode(tempArray[subarrayIndex[a.getWhichSubarray()]]++, a.getWhichSubarray()));
+                heap.insert(
+			new MergesortHeapNode(
+				tempArray[subarrayIndex[a.getWhichSubarray()]]++, a.getWhichSubarray()
+			));
 
                 // Increment the subarray index where the lowest element resides
                 subarrayIndex[a.getWhichSubarray()]++;
@@ -806,6 +809,7 @@ else {
         }
     }
 }
+'
 '
 
 
@@ -1801,6 +1805,31 @@ void Perm(T list[], int k, int m)
             Swap(list[k], list[i]);
             }
 }
+
+# if duplicates are there :
+
+void permutate( char[] str, int index )
+{
+    int i = 0;
+    static lastChar = 0;
+    if( index == strlen(str) )
+    { // We have a permutation so print it
+        printf(str);
+        return;
+    }
+    for( i = index; i < strlen(str); i++ )
+    {
+        if( lastChar == str[i] ) {
+            continue;
+        } else {
+            lastChar = str[i];
+        }
+        swap( str[index], str[i] ); // It doesn't matter how you swap.'
+        permutate( str, index + 1 );
+        swap( str[index], str[i] );
+    }
+} permutate( sort("Hello World"), 0 );
+
 
 ###########################################
 # 2nd method:

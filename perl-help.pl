@@ -2,6 +2,99 @@ intitle:"index.of" linkin (mp3|mp4|flv|avi|mpg|wmv) -html-htm-php-jsp-asp
 http://www.ihas1337code.com/2010/04/hacking-google-interview-from-mit.html
 
 ###########################################
+
+# default constructor is called if an array of objects is made
+#
+In C++, the standard describes the default constructor for a class as a constructor that can be called with no arguments (this includes a constructor whose parameters all have default arguments).[1]
+In C++, default constructors are significant because they are automatically invoked in certain circumstances:
+- When an object value is declared with no argument list, e.g. MyClass x;; or allocated dynamically with no argument list, e.g. new MyClass; the default constructor is used to initialize the object
+- When an array of objects is declared, e.g. MyClass x[10];; or allocated dynamically, e.g. new MyClass [10]; the default constructor is used to initialize all the elements
+- When a derived class constructor does not explicitly call the base class constructor in its initializer list, the default constructor for the base class is called
+- When a class constructor does not explicitly call the constructor of one of its object-valued fields in its initializer list, the default constructor for the field's class is called
+- In the standard library, certain containers "fill in" values using the default constructor when the value is not given explicitly, e.g. vector<MyClass>(10); initializes the vector with 10 elements, which are filled with the default-constructed value of our type.'
+- In the above circumstances, it is an error if the class does not have a default constructor.''
+The compiler will implicitly define a default constructor if no constructors are explicitly defined for a class. This implicitly-declared default constructor is equivalent to a default constructor defined with a blank body. (Note: if some constructors are defined, but they are all non-default, the compiler will not implicitly define a default constructor. This means that a default constructor may not exist for a class.)
+'
+'
+
+# 5 types following ... u can init an array of objects
+
+class MyClass {		# using set/get methods
+  int x;
+public:
+  void setX(int i) { x = i; }
+  int getX() { return x; }
+};
+
+int main()
+{
+  MyClass obs[4];
+  int i;
+
+  for(i=0; i < 4; i++)
+    obs[i].setX(i);
+
+--
+
+class Fred {
+ public:
+   Fred();
+   ...
+ };
+
+ int main()
+ {
+   Fred a[10];              ? calls the default constructor 10 times
+   Fred* p = new Fred[10];  ? calls the default constructor 10 times
+   ...
+ }
+
+ ---
+class Fred {
+ public:
+   Fred(int i, int j);      ? assume there is no default constructor
+   ...
+ };
+
+ int main()
+ {
+   Fred a[10];              ? ERROR: Fred doesn't have a default constructor
+   Fred* p = new Fred[10];  ? ERROR: Fred doesn't have a default constructor
+   ...
+ }
+
+---
+
+#include <vector>
+
+ int main()
+ {
+   std::vector<Fred> a(10, Fred(5,7));  ? the 10 Fred objects in std::vector a will be initialized with Fred(5,7)
+   ...
+ }
+
+ ---
+class Fred {
+ public:
+   Fred(int i, int j);      ? assume there is no default constructor
+   ...
+ };
+
+ int main()
+ {
+   Fred a[10] = {
+     Fred(5,7), Fred(5,7), Fred(5,7), Fred(5,7), Fred(5,7),  // The 10 Fred objects are
+     Fred(5,7), Fred(5,7), Fred(5,7), Fred(5,7), Fred(5,7)   // initialized using Fred(5,7)
+   };
+   ...
+ }
+
+
+
+
+###########################################
+IPv6 addresses are written in eight groups of four hexadecimal digits separated by colons, for example, 2001:0db8:85a3:0000:0000:8a2e:0370:7334
+###########################################
 Actually, the conversion rules are
 
 a) Convert to the larger type.

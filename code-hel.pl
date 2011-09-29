@@ -1806,7 +1806,40 @@ void Perm(T list[], int k, int m)
             }
 }
 
-# if duplicates are there :
+
+# if duplicates are thr:
+# A simple solution would be to keep track of all characters used at a stack call while permuting.
+
+void permutate( char[] str, int index )
+{
+if( index == strlen(str) )
+{ // We have a permutation so print it
+printf(str);
+return;
+}
+
+char used[255];
+bzero(used, sizeof(used));
+
+int i;
+for( i = index; i < strlen(str); i++ )
+{
+if( (int)used[arr[i]] != 0)
+{
+continue;
+}
+
+used[arr[i]] = 1;
+
+swap( str[index], str[i] ); // It doesn't matter how you swap.
+permutate( str, index + 1 );
+swap( str[index], str[i] );
+}
+}
+
+
+
+# if duplicates are there : (this is possibly wrong)
 
 void permutate( char[] str, int index )
 {

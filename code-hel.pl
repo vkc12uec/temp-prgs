@@ -1921,3 +1921,27 @@ baseconv(unsigned int num, int base)
 }
 
 ###########################################/
+transpose:
+
+for(i=0;i<n;i++)
+{
+	for(j=0;j<n;j++)
+	{
+		scanf("%d",&m[i][j]);
+	}
+}
+printf("Transpose of the Matrix :\n\n");
+for(i=0;i<n;i++)
+{
+	for(j=i+1;j<n;j++)
+	{
+		t=m[i][j];
+		m[i][j]=m[j][i];
+		m[j][i]=t;
+	}
+
+
+	Read more: http://wiki.answers.com/Q/Write_a_programme_to_transpose_of_a_matrix#ixzz1ZSfWvn1v
+
+
+###########################################/

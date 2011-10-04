@@ -1921,6 +1921,15 @@ baseconv(unsigned int num, int base)
 }
 
 ###########################################/
+# rotate a matrix 180 deg.
+
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            ret[i, j] = matrix[n - j - 1, i];
+        }
+    }
+
+###########################################/
 transpose:
 
 for(i=0;i<n;i++)

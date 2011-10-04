@@ -2,6 +2,29 @@ intitle:"index.of" linkin (mp3|mp4|flv|avi|mpg|wmv) -html-htm-php-jsp-asp
 http://www.ihas1337code.com/2010/04/hacking-google-interview-from-mit.html
 
 ###########################################
+#define my_sizeof(type) (char *)(&type+1)-(char*)(&type)
+From anonymous is correct, however, i'd suggest the use of void pointers
+
+'
+###########################################
+- ARP provides mapping
+32bit IP address <-> 48bit MAC address
+128.97.89.153  <-> 00-C0-4F-48-47-93
+- ARP cache 
+maintains the recent mappings from IP addresses to MAC addresses
+Protocol
+1. ARP request broadcast on Ethernet
+2. Destination host ARP layer responds
+
+IP: Internet Protocol
+- Unreliable … connectionless datagram delivery service
+- Responsible for routing of data through intermediate networks and computers
+
+IP packet encapsulates the TCP/UDP packet.
+
+
+
+###########################################
 
 # default constructor is called if an array of objects is made
 #

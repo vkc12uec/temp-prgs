@@ -1309,6 +1309,30 @@ bool Network::findPath(int v, int w, int &length, int path[], int reach[])
 }
 
 ###########################################
+# if mouse is allowed to go down, right only ... where no. of paths with all open cells = (n+m)! / n!m!
+
+Part 2: Psuedo-code
+
+bool is_free(int x, int y) { // return true if we can move here };
+global current_path;
+
+void print_paths(int x, int y) {
+  current_path.add( pair(x, y) );
+  if (0 == x && 0 == y) {
+    print current_path();
+    return;
+  }
+  if (x > 1 && is_free(x - 1, y)) {
+    print_paths(x - 1, y);
+  }
+  if (y > 1 && is_free(y - 1, x)) {
+    print_paths(y - 1, 1);
+  }
+  current_path.remove(path(x, y);
+}
+
+
+###########################################
 bool Network::Topological(int v[])
 {// Compute topological ordering of digraph vertices.
  // Return true if a topological order is found.
@@ -1951,6 +1975,28 @@ for(i=0;i<n;i++)
 
 
 	Read more: http://wiki.answers.com/Q/Write_a_programme_to_transpose_of_a_matrix#ixzz1ZSfWvn1v
+
+
+###########################################/
+	# quiora challenge
+
+int g_pathcount = 0;
+
+point st, end;
+int nc0 = //given
+
+void findpath (int s, int tillnow0) {
+	if (tillnow0 == nc0)
+		if (s == end)
+			g_pathcount++;
+	else {
+		visited[s.x][s.y]=1;
+		for (int i =0; i<4; i++) {
+			int newposi = s + offset[i];
+
+		}
+	}
+}
 
 
 ###########################################/

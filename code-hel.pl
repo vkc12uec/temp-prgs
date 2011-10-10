@@ -624,11 +624,81 @@ void numTostr(int n) {
 }
 
 ###########################################
+# convert sorted  link list to bst
+BinaryTree* sortedListToBST(ListNode *& list, int start, int end) {
+  if (start > end) return NULL;
+  // same as (start+end)/2, avoids overflow
+  int mid = start + (end - start) / 2;
+  BinaryTree *leftChild = sortedListToBST(list, start, mid-1);
+  BinaryTree *parent = new BinaryTree(list->data);
+  parent->left = leftChild;
+  list = list->next;
+  parent->right = sortedListToBST(list, mid+1, end);
+  return parent;
+}
+
+BinaryTree* sortedListToBST(ListNode *head, int n) {
+  return sortedListToBST(head, 0, n-1);
+}
+
+# covert a sorted array to bst, divide conquer:
+
+BinaryTree* sortedArrayToBST(int arr[], int start, int end) {
+  if (start > end) return NULL;
+  // same as (start+end)/2, avoids overflow.
+  int mid = start + (end - start) / 2;
+  BinaryTree *node = new BinaryTree(arr[mid]);
+  node->left = sortedArrayToBST(arr, start, mid-1);
+  node->right = sortedArrayToBST(arr, mid+1, end);
+  return node;
+}
+
+BinaryTree* sortedArrayToBST(int arr[], int n) {
+  return sortedArrayToBST(arr, 0, n-1);
+}
+
 # convert sorted doubly link list to bst
 
-#
 ###########################################
 # A sorted doubly linked list is created from bst in O(n) time
+
+# mtd 1: http://www.ihas1337code.com/2010/11/convert-binary-search-tree-bst-to.html
+
+// This is a modified in-order traversal adapted to this problem.
+// prev (init to NULL) is used to keep track of previously traversed node.
+// head pointer is updated with the list's head as recursion ends.
+void treeToDoublyList(Node *p, Node *& prev, Node *& head) {
+  if (!p) return;
+  treeToDoublyList(p->left, prev, head);
+  // current node's left points to previous node
+  p->left = prev;
+  if (prev)
+    prev->right = p;  // previous node's right points to current node
+  else
+    head = p; // current node (smallest element) is head of
+              // the list if previous node is not available
+  // as soon as the recursion ends, the head's left pointer
+  // points to the last node, and the last node's right pointer
+  // points to the head pointer.
+  Node *right = p->right;
+  head->left = p;
+  p->right = head;
+  // updates previous node
+  prev = p;
+  treeToDoublyList(right, prev, head);
+}
+
+// Given an ordered binary tree, returns a sorted circular
+// doubly-linked list. The conversion is done in-place.
+Node* treeToDoublyList(Node *root) {
+  Node *prev = NULL;
+  Node *head = NULL;
+  treeToDoublyList(root, prev, head);
+  return head;
+}'
+
+# mtd 2:
+
 - For each node in the bst the left is made to point to previous element in dll and right is made to point to next element in dll.
 - Flag is used to keep track if a node is left child or right child of parent.
 - function call on left subtree returns rightmost child and viceversa.
@@ -679,86 +749,62 @@ node * Tree :: convLnLst(node *T,int flag=-1){
 # 2nd method by stan:
 #	http://cslibrary.stanford.edu/109/TreeListRecursion.html
 #
-    public static void join(Node a, Node b) {
-        a.large = b;
-        b.small = a;
-    }
 
-
-    /*
-     helper function -- given two circular doubly linked
-     lists, append them and return the new list.
-    */
-    public static Node append(Node a, Node b) {
-        // if either is null, return the other
-        if (a==null) return(b);
-        if (b==null) return(a);
-
-        // find the last node in each using the .previous pointer
-        Node aLast = a.small;
-        Node bLast = b.small;
-
-        // join the two together to make it connected and circular
-        join(aLast, b);
-        join(bLast, a);
-
-        return(a);
-    }
-
-
-    /*
-     --Recursion--
-     Given an ordered binary tree, recursively change it into
-     a circular doubly linked list which is returned.
-    */
-    public static Node treeToList(Node root) {
-        // base case: empty tree -> empty list
-        if (root==null) return(null);
-
-        // Recursively do the subtrees (leap of faith!)
-        Node aList = treeToList(root.small);
-        Node bList = treeToList(root.large);
-
-        // Make the single root node into a list length-1
-        // in preparation for the appending
-        root.small = root;
-        root.large = root;
-
-        // At this point we have three lists, and it's'
-        // just a matter of appending them together
-        // in the right order (aList, root, bList)
-        aList = append(aList, root);
-        aList = append(aList, bList);
-
-        return(aList);
-    }
-
-# 3rd method by vkc:
-
-void convert (node *n, int whichchild) {
-	if (n) {
-		node *nl = convert (n->left, 0);
-		node *nr = convert (n->right, 1);
-
-		n->small = nl, n->big = nr;
-
-		if (nl == 0 && nr == 0)
-			return n;
-		else if (whichchild == 0) {
-			if (nr) return nr;
-			else return n;
-		}
-		else if (whichchild == 1) {
-			if (nl) return nl
-			else return n
-		}
-	}
-	else {
-		return 0;
-	}
+/*
+ helper function -- given two list nodes, join them
+ together so the second immediately follow the first.
+ Sets the .next of the first and the .previous of the second.
+*/
+static void join(Node a, Node b) {
+    a->large = b;
+    b->small = a;
 }
 
-'#
+/*
+ helper function -- given two circular doubly linked
+ lists, append them and return the new list.
+*/
+static Node append(Node a, Node b) {
+    Node aLast, bLast;
+
+    if (a==NULL) return(b);
+    if (b==NULL) return(a);
+
+    aLast = a->small;
+    bLast = b->small;
+
+    join(aLast, b);
+    join(bLast, a);
+
+    return(a);
+}
+
+/*
+ --Recursion--
+ Given an ordered binary tree, recursively change it into
+ a circular doubly linked list which is returned.
+*/
+static Node treeToList(Node root) {
+    Node aList, bList;
+
+    if (root==NULL) return(NULL);
+
+    /* recursively solve subtrees -- leap of faith! */
+    aList = treeToList(root->small);
+    bList = treeToList(root->large);
+
+    /* Make a length-1 list ouf of the root */
+    root->small = root;
+    root->large = root;
+
+    /* Append everything together in sorted order */
+    aList = append(aList, root);
+    aList = append(aList, bList);
+
+    return(aList);
+}
+
+
 
 ###########################################'
 # k-way merge
@@ -1153,6 +1199,35 @@ E:\My eBooks\Algo\Sahni Codes\all\network.h
 ###########################################
 
 # cicular sorted array search:
+
+# mtd 1
+int rotated_binary_search(int A[], int N, int key) {
+  int L = 0;
+  int R = N - 1;
+
+  while (L <= R) {
+    // Avoid overflow, same as M=(L+R)/2
+    int M = L + ((R - L) / 2);
+    if (A[M] == key) return M;
+
+    // the bottom half is sorted
+    if (A[L] <= A[M]) {
+      if (A[L] <= key && key < A[M])
+        R = M - 1;
+      else
+        L = M + 1;
+    }
+    // the upper half is sorted
+    else {
+      if (A[M] < key && key <= A[R])
+        L = M + 1;
+      else
+        R = M - 1;
+    }
+  }
+  return -1;
+
+
 
 public int rotatedSearch(int[] values, int start, int end,
                           int x){

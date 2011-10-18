@@ -2,8 +2,79 @@ intitle:"index.of" linkin (mp3|mp4|flv|avi|mpg|wmv) -html-htm-php-jsp-asp
 http://www.ihas1337code.com/2010/04/hacking-google-interview-from-mit.html
 
 ###########################################
+Although inline functions are similar to macros (because the function code is expanded at the point of the call at compile time), inline functions are parsed by the compiler, whereas macros are expanded by the preprocessor. As a result, there are several important differences:
+
+Inline functions follow all the protocols of type safety enforced on normal functions.
+
+Inline functions are specified using the same syntax as any other function except that they include the inline keyword in the function declaration.
+
+Expressions passed as arguments to inline functions are evaluated once. In some cases, expressions passed as arguments to macros can be evaluated more than once
+
+// inline_functions_macro.c
+#include <stdio.h>
+#include <conio.h>
+
+#define toupper(a) ((a) >= 'a' && ((a) <= 'z') ? ((a)-('a'-'A')):(a))
+
+int main() {
+   char ch;
+   printf_s("Enter a character: ");
+   ch = toupper( getc(stdin) );
+   printf_s( "%c", ch );
+}
+
+
+
+The intent of the expression toupper(getc(stdin)) is that a character should be read from the console device (stdin) and, if necessary, converted to uppercase.
+
+Because of the implementation of the macro, getc is executed once to determine whether the character is greater than or equal to "a," and once to determine whether it is less than or equal to "z." If it is in that range, getc is executed again to convert the character to uppercase. This means the program waits for two or three characters when, ideally, it should wait for only one.
+
+Inline functions remedy the problem previously described:
+
+
+###########################################
 #define my_sizeof(type) (char *)(&type+1)-(char*)(&type)
 From anonymous is correct, however, i'd suggest the use of void pointers
+
+'
+###########################################
+Simultaneous spinlocks
+Now after you get into this stuff, you may find that you have to have more than one spinlock at a time. This
+can lead to problems. Consider this:
+
+Routine A:
+lock spinlock X
+maybe do some work
+lock spinlock Y
+do some more work
+unlock spinlock Y
+unlock spinlock X
+
+And Routine B:
+lock spinlock Y
+maybe do some work
+lock spinlock X
+do some more work
+unlock spinlock X
+unlock spinlock Y
+
+So CPU #1 comes along and starts routine A, while CPU #2 starts routine B. Well, they'll never finish,
+because CPU #1 will be waiting for CPU #2 to release spinlock Y and CPU #2 will be waiting for CPU #1 to
+release spinlock X.
+So we have another simple rule: When locking more than one spinlock, they must always be locked in the
+same order.
+So for our example, both routines need to be changed so that they either both lock X then Y or they both lock
+Y then X. You may be thinking, 'I might not be able to do that in ALL cases!' Easy to fix, replace the two
+spinlocks with one, say Z.
+Now I am terrible at checking to make sure I do everything in order. Computers are good at that sort of thing.
+So rather than just using an 'int' for my spinlocks, I use a struct as follows:
+
+typedef struct { char spinlock_flag; // the usual 0=unlocked, 1=locked
+unsigned char spinlock_level; // 'locking' order
+} Spinlock;
+
+Then I have a spinlock_wait routine that checks to make sure my new spinlock's level is .gt. the last spinlock's
+level that was locked by this cpu. If I try to do it out of order, the routine panics/BSOD's on the spot
 
 '
 ###########################################

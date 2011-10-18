@@ -24,6 +24,91 @@ struct node {
 }
 
 ###########################################
+
+Q. Given a array,find out if there exist a subarray such its sum is zero.
+
+subarray=>contiguous slice
+take cumulative sum of the array; if the cumulative sum has duplicate numbers then there is subarray which sums to zero;
+
+for(i=1;i<n;i++)
+c[i]=c[i-1]+input[i];
+if(duplicates in array 'c')
+then true
+Complexity-O(n);
+
+
+###########################################
+# check if a tree is symettric , not data symettric perpendicular to root
+#
+here asked only structure not the data......
+int symTree(node *a , node *b)
+{
+if(a == NULL && b == NULL)
+{
+return 1;
+}
+else if( a != NULL && b!= NULL)
+{
+return (//if data should be check then
+//a->data == b->data &&
+symTree(a->left,b->right) &&
+symTree(a->right,b->left));
+}
+else
+{
+return 0;
+}
+}
+
+# mtd 2:
+
+This can be answered through a variant of inorder traversal. For example take the following tree
+1
+/ \
+2 3
+/ \ / \
+4 5 6 7
+\ / \ /
+9 1 1 2
+
+If you take the inorder traversal of the left subtree and instead of printing the node print whether the node is left child (L) or right child (R) w.r.t its parent. So for the left subtree you will have:
+L R L L R
+
+Similar for the right subtree you will have:
+L R R L R
+
+Now reverse the right subtree sequence:
+R L R R L
+
+flip the R to L and L to R:
+L R L L R
+
+Now this is equal to the left subtree's sequence and hence voila
+
+
+
+
+###########################################
+Q: give a binary tree (not BST)where tree node, with extra pointer inorder-successor, initaliy all inorder-successor pointer set to NULL.
+write a code to set all pointer to its inordersuccessor.
+struct Node
+{
+int data;
+Node *left, *right;
+Node *successor;
+};
+
+node *su = 0;
+void rIno (node *n) {
+	if (n) {
+		rIno(n->right);
+		n->succ = su;
+		su = n;
+		rIno(n->left);
+	}
+}
+
+###########################################
 # read a BST preorder string from a file and convert it to tree:
 #
 Remember my post: Determine if a Binary Tree is a Binary Search Tree (BST)?
@@ -624,7 +709,7 @@ void numTostr(int n) {
 }
 
 ###########################################
-# convert sorted  link list to bst
+# convert sorted  link list to bst	(bottom up)
 BinaryTree* sortedListToBST(ListNode *& list, int start, int end) {
   if (start > end) return NULL;
   // same as (start+end)/2, avoids overflow
@@ -666,7 +751,7 @@ BinaryTree* sortedArrayToBST(int arr[], int n) {
 
 // This is a modified in-order traversal adapted to this problem.
 // prev (init to NULL) is used to keep track of previously traversed node.
-// head pointer is updated with the list's head as recursion ends.
+// head pointer is updated with the list's head as recursion ends.'
 void treeToDoublyList(Node *p, Node *& prev, Node *& head) {
   if (!p) return;
   treeToDoublyList(p->left, prev, head);
@@ -695,7 +780,7 @@ Node* treeToDoublyList(Node *root) {
   Node *head = NULL;
   treeToDoublyList(root, prev, head);
   return head;
-}'
+}
 
 # mtd 2:
 
@@ -1934,7 +2019,7 @@ swap( str[index], str[i] ); // It doesn't matter how you swap.
 permutate( str, index + 1 );
 swap( str[index], str[i] );
 }
-}
+}'
 
 
 
@@ -1960,7 +2045,9 @@ void permutate( char[] str, int index )
         permutate( str, index + 1 );
         swap( str[index], str[i] );
     }
-} permutate( sort("Hello World"), 0 );
+}
+
+permutate( sort("Hello World"), 0 );
 
 
 ###########################################

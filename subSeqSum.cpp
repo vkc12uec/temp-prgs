@@ -1,8 +1,15 @@
+/*
+# max contiguous sum
+
+*/
+
 #include <iostream>
 #include <stdio.h>
 using namespace std;
 
+int maxSum (int a[], int i);
 
+#if 0
 // using diviede and conquer
 
 int maxSum (int *a, int i, int j) {
@@ -45,12 +52,15 @@ int maxSum (int *a, int i, int j) {
 
 	return sum;	
 }
+#endif
 
 int main () {
-	int a[]= {-4, -3, -2, 4, 5, 6, -1, 2 };
+	//int a[]= {-4, -3, -2, 4, 5, 6, -1, 2 };
+	int a[]= {-4, -3, -2, 4, -5, -6, -1, 2 };
 	//int a[]= {4, -3, 5, -2 , -1, 2, 6,-4};
 
-	int max = maxSum (a, 0, 7);
+	int max = maxSum (a, 8);
+	//int max = maxSum (a, 0, 7);
 	printf ("\n max sume = [%d]", max);
 
 return 0;
@@ -70,3 +80,36 @@ int maxsum ( int a[], int len) {
 	}
 }
 */
+
+int maxSum (int a[], int length)
+{
+    int m = 0;
+    int m_st=0, m_end=0;
+    int msuf = 0;
+    int msuf_st=0, msuf_end=0;
+    // Invariant: m is the maximum subsequence sum for a[0..i-1],
+    //            msuf is the maximum suffix sum for a[0..i-1]
+
+    for (int i = 0; i < length; i++) {
+      if (0 < msuf + a[i]) {
+        msuf_end = i;
+        msuf = msuf + a[i];
+      }
+      else {
+        msuf = 0;
+        msuf_st = i+1;  // anticipate that next will be +ve
+        msuf_end = i+1;
+      }
+      //msuf = Math.max(0, msuf + a[i]);
+      if (m < msuf) {
+        m_st = msuf_st;
+        m_end = msuf_end;
+        m = msuf;
+      }
+      //m = Math.max(m, msuf);
+    }
+      printf ("\n pointers = %d || %d ", m_st, m_end);
+      printf ("\n final = %d", m);
+
+    return m;
+  }

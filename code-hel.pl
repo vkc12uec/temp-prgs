@@ -24,6 +24,93 @@ struct node {
 }
 
 ###########################################
+# reverse a C string:
+
+  char *a = str;
+  int n = len;
+  for (int i=0;i<(n/2);i++) {
+    char c = a[i];
+    a[i] = a[n-i-1];
+    a[n-i-1] = c;
+  }
+
+# # ###########		reverse just the words:
+#       reverse = [o ateb si siht]
+#       answer = [o beta is this]
+
+  int word_st = 0, word_end = 0, curr = 0;
+  int flag = 0;
+
+  while (a[curr] != 0) {
+    if (a[curr] == ' ') {
+      //word_end = curr-1;
+      reverse_part (a, word_st, curr-1);
+      flag = 0; // for new word_st
+    }
+    else {
+      if (flag == 0) {
+        word_st = curr;
+        flag = 1;
+      }
+      }
+      curr++;
+  }
+  reverse_part (a, word_st, curr-1);
+
+
+###########################################
+# merge to sorted linked list
+
+node * merge (node *a, node *b) {
+	if (!a)
+		return b;
+	else if (!b)
+		return a;
+	node *small = (a->data > b->data) ? b : a;
+	node *large = (a->data > b->data) ? a : b;
+	node *res=small;
+	small = small->next;
+
+	while (small && large) {
+		if (small->data < large->data){
+			res->next = small;
+			small = small->next;
+			}
+		else {
+			res->next = large;
+			large = large->next;
+		}
+	}	// end of while 
+
+	if (!small)
+		res->next = large;
+	else if (!large)
+		res->next = small;
+}
+
+void mergeSort (node *n) {
+	node *mid = getMid (n);
+	node *head1 = n;
+	node *head2 = mid->next;
+
+	mergeSort (head1);
+	mergeSort (head2);
+	merge (head1, head2);
+}
+
+node *getMid (node *n) {
+	node *slow =  n;
+	node *fast = n;
+
+	while (!fast || !fast->next) {
+		slow = slow->next;
+		fast = fast->next->next;
+	}
+	return slow;
+}
+
+
+###########################################
 
 Q. Given a array,find out if there exist a subarray such its sum is zero.
 
@@ -87,7 +174,7 @@ Now this is equal to the left subtree's sequence and hence voila
 
 
 
-
+'
 ###########################################
 Q: give a binary tree (not BST)where tree node, with extra pointer inorder-successor, initaliy all inorder-successor pointer set to NULL.
 write a code to set all pointer to its inordersuccessor.
@@ -406,6 +493,42 @@ http://rajeevprasanna.blogspot.com/2011/07/maximum-contiguous-product-in-array.h
 		}
 		return m;
 	}
+
+# Tested code to report positions too:
+
+int maxSum (int a[], int length)
+{
+    int m = 0;
+    int m_st=0, m_end=0;
+    int msuf = 0;
+    int msuf_st=0, msuf_end=0;
+    // Invariant: m is the maximum subsequence sum for a[0..i-1],
+    //            msuf is the maximum suffix sum for a[0..i-1]
+
+    for (int i = 0; i < length; i++) {
+      if (0 < msuf + a[i]) {
+        msuf_end = i;
+        msuf = msuf + a[i];
+      }
+      else {
+        msuf = 0;
+        msuf_st = i+1;  // anticipate that next will be +ve
+        msuf_end = i+1;
+      }
+      //msuf = Math.max(0, msuf + a[i]);
+      if (m < msuf) {
+        m_st = msuf_st;
+        m_end = msuf_end;
+        m = msuf;
+      }
+      //m = Math.max(m, msuf);
+    }
+      printf ("\n pointers = %d || %d ", m_st, m_end);
+      printf ("\n final = %d", m);
+
+    return m;
+  }
+
 
 ###########################################
 # a divide conquer approach to above:
@@ -1035,6 +1158,27 @@ public object max(){
 return max.pop();
 }
 }
+
+###########################################
+# from inorder and level order
+#
+static TreeNode* createTreeFromLevelOrder(int inorder[],int levelorder[], int start, int end,int level)
+    {
+        if(start>end)
+        {
+            return NULL;
+        }
+        TreeNode* temp = new TreeNode();
+        temp->value = levelorder[level-1];
+        if(start==end)
+        {
+            return temp;
+        }
+        int mid = search(inorder,start,end,temp->value);
+        temp->left = createTreeFromLevelOrder(inorder,levelorder,start, mid-1,2*level);
+        temp->right = createTreeFromLevelOrder(inorder,levelorder,mid+1,end,2*level+1);
+        return temp;
+    }
 
 ###########################################
 

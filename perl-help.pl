@@ -2,6 +2,48 @@ intitle:"index.of" linkin (mp3|mp4|flv|avi|mpg|wmv) -html-htm-php-jsp-asp
 http://www.ihas1337code.com/2010/04/hacking-google-interview-from-mit.html
 
 ###########################################
+# barrier synchronization
+
+method 1:
+
+#################################################
+#
+# For N process to do a barrier syncro, use another new process_barr {} which will sync. these N process.
+
+
+semaphore s [N] = {1};
+semaphore all_arrived = 0;
+
+process_i () {
+	signal(s[i]);
+	wait(all_arrived);
+}
+
+process_barrier () {
+	for (int i =0;i<N;i++)
+		wait(s[i]);
+	for (int i =0;i<N;i++)
+		signal[all_arrived];
+}
+
+# method 2:
+
+1 rendezvous
+2
+3 mutex.wait()
+4 count = count + 1
+5 mutex.signal()
+6
+7 if count == n: barrier.signal()
+8
+9 barrier.wait()
+10 barrier.signal()
+11
+12 critical point
+
+
+
+###########################################
 Although inline functions are similar to macros (because the function code is expanded at the point of the call at compile time), inline functions are parsed by the compiler, whereas macros are expanded by the preprocessor. As a result, there are several important differences:
 
 Inline functions follow all the protocols of type safety enforced on normal functions.

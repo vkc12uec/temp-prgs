@@ -24,6 +24,105 @@ struct node {
 }
 
 ###########################################
+# Do division of a/b w/o using division operator:
+# use binary search to get which multiple to choose ...
+#
+// computes a = b*q + r with 0 <= r < b
+void divide(unsigned a, unsigned b, unsigned& quo, unsigned& rem) {
+    // suppose numbers are positive
+    if(a < b) {
+        quo = 0; rem = a;
+        return;
+    }
+    quo = 1;
+    while(quo*b*2 <= a) {
+         quo *= 2;
+    }
+    // here it holds that: quo*b <= a < quo*b*2
+    if(quo * b == a) {
+        rem = 0;
+        return;
+    }
+
+unsigned ql = quo, qr = quo*2, mid;
+while(1) {
+mid = (ql + qr) / 2;
+if(mid*b <= a && a < (mid+1)*b)
+break;
+if(mid*b < a) {
+ql = mid+1;
+} else {
+qr = mid;
+}
+}
+quo = mid, rem = a - quo * b;
+}
+
+
+int main() {
+unsigned a = 2556721331, b = 13, q, r;
+printf("correct: %d %d\n", a / b, a % b);
+divide(a, b, q, r);
+printf("test: quo: %d; rem: %d\n", q, r);
+return 1;
+}
+
+
+###########################################
+# sort a stack:
+
+# push smallest at level n, 2nd smallest at level n-1 ....
+void sortStack () {
+n = S.length();
+for (i=n;i>=1;i--)
+	pushsmallest (s, i, INT_MIN);
+}
+
+# push smallest element of stack from top to level at position level
+# recursion goes from top to level and finds the smallest element in that range
+# and pushes that in the leaft of recssion
+#
+void pushsmallest (s, int level, int small) {
+	if (level == 1) {
+		s.push (small);
+	}
+	else {
+		int top = s.top();
+		if (top < small)
+			small = top;
+
+		pushsmallest (s, level-1, small)
+		s.push (top);
+	}
+}
+
+###########################################
+# reverse a stack:
+
+void revStack () {
+n = S.length();
+for (i=n;i>=1;i--)
+	pushR (s, i);
+}
+
+# this pushes top value to level i
+void pushR(s, int level) {
+	top = S.pop ();
+	pushhelper (s, top, level)
+}
+
+# recurseive push at level
+void pushhelper (s, int value, int level) {
+	if (level == 1)
+		s.push(value);
+	else {
+		newtop = s.pop();
+		pushhelper (s, value, level-1)
+		s.push (newtop);
+		}
+}
+
+###########################################
 # reverse a C string:
 
   char *a = str;
@@ -80,7 +179,8 @@ node * merge (node *a, node *b) {
 			res->next = large;
 			large = large->next;
 		}
-	}	// end of while 
+		res = res->next;
+	}	// end of while
 
 	if (!small)
 		res->next = large;
@@ -109,6 +209,7 @@ node *getMid (node *n) {
 	return slow;
 }
 
+t(n) = 2t(n/2) + n
 
 ###########################################
 
@@ -185,6 +286,9 @@ Node *left, *right;
 Node *successor;
 };
 
+# algo: if u do reverse inorder traversal, then at every node, u can assign its succ pointer
+# prpovided u keep its info
+# 
 node *su = 0;
 void rIno (node *n) {
 	if (n) {
@@ -263,17 +367,17 @@ choose a cell at random and call it CurrentCell
 set VisitedCells = 1
 
 while VisitedCells < TotalCells
-find all neighbors of CurrentCell with all walls intact
-if one or more found
-choose one at random
-knock down the wall between it and CurrentCell
-push CurrentCell location on the CellStack
-make the new cell CurrentCell
-add 1 to VisitedCells
-else
-pop the most recent cell entry off the CellStack
-make it CurrentCell
-endIf
+	find all neighbors of CurrentCell with all walls intact
+	if one or more found
+		choose one at random
+		knock down the wall between it and CurrentCell
+		push CurrentCell location on the CellStack
+		make the new cell CurrentCell
+		add 1 to VisitedCells
+	else
+		pop the most recent cell entry off the CellStack
+		make it CurrentCell
+	endIf
 endWhile
 
 
@@ -833,6 +937,8 @@ void numTostr(int n) {
 
 ###########################################
 # convert sorted  link list to bst	(bottom up)
+# same to : convert sorted doubly link list to bst
+
 BinaryTree* sortedListToBST(ListNode *& list, int start, int end) {
   if (start > end) return NULL;
   // same as (start+end)/2, avoids overflow
@@ -865,7 +971,6 @@ BinaryTree* sortedArrayToBST(int arr[], int n) {
   return sortedArrayToBST(arr, 0, n-1);
 }
 
-# convert sorted doubly link list to bst
 
 ###########################################
 # A sorted doubly linked list is created from bst in O(n) time
@@ -1161,7 +1266,9 @@ return max.pop();
 
 ###########################################
 # from inorder and level order
-#
+# call like:
+#	Tree::levelorderTraversal(Tree::createTreeFromLevelOrder(inorder,levelorder,0,len-1,1));
+
 static TreeNode* createTreeFromLevelOrder(int inorder[],int levelorder[], int start, int end,int level)
     {
         if(start>end)
@@ -1180,6 +1287,18 @@ static TreeNode* createTreeFromLevelOrder(int inorder[],int levelorder[], int st
         return temp;
     }
 
+	    static int search(int x[],int start, int end,char value)
+072	    {
+073	        for(int i=start; i<end; i++)
+074	        {
+075	            if(x[i]==value)
+076	            {
+077	                return i;
+078	            }
+079	        }
+080	    }
+
+
 ###########################################
 
 
@@ -1188,6 +1307,7 @@ static TreeNode* createTreeFromLevelOrder(int inorder[],int levelorder[], int st
 struct node* buildTree(char in[], char pre[], int inStrt, int inEnd)
 {
   static int preIndex = 0;
+  # static int preIndex = end;		// if u want to do for postOrder
  
   if(inStrt > inEnd)
      return NULL;
@@ -1486,7 +1606,8 @@ public int rotatedSearch(int[] values, int start, int end,
     }
 }
 
-
+# see "find_inflection.cpp" in hg-repo
+#
 *
 http://www.mytechinterviews.com/search-in-a-sorted-circular-array
 
@@ -1592,6 +1713,7 @@ int cyclePresent (node *head) {
 	}
 }
 
+###########################################
 
 bool Network::findPath(int v, int w, int &length, int path[], int reach[])
 {// Actual path finder v != w.
@@ -1867,7 +1989,7 @@ That is, the matrice on the left (with the ones and zero) when multiplied by its
 
 ------------------------
 
-    int M[2][2] = {{1,0}{1,0}}		// identity matrix
+    int M[2][2] = {{1,0}{0,1}}		// identity matrix
 
     int fib(int n)
     {
@@ -2007,9 +2129,7 @@ Initial method call should be
 Logger* Logger::Instance()
 12	{
 13	   if (!m_pInstance)   // Only allow one instance of class to be generated.
-		# u can also put here lock.acquire()
 14	      m_pInstance = new Logger;
-		# u can also put here lock.release()
 15
 16	   return m_pInstance;
 17	}
@@ -2083,16 +2203,16 @@ wy
 wyz
 wz
 
-void DoCombine (char in[], char out [] , int length, int recursLev, int start)
+void DoCombine (char in[], char out [] , int length, int fillptr, int start)
 {
   int i ;
   for (i = start; i < length; i++) {
-    out[recursLev] = in[i]; /* select current letter */
-    out[recursLev + 1] = '\o' ; /* tack on NUL for printf */
+    out[fillptr] = in[i]; /* select current letter */
+    out[fillptr + 1] = '\o' ; /* tack on NUL for printf */
     printf("%s\n", out);
 
     if (i < length - 1) /* recurse if more letters in input */
-        DoCombine(in, out, length, recursLev +1 , i + 1);
+        DoCombine(in, out, length, fillptr +1 , i + 1);
   }
 }
 
@@ -2142,8 +2262,8 @@ void permutate( char[] str, int index )
 {
 if( index == strlen(str) )
 { // We have a permutation so print it
-printf(str);
-return;
+	printf(str);
+	return;
 }
 
 char used[255];
@@ -2154,16 +2274,16 @@ for( i = index; i < strlen(str); i++ )
 {
 if( (int)used[arr[i]] != 0)
 {
-continue;
+	continue;
 }
 
 used[arr[i]] = 1;
 
-swap( str[index], str[i] ); // It doesn't matter how you swap.
+swap( str[index], str[i] ); // It doesn't matter how you swap.'
 permutate( str, index + 1 );
 swap( str[index], str[i] );
 }
-}'
+}
 
 
 
@@ -2252,6 +2372,7 @@ baseconv(unsigned int num, int base)
 
 ###########################################/
 # rotate a matrix 180 deg.
+# memorise: i->j ...rotate by 180 .... j->i ... do n-j-1
 
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < n; ++j) {

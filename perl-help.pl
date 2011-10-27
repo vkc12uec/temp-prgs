@@ -2,6 +2,184 @@ intitle:"index.of" linkin (mp3|mp4|flv|avi|mpg|wmv) -html-htm-php-jsp-asp
 http://www.ihas1337code.com/2010/04/hacking-google-interview-from-mit.html
 
 ###########################################
+
+Long-term scheduler (or job scheduler) . selects which
+processes should be brought into the ready queue.
+
+Short-term scheduler (or CPU scheduler) . selects which process should be executed next and allocates CPU
+
+Short-term scheduler is invoked very frequently
+(milliseconds)  (must be fast).
+Long-term scheduler is invoked very infrequently
+(seconds, minutes) (may be slow).
+The long-term scheduler controls the degree of
+multiprogramming.
+
+
+
+buff full condition :
+while (((in + 1) % BUFFER_SIZE) == out)
+- buff empty condi.:
+while (in == out)
+
+
+consumer:
+
+item nextConsumed;
+while (1) {
+	while (in == out)
+	; /* do nothing */
+	nextConsumed = buffer[out];
+	out = (out + 1) % BUFFER_SIZE;
+}
+
+producer:
+
+item nextProduced;
+while (1) {
+	while (((in + 1) % BUFFER_SIZE) == out)
+	; /* do nothing */
+	buffer[in] = nextProduced;
+	in = (in + 1) % BUFFER_SIZE;
+}
+
+
+
+- Every thread has stack and segment of its own
+
+- Each user-level thread maps to kernel thread.
+n Examples
+- Windows 95/98/NT/2000
+- OS/2
+
+- Windows has :
+Each thread contains
+- a thread id
+- register set
+- separate user and kernel stacks
+- private data storage area
+
+
+- Associate with each process the length of its next CPU
+burst. Use these lengths to schedule the process with the
+shortest time. 
+- SJF is optimal . gives minimum average waiting time for
+a given set of processes
+
+* Multilevel queuing:
+
+Each queue has its own scheduling algorithm,
+foreground . RR
+background . FCFS
+-  Scheduling must be done between the queues.
+. Fixed priority scheduling; (i.e., serve all from foreground
+	then from background). Possibility of starvation.
+. Time slice . each queue gets a certain amount of CPU time
+which it can schedule amongst its processes; i.e., 80% to
+foreground in RR
+. 20% to background in FCFS
+
+* spinlocks ?
+
+* test-and-set
+
+function Lock(boolean *lock) {
+	while (test_and_set (lock) == 1)
+	;
+}
+
+function TestAndSet(boolean lock) {
+	boolean initial = lock
+	lock = true
+	return initial
+}
+
+* The efficient implementation of spinlocks is of great concern because spinlocks are the usual foundation for synchronization, expecially in multiprocessor systems. They are used everywhere and very frequently. As the use of multiprocessor systems increases so will the interest in efficient spinlocks and in alternative synchronization mechanisms 
+
+* Spinlocks should only be held for a short period of time, and attempting to claim a spinlock will never cause a thread to be suspended. This means that there is no need to worry about priority inversion problems, and concepts such as priority ceilings and inheritance do not apply. 
+
+* Paravirtualization is different from full
+virtualization, where the unmodified OS does not know it is virtualized and sensitive OS calls are
+trapped using binary translation. The value proposition of paravirtualization is in lower
+virtualization overhead, but the performance advantage of paravirtualization over full
+virtualization can vary greatly depending on the workload. As paravirtualization cannot support
+unmodified operating systems (e.g. Windows 2000/XP), its compatibility and portability is poor.
+Paravirtualization can also introduce significant support and maintainability issues in production
+environments as it requires deep OS kernel modifications. The open source Xen project is an
+example of paravirtualization that virtualizes the processor and memory using a modified Linux
+kernel and virtualizes the I/O using custom guest OS device drivers.
+
+* do {
+	while (TestAndSet(lock)) ;
+	critical section
+	lock = false;
+	remainder section
+}
+
+boolean TestAndSet(boolean &target) {
+	boolean rv = target;
+	tqrget = true;
+	return rv;
+}
+
+* Reader / Writers:
+
+Readers-Writers Problem Writer Process
+-Writeer:
+
+wait(wrt);
+...
+writing is performed
+...
+signal(wrt);
+
+- Reader:
+
+wait(mutex);
+readcount++;
+if (readcount == 1)
+wait(wrt);
+signal(mutex);
+...
+reading is performed
+...
+wait(mutex);
+readcount--;
+if (readcount == 0)
+signal(wrt);
+signal(mutex):
+
+* Havenders four necessary conditions
+
+Havender identified four condtions which are necessary for a deadlock to occur:
+Mutual exclusion -- i.e., one-at-a-time sharing
+Hold and wait -- A process may hold one resource while holding another
+No preemption -- Resources are held until voluntarily released.
+Circular wait.
+These conditions can be used as the basis for deadlock prevention techniques.
+
+* In this scheme every data/instruction access requires two
+memory accesses. One for the page table and one for
+the data/instruction.
+I The two memory access problem can be solved by the
+use of a special fast-lookup hardware cache called
+associative memory or translation look-aside buffers
+(TLBs)
+
+* Memory protection implemented by associating protection
+bit with each frame.
+I Valid-invalid bit attached to each entry in the page table:
+? “valid” indicates that the associated page is in the process’
+logical address space, and is thus a legal page.
+? “invalid” indicates that the page is not in the process’ logical
+address space.
+
+* During address translation, if valid–invalid bit in page
+table entry is 0 page fault.
+
+* lru stack working with a stack with doubly link list types .... http://www.slideshare.net/guest628caa/lru-stack
+'
+###########################################
 # barrier synchronization
 
 method 1:
@@ -15,15 +193,15 @@ semaphore s [N] = {1};
 semaphore all_arrived = 0;
 
 process_i () {
-	signal(s[i]);
-	wait(all_arrived);
+signal(s[i]);
+wait(all_arrived);
 }
 
 process_barrier () {
-	for (int i =0;i<N;i++)
-		wait(s[i]);
-	for (int i =0;i<N;i++)
-		signal[all_arrived];
+for (int i =0;i<N;i++)
+wait(s[i]);
+for (int i =0;i<N;i++)
+signal[all_arrived];
 }
 
 # method 2:
@@ -59,10 +237,10 @@ Expressions passed as arguments to inline functions are evaluated once. In some 
 #define toupper(a) ((a) >= 'a' && ((a) <= 'z') ? ((a)-('a'-'A')):(a))
 
 int main() {
-   char ch;
-   printf_s("Enter a character: ");
-   ch = toupper( getc(stdin) );
-   printf_s( "%c", ch );
+char ch;
+printf_s("Enter a character: ");
+ch = toupper( getc(stdin) );
+printf_s( "%c", ch );
 }
 
 
@@ -112,7 +290,7 @@ Now I am terrible at checking to make sure I do everything in order. Computers a
 So rather than just using an 'int' for my spinlocks, I use a struct as follows:
 
 typedef struct { char spinlock_flag; // the usual 0=unlocked, 1=locked
-unsigned char spinlock_level; // 'locking' order
+	unsigned char spinlock_level; // 'locking' order
 } Spinlock;
 
 Then I have a spinlock_wait routine that checks to make sure my new spinlock's level is .gt. the last spinlock's
@@ -156,84 +334,84 @@ The compiler will implicitly define a default constructor if no constructors are
 # 5 types following ... u can init an array of objects
 
 class MyClass {		# using set/get methods
-  int x;
-public:
-  void setX(int i) { x = i; }
-  int getX() { return x; }
+	int x;
+	public:
+	void setX(int i) { x = i; }
+	int getX() { return x; }
 };
 
 int main()
 {
-  MyClass obs[4];
-  int i;
+	MyClass obs[4];
+	int i;
 
-  for(i=0; i < 4; i++)
-    obs[i].setX(i);
+	for(i=0; i < 4; i++)
+	obs[i].setX(i);
 
---
+	--
 
-class Fred {
- public:
-   Fred();
-   ...
- };
+	class Fred {
+		public:
+		Fred();
+		...
+	};
 
- int main()
- {
-   Fred a[10];              ? calls the default constructor 10 times
-   Fred* p = new Fred[10];  ? calls the default constructor 10 times
-   ...
- }
+	int main()
+	{
+		Fred a[10];              ? calls the default constructor 10 times
+		Fred* p = new Fred[10];  ? calls the default constructor 10 times
+		...
+	}
 
- ---
-class Fred {
- public:
-   Fred(int i, int j);      ? assume there is no default constructor
-   ...
- };
+	---
+	class Fred {
+		public:
+		Fred(int i, int j);      ? assume there is no default constructor
+		...
+	};
 
- int main()
- {
-   Fred a[10];              ? ERROR: Fred doesn't have a default constructor
-   Fred* p = new Fred[10];  ? ERROR: Fred doesn't have a default constructor
-   ...
- }
+	int main()
+	{
+		Fred a[10];              ? ERROR: Fred doesn't have a default constructor
+		Fred* p = new Fred[10];  ? ERROR: Fred doesn't have a default constructor
+		...
+	}
 
----
+	---
 
 #include <vector>
 
- int main()
- {
-   std::vector<Fred> a(10, Fred(5,7));  ? the 10 Fred objects in std::vector a will be initialized with Fred(5,7)
-   ...
- }
+	int main()
+	{
+		std::vector<Fred> a(10, Fred(5,7));  ? the 10 Fred objects in std::vector a will be initialized with Fred(5,7)
+		...
+	}
 
- ---
-class Fred {
- public:
-   Fred(int i, int j);      ? assume there is no default constructor
-   ...
- };
+	---
+	class Fred {
+		public:
+		Fred(int i, int j);      ? assume there is no default constructor
+		...
+	};
 
- int main()
- {
-   Fred a[10] = {
-     Fred(5,7), Fred(5,7), Fred(5,7), Fred(5,7), Fred(5,7),  // The 10 Fred objects are
-     Fred(5,7), Fred(5,7), Fred(5,7), Fred(5,7), Fred(5,7)   // initialized using Fred(5,7)
-   };
-   ...
- }
+	int main()
+	{
+		Fred a[10] = {
+			Fred(5,7), Fred(5,7), Fred(5,7), Fred(5,7), Fred(5,7),  // The 10 Fred objects are
+			Fred(5,7), Fred(5,7), Fred(5,7), Fred(5,7), Fred(5,7)   // initialized using Fred(5,7)
+		};
+		...
+	}
 
 
 
 
 ###########################################
-IPv6 addresses are written in eight groups of four hexadecimal digits separated by colons, for example, 2001:0db8:85a3:0000:0000:8a2e:0370:7334
+	IPv6 addresses are written in eight groups of four hexadecimal digits separated by colons, for example, 2001:0db8:85a3:0000:0000:8a2e:0370:7334
 ###########################################
-Actually, the conversion rules are
+	Actually, the conversion rules are
 
-a) Convert to the larger type.
+	a) Convert to the larger type.
 b) In case of equal size prefer usigned over signed.
 
 You can verify this by changing the declaration of int b to int64_t b. The output would now say Negative.
@@ -258,15 +436,15 @@ Shared libraries are handled with a more advanced form of linking, which makes t
 To minimize the number of broadcasts, ARP maintains a cache of IP address-to-media access control address mappings for future use. The ARP cache can contain both dynamic and static entries. Dynamic entries are added and removed automatically over time. Static entries remain in the cache until the computer is restarted.
 
 # ICMP:
- You can use the ping command to send ICMP echo request messages and record the receipt of ICMP echo reply messages. With these messages, you
+You can use the ping command to send ICMP echo request messages and record the receipt of ICMP echo reply messages. With these messages, you
 
 #IGMP:
 Other important aspects of IP multicasting include the following:
 
-    Group membership is dynamic, allowing hosts to join and leave the group at any time.
-    The ability of hosts to join multicast groups is performed through the sending of IGMP messages.
-    Groups are not limited by size and members can be spread out across multiple IP networks (if connecting routers support the propagation of IP multicast traffic and group membership information).
-    A host can send IP traffic to the group's IP address without belonging to the corresponding group
+Group membership is dynamic, allowing hosts to join and leave the group at any time.
+The ability of hosts to join multicast groups is performed through the sending of IGMP messages.
+Groups are not limited by size and members can be spread out across multiple IP networks (if connecting routers support the propagation of IP multicast traffic and group membership information).
+A host can send IP traffic to the group's IP address without belonging to the corresponding group
 '
 #UDP
 UDP is fast, has low overhead requirements, and can support point-to-point and point-to-multipoint communication.
@@ -289,7 +467,7 @@ Passing 2-dimensional arrays as parameters
 
 C++ doesn't care about bounds, but it needs to compute the memory address given the subscripts (see below). To do this it needs to know the row width (number of columns). Therefore formal 2-dimensional array parameters must be declared with the row size, altho the number of rows may be omitted. For example,
 void clearBoard(ticTacToeBoard[][3]) {
-   . . .
+. . .
 }
 '
 ###########################################
@@ -322,17 +500,17 @@ so the minimum such N is the answer
 ###########################################
 ###########################################
 Bucket Sort:
-	N nos., each M bit:		O(N)
-	http://www.personal.kent.edu/~rmuhamma/Algorithms/MyAlgorithms/Sorting/bucketSort.htm
+N nos., each M bit:		O(N)
+http://www.personal.kent.edu/~rmuhamma/Algorithms/MyAlgorithms/Sorting/bucketSort.htm
 
 Radix sort:
-	O(M*N)
-	M is for outer loop.
-	Each internal loop is for N times, using bucket sort
+O(M*N)
+M is for outer loop.
+Each internal loop is for N times, using bucket sort
 
 Count sort:
-	O(N)
-	http://www.personal.kent.edu/~rmuhamma/Algorithms/MyAlgorithms/Sorting/countingSort.htm
+O(N)
+http://www.personal.kent.edu/~rmuhamma/Algorithms/MyAlgorithms/Sorting/countingSort.htm
 ###########################################
 babylonian method:
 
@@ -342,46 +520,46 @@ Let xn+1 be the average of xn and S / xn (using the arithmetic mean to approxima
 Repeat step 2 until the desired accuracy is achieved.
 
 ###########################################
-    abstract class GraphicObject {
-        int x, y;
-        ...
-        void moveTo(int newX, int newY) {
-            ...
-        }
-        abstract void draw();
-        abstract void resize();
-    }
+abstract class GraphicObject {
+	int x, y;
+	...
+	void moveTo(int newX, int newY) {
+		...
+	}
+	abstract void draw();
+	abstract void resize();
+}
 
 Each non-abstract subclass of GraphicObject, such as Circle and Rectangle, must provide implementations for the draw and resize methods:
 
-    class Circle extends GraphicObject {
-        void draw() {
-            ...
-        }
-        void resize() {
-            ...
-        }
-    }
-    class Rectangle extends GraphicObject {
-        void draw() {
-            ...
-        }
-        void resize() {
-            ...
-        }
-    }
+class Circle extends GraphicObject {
+	void draw() {
+		...
+	}
+	void resize() {
+		...
+	}
+}
+class Rectangle extends GraphicObject {
+	void draw() {
+		...
+	}
+	void resize() {
+		...
+	}
+}
 
 ###########################################
 sudo apt-get update
-	To install all available updates:
+To install all available updates:
 sudo apt-get upgrade
-	To search for a package:
+To search for a package:
 apt-cache search package
-	To install a package:
+To install a package:
 sudo apt-get install package
-	To remove a package:
+To remove a package:
 sudo apt-get remove package
-	To list other apt commands and options:
+To list other apt commands and options:
 apt-get help
 
 ###########################################
@@ -413,8 +591,8 @@ The wc section of code works the same way, except in revers
 Unions like structure contain members whose individual data types may differ from one another. However the members that compose a union all share the same storage area within the computers memory where as each member within a structure is assigned its own unique storage area. Thus unions are used to conserve memory. They are useful for application involving multiple members. Where values need not be assigned to all the members at any one time. Like structures union can be declared using the keyword union as follows:
 
 union {
-float coords[3];
-char about[20];
+	float coords[3];
+	char about[20];
 } assocdata;
 
 code.m=456;
@@ -433,9 +611,9 @@ http://developers.facebook.com/docs/guides/web
 ###########################################
 Some examples of sorts which are not comparison sorts include:
 
-    * Radix sort (examines individual bits of keys)
-    * Counting sort (indexes using key values)
-    * Bucket sort (examines bits of keys)
+* Radix sort (examines individual bits of keys)
+* Counting sort (indexes using key values)
+* Bucket sort (examines bits of keys)
 
 ###########################################
 http://www.cplusplus.com/doc/tutorial/typecasting/
@@ -467,13 +645,13 @@ Infix to Postfix Conversion :
 
 In normal algebra we use the infix notation like a+b*c. The corresponding postfix notation is abc*+. The algorithm for the conversion is as follows :
 
-    * Scan the Infix string from left to right.
-    * Initialise an empty stack.
-    * If the scannned character is an operand, add it to the Postfix string. If the scanned character is an operator and if the stack is empty Push the character to stack.
-          o If the scanned character is an Operand and the stack is not empty, compare the precedence of the character with the element on top of the stack (topStack). If topStack has higher precedence over the scanned character Pop the stack else Push the scanned character to stack. Repeat this step as long as stack is not empty and topStack has precedence over the character.
-      Repeat this step till all the characters are scanned.
-    * (After all characters are scanned, we have to add any character that the stack may have to the Postfix string.) If stack is not empty add topStack to Postfix string and Pop the stack. Repeat this step as long as stack is not empty.
-    * Return the Postfix string.
+* Scan the Infix string from left to right.
+* Initialise an empty stack.
+* If the scannned character is an operand, add it to the Postfix string. If the scanned character is an operator and if the stack is empty Push the character to stack.
+o If the scanned character is an Operand and the stack is not empty, compare the precedence of the character with the element on top of the stack (topStack). If topStack has higher precedence over the scanned character Pop the stack else Push the scanned character to stack. Repeat this step as long as stack is not empty and topStack has precedence over the character.
+Repeat this step till all the characters are scanned.
+* (After all characters are scanned, we have to add any character that the stack may have to the Postfix string.) If stack is not empty add topStack to Postfix string and Pop the stack. Repeat this step as long as stack is not empty.
+* Return the Postfix string.
 
 Conversion from infix to prefix:
 
@@ -513,13 +691,13 @@ http://www.parashift.com/c++-faq-lite/ctors.html#faq-10.6
 # if you use const data member, then use initialization list to assign values
 1	class Something
 2	{
-3	private:
-4	    const int m_nValue;
-5	public:
-6	    Something(): m_nValue(5)
-7	    {
-8	    }
-9	};
+	3	private:
+	4	    const int m_nValue;
+	5	public:
+	6	    Something(): m_nValue(5)
+	7	    {
+		8	    }
+	9	};
 
 Consider the following constructor that initializes member object x_ using an initialization list: Fred::Fred() : x_(whatever) { }. The most common benefit of doing this is improved performance. For example, if the expression whatever is the same type as member variable x_, the result of the whatever expression is constructed directly inside x_ — the compiler does not make a separate copy of the object. Even if the types are not the same, the compiler is usually able to do a better job with initialization lists than with assignments.
 
@@ -527,86 +705,86 @@ The other (inefficient) way to build constructors is via assignment, such as: Fr
 
 # why is named cstor needed
 
- class Point {
- public:
-   Point(float x, float y);     // Rectangular coordinates
-   Point(float r, float a);     // Polar coordinates (radius and angle)
-   // ERROR: Overload is Ambiguous: Point::Point(float,float)
- };
+class Point {
+	public:
+	Point(float x, float y);     // Rectangular coordinates
+	Point(float r, float a);     // Polar coordinates (radius and angle)
+	// ERROR: Overload is Ambiguous: Point::Point(float,float)
+};
 
- int main()
- {
-   Point p = Point(5.7, 1.2);   // Ambiguous: Which coordinate system?
-   ...
- }
+int main()
+{
+	Point p = Point(5.7, 1.2);   // Ambiguous: Which coordinate system?
+	...
+}
 One way to solve this ambiguity is to use the Named Constructor Idiom:
 
- #include <cmath>               // To get std::sin() and std::cos()
+#include <cmath>               // To get std::sin() and std::cos()
 
- class Point {
- public:
-   static Point rectangular(float x, float y);      // Rectangular coord's
-   static Point polar(float radius, float angle);   // Polar coordinates
-   // These static methods are the so-called "named constructors"
-   ...
+class Point {
+	public:
+	static Point rectangular(float x, float y);      // Rectangular coord's
+	static Point polar(float radius, float angle);   // Polar coordinates
+	// These static methods are the so-called "named constructors"
+	...
 
-'
+	'
 
 
 ###########################################
-qsrot.h @ sahni codes:
+	qsrot.h @ sahni codes:
 	E:\My eBooks\Algo\Sahni Codes\all
 ###########################################
 
 
 ###########################################
-#
+	#
 
 ###########################################
-static variables are stored in the data segment or BSS of the process memory.
+	static variables are stored in the data segment or BSS of the process memory.
 
-xinu: un-initialised data in BSS
-
-###########################################
-in STL, map is implemented by RB tree, while hashmap is implemented via hash
-
-In STL, map is implemented by RB Tree whereas Hashmap is implemented by linkedlists/vectors
-Map does have duplicates. HashMap has.
-Map does not have collisions.
-Map has a complexity O(logn), hashmaps generally have O(1).
-
+	xinu: un-initialised data in BSS
 
 ###########################################
-const int x;      // constant int
-x = 2;            // illegal - can't modify x
+	in STL, map is implemented by RB tree, while hashmap is implemented via hash
 
-const int* pX;    // changeable pointer to constant int
-*pX = 3;          // illegal -  can't use pX to modify an int
-pX = &someOtherIntVar;      // legal - pX can point somewhere else
+	In STL, map is implemented by RB Tree whereas Hashmap is implemented by linkedlists/vectors
+	Map does have duplicates. HashMap has.
+	Map does not have collisions.
+	Map has a complexity O(logn), hashmaps generally have O(1).
 
-int* const pY;              // constant pointer to changeable int
-*pY = 4;                    // legal - can use pY to modify an int
-pY = &someOtherIntVar;      // illegal - can't make pY point anywhere else
 
-const int* const pZ;        // const pointer to const int
-*pZ = 5;                    // illegal - can't use pZ to modify an int
-pZ = &someOtherIntVar;      // illegal - can't make pZ point anywhere else
+###########################################
+	const int x;      // constant int
+	x = 2;            // illegal - can't modify x
 
-'
+	const int* pX;    // changeable pointer to constant int
+	*pX = 3;          // illegal -  can't use pX to modify an int
+	pX = &someOtherIntVar;      // legal - pX can point somewhere else
+
+	int* const pY;              // constant pointer to changeable int
+	*pY = 4;                    // legal - can use pY to modify an int
+	pY = &someOtherIntVar;      // illegal - can't make pY point anywhere else
+
+	const int* const pZ;        // const pointer to const int
+	*pZ = 5;                    // illegal - can't use pZ to modify an int
+	pZ = &someOtherIntVar;      // illegal - can't make pZ point anywhere else
+
+	'
 ###########################################
 #http://www.cplusplus.com/doc/tutorial/exceptions/
 
-float myfunction (char param) throw (int);
+	float myfunction (char param) throw (int);
 
 
-This declares a function called myfunction which takes one agument of type char and returns an element of type float. The only exception that this function might throw is an exception of type int. If it throws an exception with a different type, either directly or indirectly, it cannot be caught by a regular int-type handler.
+	This declares a function called myfunction which takes one agument of type char and returns an element of type float. The only exception that this function might throw is an exception of type int. If it throws an exception with a different type, either directly or indirectly, it cannot be caught by a regular int-type handler.
 
 
-int myfunction (int param) throw(); // no exceptions allowed
-int myfunction (int param);         // all exceptions allowed
+	int myfunction (int param) throw(); // no exceptions allowed
+	int myfunction (int param);         // all exceptions allowed
 
 
-'
+	'
 ###########################################
 what are allocators ?
 
@@ -642,36 +820,36 @@ As usual with the Named Constructor Idiom, the constructors are all private or p
 
 Note also that you can make another class Wilma a friend of Fred if you want to allow a Wilma to have a member object of class Fred, but of course this is a softening of the original goal, namely to force Fred objects to be allocated via new.
 
-		 class Fred {
-		 public:
-		   // The create() methods are the "named constructors":
-		   static Fred* create()                 { return new Fred();     }
-		   static Fred* create(int i)            { return new Fred(i);    }
-		   static Fred* create(Fred const& fred) { return new Fred(fred); }
-		   ...
+class Fred {
+	public:
+	// The create() methods are the "named constructors":
+	static Fred* create()                 { return new Fred();     }
+	static Fred* create(int i)            { return new Fred(i);    }
+	static Fred* create(Fred const& fred) { return new Fred(fred); }
+	...
 
-		 private:
-		   // The constructors themselves are private or protected:
-		   Fred();
-		   Fred(int i);
-		   Fred(Fred const& fred);
-		   ...
-		 };
+	private:
+	// The constructors themselves are private or protected:
+	Fred();
+	Fred(int i);
+	Fred(Fred const& fred);
+	...
+};
 
-		int main()
-		 {
-		   Fred* p = Fred::create(5);
-		   ...
-		   delete p;
-		   ...
-		 }
+int main()
+{
+	Fred* p = Fred::create(5);
+	...
+	delete p;
+	...
+}
 
 for e.g.: // vkc
 
 class x {
 	public:
 	static x* (int a) { return new x(a); }		// we make static so that it can be called by
-							// class name
+	// class name
 
 	private:
 	int datamem;
@@ -695,10 +873,10 @@ class A { };
 
 compiler should provide (as and when needed)
 
-       1. a constructor
-       2. a destructor
-       3. a copy constructor
-       4. = operator
+1. a constructor
+2. a destructor
+3. a copy constructor
+4. = operator
 
 #
 ###########################################
@@ -712,25 +890,25 @@ based on sub sequence problem ....
 
 int FindMax ( int amount, ...)
 {
-  int i,val,greater;
-  va_list vl;
-  va_start(vl,amount);
-  greater=va_arg(vl,int);
-  for (i=1;i<amount;i++)
-  {
-    val=va_arg(vl,int);
-    greater=(greater>val)?greater:val;
-  }
-  va_end(vl);
-  return greater;
+	int i,val,greater;
+	va_list vl;
+	va_start(vl,amount);
+	greater=va_arg(vl,int);
+	for (i=1;i<amount;i++)
+	{
+		val=va_arg(vl,int);
+		greater=(greater>val)?greater:val;
+	}
+	va_end(vl);
+	return greater;
 }
 
 int main ()
 {
-  int m;
-  m= FindMax (7,702,422,631,834,892,104,772);
-  printf ("The greatest one is: %d\n",m);
-  return 0;
+	int m;
+	m= FindMax (7,702,422,631,834,892,104,772);
+	printf ("The greatest one is: %d\n",m);
+	return 0;
 }
 
 
@@ -770,8 +948,8 @@ mutable keyword indicates that particular member of a structure or class can be 
 
 struct data
 {
-char name[80];
-mutable double salary;
+	char name[80];
+	mutable double salary;
 }
 
 const data MyStruct = { "Satish Shetty", 1000 }; //initlized by complier
@@ -792,18 +970,18 @@ constructor with a single argument makes that constructor as conversion ctor and
 using namespace std;
 class Boo
 {
-    int x;
-  public:
-    Boo( int i ){
-        x=i;
-    }
-    void prnt(){    cout << x; }
+	int x;
+	public:
+	Boo( int i ){
+		x=i;
+	}
+	void prnt(){    cout << x; }
 };
 
 int main () {
-Boo BooObject = 10 ; // assigning int 10 Boo object
-BooObject.prnt();
-return 0;
+	Boo BooObject = 10 ; // assigning int 10 Boo object
+	BooObject.prnt();
+	return 0;
 }
 
 
@@ -823,8 +1001,8 @@ bipartite: http://en.wikipedia.org/wiki/Bipartite_graph
 
 Any graph with no odd cycles is bipartite. As a consequence of this:
 
-    * Every tree is bipartite.
-    * Cycle graphs with an even number of vertices are bipartite.
+* Every tree is bipartite.
+* Cycle graphs with an even number of vertices are bipartite.
 
 
 http://en.wikipedia.org/wiki/Shortest_path
@@ -834,28 +1012,28 @@ The travelling salesman problem is the problem of finding the shortest path that
 http://geek-o-pedia.blogspot.com/2008/03/recently-i-encountered-trivial-but.html
 2 queues into a stack:
 
-    * Version A: The stack should be efficient when pushing an item.
-    * Version B: The stack should be efficient when popping an item.
+* Version A: The stack should be efficient when pushing an item.
+* Version B: The stack should be efficient when popping an item.
 
 
 Version A:
 
-    * push:
-          o enqueue in queue1	: 1,2,3,4,5
-    * pop:
-          o while size of queue1 is bigger than 1, pipe dequeued items from queue1 into queue2	{1,2,3,4} last = {5}
-          o dequeue and return the last item of queue1, then switch the names of queue1 and queue2
-	  	return 5 as pop and queue2 is now queue1
+* push:
+o enqueue in queue1	: 1,2,3,4,5
+* pop:
+o while size of queue1 is bigger than 1, pipe dequeued items from queue1 into queue2	{1,2,3,4} last = {5}
+o dequeue and return the last item of queue1, then switch the names of queue1 and queue2
+return 5 as pop and queue2 is now queue1
 
 Version B:
 
-    * push:
-          o enqueue in queue2 	: 1,2,3,4,5
-          o enqueue all items of queue1 in queue2, then switch the names of queue1 and queue2
-	  		q1 = 1,2,3,4,5
-			q2 = {}
-    * pop:
-          o deqeue from queue1
+* push:
+o enqueue in queue2 	: 1,2,3,4,5
+o enqueue all items of queue1 in queue2, then switch the names of queue1 and queue2
+q1 = 1,2,3,4,5
+q2 = {}
+* pop:
+o deqeue from queue1
 
 
 
@@ -866,14 +1044,14 @@ Snapshot is point in time image of any individual file/directory or entire File 
 
 ###########################################
 todo:
-	operator overloading in classes
-	the way done in sartaj sahni for outputtting..
+operator overloading in classes
+the way done in sartaj sahni for outputtting..
 
-	template<class T>
-	void LinearList<T>::Output(ostream& out) const
-	{// Put the list into the stream out.
-	   for (int i = 0; i < length; i++)
-	      out << element[i] << "  ";
+template<class T>
+void LinearList<T>::Output(ostream& out) const
+{// Put the list into the stream out.
+	for (int i = 0; i < length; i++)
+	out << element[i] << "  ";
 	}
 
 	// overload <<
@@ -887,17 +1065,17 @@ Or it can be done by directly using a friend function...
 
 friend ostream &operator<<(ostream &out, Complex c)     //output
 {
-        out<<"real part: "<<<"\n";
-        out<<"imag part: "<<<"\n";
-        return out;
+	out<<"real part: "<<<"\n";
+	out<<"imag part: "<<<"\n";
+	return out;
 }
 friend istream &operator>>(istream &in, Complex &c)     //input
 {
-        cout<<"enter real part:\n";
-        in>>c.real;
-        cout<<"enter imag part: \n";
-        in>>c.imag;
-        return in;
+	cout<<"enter real part:\n";
+	in>>c.real;
+	cout<<"enter imag part: \n";
+	in>>c.imag;
+	return in;
 }
 
 ###########################################
@@ -976,7 +1154,7 @@ $filename = $query->param("song");
 $filename =~ s/.*[\/\\](.*)/$1/;		# EXTRACT JUST THE LAST NAME
 						# $filename = "c:/hel/one/two/three";
 						# $1 = three
-$upload_filehandle = $query->upload("song");
+						$upload_filehandle = $query->upload("song");
 
 open(UPLOADFILE, ">$upload_dir/$filename") or die "Can't open '$upload_dir/$filename': $!";
 binmode UPLOADFILE;
@@ -1021,7 +1199,7 @@ $server = IO::Socket::INET->new(LocalPort => $server_port, Proto=>"udp") or
 	die "Couldn't be a udp server on port $server_port : $@\n";
 
 while ($him = $server->recv($datagram, $MAX_TO_READ, $flags)) {
-   	# do something
+	# do something
 }
 
 udpqotd - UDP message server
@@ -1132,8 +1310,8 @@ class MaxHeap {
       ~MaxHeap() {delete [] heap;}
       int Size() const {return CurrentSize;}
       T Max() {if (CurrentSize == 0)
-                  throw OutOfBounds();
-               return heap[1];}
+		  throw OutOfBounds();
+	       return heap[1];}
       MaxHeap<T>& Insert(const T& x);
       MaxHeap<T>& DeleteMax(T& x);
       void Initialize(T a[], int size, int ArraySize);
@@ -1207,21 +1385,21 @@ Code:
 class Base
 {
        public:
-          Base(){ cout<<"Constructor: Base"<<endl;}
-          //~Base(){ cout<<"Destructor : Base"<<endl;}
-          virtual ~Base(){ cout<<"Destructor : Base"<<endl;}
+	  Base(){ cout<<"Constructor: Base"<<endl;}
+	  //~Base(){ cout<<"Destructor : Base"<<endl;}
+	  virtual ~Base(){ cout<<"Destructor : Base"<<endl;}
 };
 class Derived: public Base
 {
      //Doing a lot of jobs by extending the functionality
        public:
-           Derived(){ cout<<"Constructor: Derived"<<endl;}
-           ~Derived(){ cout<<"Destructor : Derived"<<endl;}
+	   Derived(){ cout<<"Constructor: Derived"<<endl;}
+	   ~Derived(){ cout<<"Destructor : Derived"<<endl;}
  };
 
 <main>
 	Base *Var = new Derived();
-        delete Var;
+	delete Var;
 
 If Base has a virtual dest. o/p will be like:
 	Constructor: Base
@@ -1368,10 +1546,10 @@ bool IntersectRect(const RECT * r1, const RECT * r2)
 // recheck
 {
     return ! ( r2->left > r1->right
-        || r2->right < r1->left
-        || r2->top > r1->bottom
-        || r2->bottom > r1->top
-        );
+	|| r2->right < r1->left
+	|| r2->top > r1->bottom
+	|| r2->bottom > r1->top
+	);
 }
 
 The above algorithm finds the conditions at which the rectangles do not intersect and then negates the values to get the result. There is a straight forward way of doing the same algorithm, but it requires far more conditions than the one above.
@@ -1536,10 +1714,10 @@ InitLsaString(
     DWORD StringLength;
 
     if (String == NULL) {
-        LsaString->Buffer = NULL;
-        LsaString->Length = 0;
-        LsaString->MaximumLength = 0;
-        return;
+	LsaString->Buffer = NULL;
+	LsaString->Length = 0;
+	LsaString->MaximumLength = 0;
+	return;
     }
 
     StringLength = wcslen(String);
@@ -1565,22 +1743,22 @@ OpenPolicy(
     ZeroMemory(&ObjectAttributes, sizeof(ObjectAttributes));
 
     if (ServerName != NULL) {
-        //
-        // Make a LSA_UNICODE_STRING out of the LPWSTR passed in
-        //
-        InitLsaString(&ServerString, ServerName);
-        Server = &ServerString;
+	//
+	// Make a LSA_UNICODE_STRING out of the LPWSTR passed in
+	//
+	InitLsaString(&ServerString, ServerName);
+	Server = &ServerString;
     }
 
     //
     // Attempt to open the policy.
     //
     return LsaOpenPolicy(
-                Server,
-                &ObjectAttributes,
-                DesiredAccess,
-                PolicyHandle
-                );
+		Server,
+		&ObjectAttributes,
+		DesiredAccess,
+		PolicyHandle
+		);
 }
 
 /*++
@@ -1617,48 +1795,48 @@ GetAccountSid(
     // initial memory allocations
     //
     if((*Sid=HeapAlloc(
-                    GetProcessHeap(),
-                    0,
-                    cbSid
-                    )) == NULL) break;
+		    GetProcessHeap(),
+		    0,
+		    cbSid
+		    )) == NULL) break;
 
     if((ReferencedDomain=(LPTSTR)HeapAlloc(
-                    GetProcessHeap(),
-                    0,
-                    cchReferencedDomain * sizeof(TCHAR)
-                    )) == NULL) break;
+		    GetProcessHeap(),
+		    0,
+		    cchReferencedDomain * sizeof(TCHAR)
+		    )) == NULL) break;
 
     //
     // Obtain the SID of the specified account on the specified system.
     //
     while(!LookupAccountName(
-                    SystemName,         // machine to lookup account on
-                    AccountName,        // account to lookup
-                    *Sid,               // SID of interest
-                    &cbSid,             // size of SID
-                    ReferencedDomain,   // domain account was found on
-                    &cchReferencedDomain,
-                    &peUse
-                    )) {
-        if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
-            //
-            // reallocate memory
-            //
-            if((*Sid=HeapReAlloc(
-                        GetProcessHeap(),
-                        0,
-                        *Sid,
-                        cbSid
-                        )) == NULL) break;
+		    SystemName,         // machine to lookup account on
+		    AccountName,        // account to lookup
+		    *Sid,               // SID of interest
+		    &cbSid,             // size of SID
+		    ReferencedDomain,   // domain account was found on
+		    &cchReferencedDomain,
+		    &peUse
+		    )) {
+	if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
+	    //
+	    // reallocate memory
+	    //
+	    if((*Sid=HeapReAlloc(
+			GetProcessHeap(),
+			0,
+			*Sid,
+			cbSid
+			)) == NULL) break;
 
-            if((ReferencedDomain=(LPTSTR)HeapReAlloc(
-                        GetProcessHeap(),
-                        0,
-                        ReferencedDomain,
-                        cchReferencedDomain * sizeof(TCHAR)
-                        )) == NULL) break;
-        }
-        else break;
+	    if((ReferencedDomain=(LPTSTR)HeapReAlloc(
+			GetProcessHeap(),
+			0,
+			ReferencedDomain,
+			cchReferencedDomain * sizeof(TCHAR)
+			)) == NULL) break;
+	}
+	else break;
     }
 
     //
@@ -1675,10 +1853,10 @@ GetAccountSid(
     HeapFree(GetProcessHeap(), 0, ReferencedDomain);
 
     if(!bSuccess) {
-        if(*Sid != NULL) {
-            HeapFree(GetProcessHeap(), 0, *Sid);
-            *Sid = NULL;
-        }
+	if(*Sid != NULL) {
+	    HeapFree(GetProcessHeap(), 0, *Sid);
+	    *Sid = NULL;
+	}
     }
 
 
@@ -1704,21 +1882,21 @@ SetPrivilegeOnAccount(
     // grant or revoke the privilege, accordingly
     //
     if(bEnable) {
-        return LsaAddAccountRights(
-                PolicyHandle,       // open policy handle
-                AccountSid,         // target SID
-                &PrivilegeString,   // privileges
-                1                   // privilege count
-                );
+	return LsaAddAccountRights(
+		PolicyHandle,       // open policy handle
+		AccountSid,         // target SID
+		&PrivilegeString,   // privileges
+		1                   // privilege count
+		);
     }
     else {
-        return LsaRemoveAccountRights(
-                PolicyHandle,       // open policy handle
-                AccountSid,         // target SID
-                FALSE,              // do not disable all rights
-                &PrivilegeString,   // privileges
-                1                   // privilege count
-                );
+	return LsaRemoveAccountRights(
+		PolicyHandle,       // open policy handle
+		AccountSid,         // target SID
+		FALSE,              // do not disable all rights
+		&PrivilegeString,   // privileges
+		1                   // privilege count
+		);
     }
 }
 
@@ -1749,33 +1927,33 @@ DisplayWinError(
     fprintf(stderr,"%s error!\n", szAPI);
 
     if(dwBufferLength=FormatMessageA(
-                        FORMAT_MESSAGE_ALLOCATE_BUFFER |
-                        FORMAT_MESSAGE_FROM_SYSTEM,
-                        NULL,
-                        WinError,
-                        GetUserDefaultLangID(),
-                        (LPSTR) &MessageBuffer,
-                        0,
-                        NULL
-                        ))
+			FORMAT_MESSAGE_ALLOCATE_BUFFER |
+			FORMAT_MESSAGE_FROM_SYSTEM,
+			NULL,
+			WinError,
+			GetUserDefaultLangID(),
+			(LPSTR) &MessageBuffer,
+			0,
+			NULL
+			))
     {
-        DWORD dwBytesWritten; // unused
+	DWORD dwBytesWritten; // unused
 
-        //
-        // Output message string on stderr.
-        //
-        WriteFile(
-            GetStdHandle(STD_ERROR_HANDLE),
-            MessageBuffer,
-            dwBufferLength,
-            &dwBytesWritten,
-            NULL
-            );
+	//
+	// Output message string on stderr.
+	//
+	WriteFile(
+	    GetStdHandle(STD_ERROR_HANDLE),
+	    MessageBuffer,
+	    dwBufferLength,
+	    &dwBytesWritten,
+	    NULL
+	    );
 
-        //
-        // Free the buffer allocated by the system.
-        //
-        LocalFree(MessageBuffer);
+	//
+	// Free the buffer allocated by the system.
+	//
+	LocalFree(MessageBuffer);
     }
 }
 
@@ -1802,9 +1980,9 @@ main(int argc, char *argv[])
 
     if(argc == 1)
     {
-        fprintf(stderr,"Usage: %s <Account> [TargetMachine]\n",
-            argv[0]);
-        return RTN_USAGE;
+	fprintf(stderr,"Usage: %s <Account> [TargetMachine]\n",
+	    argv[0]);
+	return RTN_USAGE;
     }
 
     //
@@ -1823,12 +2001,12 @@ main(int argc, char *argv[])
     // Open the policy on the target machine.
     //
     if((Status=OpenPolicy(
-                wComputerName,      // target machine
-                POLICY_CREATE_ACCOUNT | POLICY_LOOKUP_NAMES,
-                &PolicyHandle       // resultant policy handle
-                )) != STATUS_SUCCESS) {
-        DisplayNtStatus("OpenPolicy", Status);
-        return RTN_ERROR;
+		wComputerName,      // target machine
+		POLICY_CREATE_ACCOUNT | POLICY_LOOKUP_NAMES,
+		&PolicyHandle       // resultant policy handle
+		)) != STATUS_SUCCESS) {
+	DisplayNtStatus("OpenPolicy", Status);
+	return RTN_ERROR;
     }
 
     //
@@ -1839,34 +2017,34 @@ main(int argc, char *argv[])
     // trusted domains.
     //
     if(GetAccountSid(
-            NULL,       // default lookup logic
-            AccountName,// account to obtain SID
-            &pSid       // buffer to allocate to contain resultant SID
-            )) {
-        //
-        // We only grant the privilege if we succeeded in obtaining the
-        // SID. We can actually add SIDs which cannot be looked up, but
-        // looking up the SID is a good sanity check which is suitable for
-        // most cases.
+	    NULL,       // default lookup logic
+	    AccountName,// account to obtain SID
+	    &pSid       // buffer to allocate to contain resultant SID
+	    )) {
+	//
+	// We only grant the privilege if we succeeded in obtaining the
+	// SID. We can actually add SIDs which cannot be looked up, but
+	// looking up the SID is a good sanity check which is suitable for
+	// most cases.
 
-        //
-        // Grant the SeServiceLogonRight to users represented by pSid.
-        //
-        if((Status=SetPrivilegeOnAccount(
-                    PolicyHandle,           // policy handle
-                    pSid,                   // SID to grant privilege
-                    L"SeServiceLogonRight", // Unicode privilege
-                    TRUE                    // enable the privilege
-                    )) == STATUS_SUCCESS)
-            iRetVal=RTN_OK;
-        else
-            DisplayNtStatus("AddUserRightToAccount", Status);
+	//
+	// Grant the SeServiceLogonRight to users represented by pSid.
+	//
+	if((Status=SetPrivilegeOnAccount(
+		    PolicyHandle,           // policy handle
+		    pSid,                   // SID to grant privilege
+		    L"SeServiceLogonRight", // Unicode privilege
+		    TRUE                    // enable the privilege
+		    )) == STATUS_SUCCESS)
+	    iRetVal=RTN_OK;
+	else
+	    DisplayNtStatus("AddUserRightToAccount", Status);
     }
     else {
-        //
-        // Error obtaining SID.
-        //
-        DisplayWinError("GetAccountSid", GetLastError());
+	//
+	// Error obtaining SID.
+	//
+	DisplayWinError("GetAccountSid", GetLastError());
     }
 
     //
@@ -1999,7 +2177,7 @@ break;
 http://en.wikipedia.org/wiki/C_preprocessor
 
 #define _STATE_TO_STRING(_st) \
-  	case Veritas::HAL::SVC::HALSVC_##_st: n = #_st; break;
+	case Veritas::HAL::SVC::HALSVC_##_st: n = #_st; break;
 
     _STATE_TO_STRING(STARTING);
     _STATE_TO_STRING(RUNNING);
@@ -2096,7 +2274,7 @@ vector iterator:
 vector<string> vecTags;
     vector<string>::iterator itr;
     for (itr = vecTags.begin(); itr != vecTags.end(); itr++) {
-        __m_sMaskingTags.push_back(*itr);
+	__m_sMaskingTags.push_back(*itr);
     }
 
     ===============================THROW + VIRTUAL:=================================
@@ -2105,8 +2283,8 @@ virtual int  ExecPipe(string strCmd, string sCurrentWorkingDir) throw (EVxExecPi
 
 	FOR ERROR NO. DO FOLLOWING:
 #include <errno.h>
-            VxITLTrace(tlError, "VxExecPipeBase: cannot copy string (%s), errno %d",
-                   itrenv->c_str(), errno);
+	    VxITLTrace(tlError, "VxExecPipeBase: cannot copy string (%s), errno %d",
+		   itrenv->c_str(), errno);
 
 	  FOR STATIC DECLARALATION IN A CLASS LIKE:
 		static CVxLock m_Lock;
@@ -2143,7 +2321,7 @@ the request cannot be satisfied. The storage is initialized to zero.
 The pointer returned by malloc or calloc has the proper alignment for the object in question,
 but it must be cast into the appropriate type, as in
 		int *ip;
- 		   ip = (int *) calloc(n, sizeof(int));
+		   ip = (int *) calloc(n, sizeof(int));
 
 
 ==================================	CALLOC & MALLOC=======================
@@ -2234,22 +2412,22 @@ On Mon, Jun 1, 2009 at 4:01 PM, Manish Bansode <manishbansode@gmail.com> wrote:
     while(<H>)
     {
     #       $lines.=$_;
-            @arr = split(/ /, $_);
-            foreach $entry(@arr)
-            {
-                    if( exists $inv_hash{$entry} )
-                    {
-                            $array_ref = $inv_hash{$entry};
-                            push(@$array_ref, $j);
-                    }
-                    else
-                    {
-                            my @array = ();
-                            push(@array, $j);
-                            $inv_hash{$entry} = \@array;
-                    }
-            }
-            $j++;
+	    @arr = split(/ /, $_);
+	    foreach $entry(@arr)
+	    {
+		    if( exists $inv_hash{$entry} )
+		    {
+			    $array_ref = $inv_hash{$entry};
+			    push(@$array_ref, $j);
+		    }
+		    else
+		    {
+			    my @array = ();
+			    push(@array, $j);
+			    $inv_hash{$entry} = \@array;
+		    }
+	    }
+	    $j++;
     }
 
     #print "\nj=$j\nsize=".keys(%inv_hash)."\n";

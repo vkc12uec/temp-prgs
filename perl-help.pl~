@@ -107,7 +107,7 @@ int echo(int fd)
     FD_SET(int fd, fd_set *set);      =>    put 'fd' in 'set'
     FD_ZERO(fd_set *set);             =>    very first calls, clears 'set'
 
-#    The following is a sample of pseudo codes for concurrency using a single process.
+    The following is a sample of pseudo codes for concurrency using a single process.
     create a socket
     bind to a well-known port
     while (1)

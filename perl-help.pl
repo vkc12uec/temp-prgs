@@ -2,6 +2,16 @@ intitle:"index.of" linkin (mp3|mp4|flv|avi|mpg|wmv) -html-htm-php-jsp-asp
 http://www.ihas1337code.com/2010/04/hacking-google-interview-from-mit.html
 
 ###########################################
+# difference b/w c++ map and hashmap
+They are implemented in very different ways.
+
+hash_map (unordered_map in TR1 and Boost; use those instead) use a hash table where the key is hashed to a slot in the table and the value is stored in a list tied to that key.
+
+map is implemented as a balanced binary search tree (usually a red/black tree).
+
+An unordered_map should give slightly better performance for accessing known elements of the collection, but a map will have additional useful characteristics (e.g. it is stored in sorted order, which allows traversal from start to finish). Unordered_map will be faster on insert and delete than a ma
+
+###########################################
 # loadbalancing:
 
 http://haproxy.1wt.eu/#desi

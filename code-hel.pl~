@@ -2,6 +2,20 @@
 vids:
 #http://openclassroom.stanford.edu/MainFolder/CoursePage.php?course=IntroToAlgorithms
 ###########################################
+# random line from a file
+#
+srand;
+open FILE, "<filename" or die "Could not open filename: $!\n";
+rand($.)<1 and ($line=$_) while <FILE>;
+close FILE;
+print "Random line is $line\n";
+
+# 
+Obviously, a file with one line (N=1) is fair: you always keep the first line because 1/1 = 100%, making it fair for files of 1 line. For a file with two lines, N=2. You always keep the first line; then when reaching the second line, you have a 50% chance of keeping it. Thus, both lines have an equal chance of being selected, which shows that N=2 is fair. For a file with three lines, N=3. You have a one-third chance, 33%, of keeping that third line. That leaves a two-thirds chance of retaining one of the first two out of the three lines. But we've already shown that for those first two lines there's a 50-50 chance of selecting either one. 50 percent of two-thirds is one-third. Thus, you have a one-third chance of selecting each of the three lines of the file.
+
+In the general case, a file of N+1 lines will choose the last line 1/(N+1) times and one of the previous N lines N/(N+1) times. Dividing N/(N+1) by N leaves us with 1/(N+1) for each the first N lines in our N+1 line file, and also 1/(N+1) for line number N+1. The algorithm is therefore fair for all N, where N is a positive integer.
+
+###########################################
 
 rough:
 ======
@@ -2192,6 +2206,26 @@ void merge(int lo, int m, int hi)
 }
 
 ###########################################
+# catalan:
+
+public static void printPar(int l, int r, char[] str, int count) {
+  if (l < 0 || r < l) return; // invalid state
+  if (l == 0 && r == 0) {
+    System.out.println(str); // found one, so print it
+  } else {
+    if (l > 0) { // try a left paren, if there are some available
+      str[count] = ‘(‘;
+          printPar(l - 1, r, str, count + 1);
+          }
+          if (r > l) { // try a right paren, if there’s a matching left
+          str[count] = ‘)’;
+      printPar(l, r - 1, str, count + 1);
+          }
+  }
+}
+
+
+###########################################
 Combinations:	wxyz		Call like: 	docombine (in, out, len , 0 , 0);
 
 w        x      y    z
@@ -2203,16 +2237,16 @@ wy
 wyz
 wz
 
-void DoCombine (char in[], char out [] , int length, int recursLev, int start)
+void DoCombine (char in[], char out [] , int length, int fillptr, int start)
 {
   int i ;
   for (i = start; i < length; i++) {
-    out[recursLev] = in[i]; /* select current letter */
-    out[recursLev + 1] = '\o' ; /* tack on NUL for printf */
+    out[fillptr] = in[i]; /* select current letter */
+    out[fillptr + 1] = '\o' ; /* tack on NUL for printf */
     printf("%s\n", out);
 
     if (i < length - 1) /* recurse if more letters in input */
-        DoCombine(in, out, length, recursLev +1 , i + 1);
+        DoCombine(in, out, length, fillptr +1 , i + 1);
   }
 }
 

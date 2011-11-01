@@ -10,7 +10,7 @@ rand($.)<1 and ($line=$_) while <FILE>;
 close FILE;
 print "Random line is $line\n";
 
-# 
+#
 Obviously, a file with one line (N=1) is fair: you always keep the first line because 1/1 = 100%, making it fair for files of 1 line. For a file with two lines, N=2. You always keep the first line; then when reaching the second line, you have a 50% chance of keeping it. Thus, both lines have an equal chance of being selected, which shows that N=2 is fair. For a file with three lines, N=3. You have a one-third chance, 33%, of keeping that third line. That leaves a two-thirds chance of retaining one of the first two out of the three lines. But we've already shown that for those first two lines there's a 50-50 chance of selecting either one. 50 percent of two-thirds is one-third. Thus, you have a one-third chance of selecting each of the three lines of the file.
 
 In the general case, a file of N+1 lines will choose the last line 1/(N+1) times and one of the previous N lines N/(N+1) times. Dividing N/(N+1) by N leaves us with 1/(N+1) for each the first N lines in our N+1 line file, and also 1/(N+1) for line number N+1. The algorithm is therefore fair for all N, where N is a positive integer.
@@ -43,44 +43,43 @@ struct node {
 #
 // computes a = b*q + r with 0 <= r < b
 void divide(unsigned a, unsigned b, unsigned& quo, unsigned& rem) {
-    // suppose numbers are positive
-    if(a < b) {
-        quo = 0; rem = a;
-        return;
-    }
-    quo = 1;
-    while(quo*b*2 <= a) {
-         quo *= 2;
-    }
-    // here it holds that: quo*b <= a < quo*b*2
-    if(quo * b == a) {
-        rem = 0;
-        return;
-    }
+  // suppose numbers are positive
+  if(a < b) {
+    quo = 0; rem = a;
+    return;
+  }
+  quo = 1;
+  while(quo*b*2 <= a) {
+    quo *= 2;
+  }
+  // here it holds that: quo*b <= a < quo*b*2
+  if(quo * b == a) {
+    rem = 0;
+    return;
+  }
 
-unsigned ql = quo, qr = quo*2, mid;
-while(1) {
-mid = (ql + qr) / 2;
-if(mid*b <= a && a < (mid+1)*b)
-break;
-if(mid*b < a) {
-ql = mid+1;
-} else {
-qr = mid;
-}
-}
-quo = mid, rem = a - quo * b;
+  unsigned ql = quo, qr = quo*2, mid;
+  while(1) {
+    mid = (ql + qr) / 2;
+    if(mid*b <= a && a < (mid+1)*b)
+      break;
+    if(mid*b < a) {
+      ql = mid+1;
+    } else {
+      qr = mid;
+    }
+  }
+  quo = mid, rem = a - quo * b;
 }
 
 
 int main() {
-unsigned a = 2556721331, b = 13, q, r;
-printf("correct: %d %d\n", a / b, a % b);
-divide(a, b, q, r);
-printf("test: quo: %d; rem: %d\n", q, r);
-return 1;
+  unsigned a = 2556721331, b = 13, q, r;
+  printf("correct: %d %d\n", a / b, a % b);
+  divide(a, b, q, r);
+  printf("test: quo: %d; rem: %d\n", q, r);
+  return 1;
 }
-
 
 ###########################################
 # sort a stack:
@@ -89,7 +88,7 @@ return 1;
 void sortStack () {
 n = S.length();
 for (i=n;i>=1;i--)
-	pushsmallest (s, i, INT_MIN);
+	pushsmallest (s, i, INT_MAX);
 }
 
 # push smallest element of stack from top to level at position level
@@ -101,12 +100,14 @@ void pushsmallest (s, int level, int small) {
 		s.push (small);
 	}
 	else {
-		int top = s.top();
-		if (top < small)
-			small = top;
-
+    int to_be_pushed = s.pop();
+		if (to_be_pushed < small) {
+      to_be_pushed = small;     # corrected
+			small = to_be_pushed;
+      flag = 1;
+    }
 		pushsmallest (s, level-1, small)
-		s.push (top);
+		s.push (to_be_pushed);
 	}
 }
 
@@ -233,34 +234,37 @@ subarray=>contiguous slice
 take cumulative sum of the array; if the cumulative sum has duplicate numbers then there is subarray which sums to zero;
 
 for(i=1;i<n;i++)
-c[i]=c[i-1]+input[i];
+  c[i]=c[i-1]+input[i];
 if(duplicates in array 'c')
 then true
-Complexity-O(n);
 
+Complexity-O(n);
 
 ###########################################
 # check if a tree is symettric , not data symettric perpendicular to root
 #
 here asked only structure not the data......
+
 int symTree(node *a , node *b)
 {
-if(a == NULL && b == NULL)
-{
-return 1;
+  if(a == NULL && b == NULL)
+  {
+    return 1;
+  }
+  else if( a != NULL && b!= NULL)
+  {
+    return (//if data should be check then
+        //a->data == b->data &&
+        symTree(a->left,b->right) &&
+        symTree(a->right,b->left));
+  }
+  else
+  {
+    return 0;
+  }
 }
-else if( a != NULL && b!= NULL)
-{
-return (//if data should be check then
-//a->data == b->data &&
-symTree(a->left,b->right) &&
-symTree(a->right,b->left));
-}
-else
-{
-return 0;
-}
-}
+
+
 
 # mtd 2:
 
@@ -302,14 +306,14 @@ Node *successor;
 
 # algo: if u do reverse inorder traversal, then at every node, u can assign its succ pointer
 # prpovided u keep its info
-# 
-node *su = 0;
-void rIno (node *n) {
+#
+node *su = 0;     // pass su by ref
+void rIno (node *n, node *&su) {
 	if (n) {
-		rIno(n->right);
+		rIno(n->right, su);
 		n->succ = su;
 		su = n;
-		rIno(n->left);
+		rIno(n->left, su);
 	}
 }
 
@@ -633,19 +637,17 @@ int maxSum (int a[], int length)
         msuf_st = i+1;  // anticipate that next will be +ve
         msuf_end = i+1;
       }
-      //msuf = Math.max(0, msuf + a[i]);
       if (m < msuf) {
         m_st = msuf_st;
         m_end = msuf_end;
         m = msuf;
       }
-      //m = Math.max(m, msuf);
     }
       printf ("\n pointers = %d || %d ", m_st, m_end);
       printf ("\n final = %d", m);
 
     return m;
-  }
+}
 
 
 ###########################################
@@ -1451,8 +1453,10 @@ void preIter (node *n) {
 			s.push (curr->rC);
 			curr = curr->lc;
 		}
-		if (!s.isempty () )
+		if (!s.isempty () ) {
 			curr = S.pop();
+      cout << curr->data;
+    }
 		else
 			break;
 	}
@@ -1824,7 +1828,8 @@ void Network::dfs(int v, int reach[], int label)
    int u = Begin(v);
    while (u) {
 	   // u is adj to v
-      if (!reach[u]) dfs(u, reach, label);
+      if (!reach[u]) 
+        dfs(u, reach, label);
       u = NextVertex(v);
 	}
 }
@@ -2217,7 +2222,7 @@ public static void printPar(int l, int r, char[] str, int count) {
       str[count] = ‘(‘;
           printPar(l - 1, r, str, count + 1);
           }
-          if (r > l) { // try a right paren, if there’s a matching left
+    if (r > l) { // try a right paren, if there’s a matching left
           str[count] = ‘)’;
       printPar(l, r - 1, str, count + 1);
           }
@@ -2294,32 +2299,30 @@ void Perm(T list[], int k, int m)
 
 void permutate( char[] str, int index )
 {
-if( index == strlen(str) )
-{ // We have a permutation so print it
-	printf(str);
-	return;
+  if( index == strlen(str) )
+  { // We have a permutation so print it
+    printf(str);
+    return;
+  }
+
+  char used[255];
+  bzero(used, sizeof(used));
+
+  int i;
+  for( i = index; i < strlen(str); i++ )
+  {
+    if( (int)used[arr[i]] != 0)
+    {
+      continue;
+    }
+
+    used[arr[i]] = 1;
+
+    swap( str[index], str[i] ); // It doesn't matter how you swap.'
+    permutate( str, index + 1 );
+    swap( str[index], str[i] );
+  }
 }
-
-char used[255];
-bzero(used, sizeof(used));
-
-int i;
-for( i = index; i < strlen(str); i++ )
-{
-if( (int)used[arr[i]] != 0)
-{
-	continue;
-}
-
-used[arr[i]] = 1;
-
-swap( str[index], str[i] ); // It doesn't matter how you swap.'
-permutate( str, index + 1 );
-swap( str[index], str[i] );
-}
-}
-
-
 
 # if duplicates are there : (this is possibly wrong)
 

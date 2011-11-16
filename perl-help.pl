@@ -2,6 +2,155 @@ intitle:"index.of" linkin (mp3|mp4|flv|avi|mpg|wmv) -html-htm-php-jsp-asp
 http://www.ihas1337code.com/2010/04/hacking-google-interview-from-mit.html
 
 ###########################################
+#Dynamic linking has many advantages over static linking. Here are two:
+
+Reduced use of disk space. Dynamically linked executables tend to be much smaller than statically linked executables.
+More efficient use of memory at run time. Dynamically linked executables allow the operating system to play clever tricks that may reduce total memory use when many programs are running simultaneously. (Ask me in a lab period if you would like a less vague explanation.)
+
+###########################################
+# Thread v/s process:
+
+By contrast, a thread is a coding construct that doesn't affect the architecture of an application. A single process might contains multiple threads; all threads within a process share the same state and same memory space, and can communicate with each other directly, because they share the same variables'
+
+###########################################
+In most systems a stack frame has a field to contain the previous value of the frame pointer register, the value it had while the caller was executing. For example, in the diagram above, the stack frame of DrawLine would have a memory location holding the frame pointer value that DrawSquare uses. The value is saved upon entry to the subroutine and restored for the return. Having such a field in a known location in the stack frame enables code to access each frame successively underneath the currently executing routine's frame, and also allows the routine to easily restore the frame pointer to the caller's frame, just before it returns.
+###########################################
+# static functions:
+For some reason, static has different meanings in in different contexts.
+
+    When specified on a function declaration, it makes the function local to the file.
+
+    When specified with a variable inside a function, it allows the vairable to retain its value between calls to the function. See static variables. 
+
+It seems a little strange that the same keyword has such different meanings.... 
+
+###########################################
+# C program code segment:
+
+When a program is loaded into memory, it resides in memory like following figure:
++-------------------+-------------------+----------+-----------+-----------+
+| Code segment(r+x) | Data segment(r+w) | BSS(r+w) | Heap(r+w) | Stack(r+w)|
++--------------------------------------------------------------------------+
+Figure-5: Runtime Memory Layout
+
+Start of BSS : 'break'
+
+brk and sbrk are used to change dynamically the amount of space allocated for the calling process's data segment. The change is made by resetting the process's break value. The break value is the address of the first location beyond the end of the data segment. The amound of allocated space increases as the break value increases. The current value of the break may be determined by calling sbrk(0).
+
+# pointer arithemtic:
+Pointer subtraction is also valid: if p and q point to elements of the same array, and p<q, then q-
+p+1 is the number of elements from p to q inclusive. This fact can be used to write yet another
+version of strlen:
+
+###########################################
+# Dynamic libs:
+
+To create shared library, you have to use -fPIC or  -fpic options beside -shared options. A
+function in shared library will  be placed diffirent  address  in memory for each program.  For that
+reason we have to generate position indipendent code (PIC). -fPIC option generates larger object
+file then -fpic. -fpic generates smaller and faster objects. But they will be platform dependent
+and they will include less debug informations.
+
+
+# Static libs:
+
+main.c
+#include <stdio.h>
+
+/* functions have to be external */
+extern void test();
+extern void util();
+
+int main() {
+  printf("in main");
+  /* Let call functions in library */
+  test();
+  util();
+  return 0; 
+}
+
+# test.c
+int test() {
+  printf("in test");
+  return 0;
+}
+
+# util.c
+int util() {
+  printf("in util");
+  return 0;
+}
+Lets compile above source codes:
+$ gcc -c test.c
+$ gcc -c util.c
+$ ar rc libtest.a test.o util.o
+$ ranlib libtest.a
+$ gcc -c main.c
+$ gcc main.o -L /home/simsek -ltest -o testprog
+
+
+###########################################
+# addresses in various segments of program:
+
+#include <stdio.h>
+#include <stdlib.h>
+int uig;
+int ig = 5;
+int func()
+{
+        return 0;
+}
+int main()
+{
+        int local;
+        int *ptr;
+        ptr = (int *) malloc(sizeof(int));
+        printf("An address from BSS: %p\n", &uig);
+        printf("An address from Data segment: %p\n", &ig);
+        printf("An address from Code segment: %p\n", &func);
+        printf("An address from Stack segment: %p\n", &local);
+        printf("An address from Heap: %p\n", ptr);
+        printf("Another address from Stack: %p\n", &ptr);
+        free(ptr);
+        return 0;
+}
+
+
+###########################################
+# struct alignment
+Here is a structure with members of various types, totaling 8 bytes before compilation:
+
+struct MixedData
+{
+    char Data1;
+    short Data2;
+    int Data3;
+    char Data4;
+};
+
+After compilation the data structure will be supplemented with padding bytes to ensure a proper alignment for each of its members:
+
+struct MixedData  /* After compilation in 32-bit x86 machine */
+{
+    char Data1; /* 1 byte */
+    char Padding1[1]; /* 1 byte for the following 'short' to be aligned on a 2 byte boundary
+assuming that the address where structure begins is an even number */
+    short Data2; /* 2 bytes */
+    int Data3;  /* 4 bytes - largest structure member */
+    char Data4; /* 1 byte */
+    char Padding2[3]; /* 3 bytes to make total size of the structure 12 bytes */
+};
+
+The compiled size of the structure is now 12 bytes. It is important to note that the last member is padded with the number of bytes required so that the total size of the structure should be a multiple of the largest alignment of any structure member (alignment(int) in this case, which = 4 on linux-32bit/gcc)
+
+struct FinalPadShort {
+  short s;
+  char n[3];
+};
+
+In this example the total size of the structure sizeof(FinalPadShort) = 6 not 5 (not 8 either) (so that the size is a multiple of 2 (alignment(short) = 2 on linux-32bit/gcc)).
+
+###########################################
 How Big is the Heap?
 It can only contain as much physical memory as you have installed or as much virtual memory as your operating system can make available (if it supports virtual memory)
 

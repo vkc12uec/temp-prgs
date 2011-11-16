@@ -1563,6 +1563,10 @@ E:\My eBooks\Algo\Sahni Codes\all\network.h
 		- compute in-degree
 		- stack 0 in-degress vertices
 		- find topo order
+
+# another trick is to start dfs(v) from a random node v , and the end of dfs(v) insert v into a list L
+# list of the nodes in descending order of finish nos. gives the topological order.
+#
 ###########################################
 
 # cicular sorted array search:

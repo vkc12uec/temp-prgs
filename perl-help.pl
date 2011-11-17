@@ -12,6 +12,27 @@ More efficient use of memory at run time. Dynamically linked executables allow t
 
 By contrast, a thread is a coding construct that doesn't affect the architecture of an application. A single process might contains multiple threads; all threads within a process share the same state and same memory space, and can communicate with each other directly, because they share the same variables'
 
+# https://computing.llnl.gov/tutorials/pthreads/
+
+This independent flow of control is accomplished because a thread maintains its own:
+  Stack pointer
+  Registers
+  Scheduling properties (such as policy or priority)
+  Set of pending and blocked signals
+  Thread specific data
+
+Because threads within the same process share resources:
+Changes made by one thread to shared system resources (such as closing a file) will be seen by all other threads.
+Two pointers having the same value point to the same data.
+Reading and writing to the same memory locations is possible, and therefore requires explicit synchronization by the programmer.
+
+# Shared Memory Model:
+
+All threads have access to the same global, shared memory
+Threads also have their own private data
+Programmers are responsible for synchronizing access (protecting) globally shared data
+
+
 ###########################################
 In most systems a stack frame has a field to contain the previous value of the frame pointer register, the value it had while the caller was executing. For example, in the diagram above, the stack frame of DrawLine would have a memory location holding the frame pointer value that DrawSquare uses. The value is saved upon entry to the subroutine and restored for the return. Having such a field in a known location in the stack frame enables code to access each frame successively underneath the currently executing routine's frame, and also allows the routine to easily restore the frame pointer to the caller's frame, just before it returns.
 ###########################################
@@ -539,7 +560,7 @@ for (int i =0;i<N;i++)
 signal[all_arrived];
 }
 
-# method 2:
+# method 2: (taken from Sema book)
 
 1 rendezvous
 2
@@ -547,7 +568,8 @@ signal[all_arrived];
 4 count = count + 1
 5 mutex.signal()
 6
-7 if count == n: barrier.signal()
+7 if count == n: 
+    barrier.signal()
 8
 9 barrier.wait()
 10 barrier.signal()
@@ -647,8 +669,6 @@ IP: Internet Protocol
 - Responsible for routing of data through intermediate networks and computers
 
 IP packet encapsulates the TCP/UDP packet.
-
-
 
 ###########################################
 

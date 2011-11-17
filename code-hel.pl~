@@ -2,6 +2,18 @@
 vids:
 #http://openclassroom.stanford.edu/MainFolder/CoursePage.php?course=IntroToAlgorithms
 ###########################################
+
+# reverse the bits:
+#
+I am trying to reverse the bits in a number
+The following fucntion successfully reverses the bits, but the runtime is O(n). 
+
+for ( unsigned i = 0; i < n_bits; ++i ) {
+    rev_bit = (rev_bit<<1) | ( val & 1 );
+    val >>= 1;
+  }
+
+###########################################
 # random line from a file
 #
 srand;
@@ -61,7 +73,7 @@ void divide(unsigned a, unsigned b, unsigned& quo, unsigned& rem) {
   unsigned ql = quo, qr = quo*2, mid;
   while(1) {
     mid = (ql + qr) / 2;
-    if(mid*b <= a && a < (mid+1)*b)
+    if(mid*b <= a && a < (mid+1)*b)     // IMPORTANT step
       break;
     if(mid*b < a) {
       ql = mid+1;
@@ -83,6 +95,32 @@ int main() {
 
 ###########################################
 # sort a stack:
+
+# mtd 1:
+void sort (Stack S) {
+  if (S.isEmpty())
+    return;
+  int t = S.pop();
+  sort (S);         // sort the stack
+  insert_in_sorted (t, S);    // insert a value t in sorted stack
+}
+
+void insert_in_sorted (int t, Stack S) {
+  if (S.isEmpty()) {
+    S.push(t);
+    return;
+  }
+  if (t < S.peek()){    // assumes that S is in ascending order, going downwards
+    int x = S.pop();
+    insert (t, S);
+    S.push (x);
+  }
+  else {
+    S.push (t);
+  }
+}
+
+# mtd 2:
 
 # push smallest at level n, 2nd smallest at level n-1 ....
 void sortStack () {
@@ -114,6 +152,24 @@ void pushsmallest (s, int level, int small) {
 ###########################################
 # reverse a stack:
 
+# mtd 1:
+void ReverseStack(Stack s)
+{
+   if(isEmpty(s) return;
+   x=pop(s);
+   ReverseStack(s);
+   RecursivePush(s,x);
+}
+RecursivePush(Stack s,int x);
+ {
+  int temp;
+  if(isEmpty(s)) {push(s,x) return;}
+  temp=pop(s);
+  recursivepush(s,x);
+  push(s,temp);
+ }
+
+# mtd 2:
 void revStack () {
 n = S.length();
 for (i=n;i>=1;i--)
@@ -173,7 +229,7 @@ void pushhelper (s, int value, int level) {
 
 
 ###########################################
-# merge to sorted linked list
+# merge 2 sorted linked list
 
 node * merge (node *a, node *b) {
 	if (!a)
@@ -241,7 +297,7 @@ then true
 Complexity-O(n);
 
 ###########################################
-# check if a tree is symettric , not data symettric perpendicular to root
+# check if a tree is symettric , not data , but symettric perpendicular to root
 #
 here asked only structure not the data......
 
@@ -291,7 +347,17 @@ L R L L R
 
 Now this is equal to the left subtree's sequence and hence voila
 
+# how to produce this L R L L R sequence:
 
+int arr[100];
+static int index = 0;
+void Inorder (node *n, int which_child) {
+  if (!n)
+    return;
+  Inorder (n->left, 0);
+  arr [index++] = which_child;
+  Inorder (n->right, 1);
+}
 
 '
 ###########################################
@@ -1832,7 +1898,7 @@ void Network::dfs(int v, int reach[], int label)
    int u = Begin(v);
    while (u) {
 	   // u is adj to v
-      if (!reach[u]) 
+      if (!reach[u])
         dfs(u, reach, label);
       u = NextVertex(v);
 	}
@@ -2112,7 +2178,7 @@ void quicksort (int[] a, int lo, int hi)
 
 Node *reverseList(Node *current, Node *parent)
 {
-        Node *revHead;
+   Node *revHead;
    if(current == null)
       revHead = parent;
    else
@@ -2388,6 +2454,14 @@ double, etc)
     *( struct tempStruct*) &A = *( struct tempStruct*) &B;\
     *( struct tempStruct*) &B = swap_tmp;}
 
+#define swap(x,y) do \
+   { unsigned char swap_temp[sizeof(x) == sizeof(y) ? (signed)sizeof(x) : -1]; \
+     memcpy(swap_temp,&y,sizeof(x)); \
+     memcpy(&y,&x,       sizeof(x)); \
+     memcpy(&x,swap_temp,sizeof(x)); \
+    } while(0)
+
+
 ###########################################/
 into binary code:
 
@@ -2468,6 +2542,9 @@ void findpath (int s, int tillnow0) {
 
 
 ###########################################/
+
+# Largest area under histtogram:
+#
 int largestArea(int arr[], int len)
 {
   int area[len]; //initialize it to 0

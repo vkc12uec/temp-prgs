@@ -2,11 +2,88 @@
 vids:
 #http://openclassroom.stanford.edu/MainFolder/CoursePage.php?course=IntroToAlgorithms
 ###########################################
+# AMZN: Given a number,find the next higher number using the same digits in the number. Eg- 15432, Soln- 21345.
+
+algo: look from left to right till there is high to low transition .. say config is S...T...L
+S start
+T transition
+L low
+
+- sort in ascending order nos[T...L]
+- Now, the rightmost element of S...T say X .... find the no. which is greater that X in the above sorted sequence and swap...
+
+e.g. 12345  =>  12354
+
+12453	->	12435 (mid)	->	12543
+
+###########################################
+# strstr in C:
+
+void BruteForce(char *x /* pattern */,
+    int m /* length of the pattern */,
+    char *y /* actual string being searched */,
+    int n /* length of this string */)
+{
+  int i, j;
+  printf("\nstring : [%s]"
+      "\nlength : [%d]"
+      "\npattern : [%s]"
+      "\nlength : [%d]\n\n", y,n,x,m);
+
+
+  /* Searching */
+  for (j = 0; j <= (n - m); ++j)
+  {
+    for (i = 0; i < m && x[i] == y[i + j]; ++i);
+    if (i >= m) {printf("\nMatch found at\n\n->[%d]\n->[%s]\n",j,y+j);}
+  }
+}
+
+###########################################
+# code to find the in-order successor of a given p
+#
+void ino (node *r, node *p) {
+  if (p == r)
+    cout << r->right->data;
+  int flag = 0;
+  ino_helper (r, p, flag);
+}
+
+void ino_helper (node *r, node *p, int &flag) {
+  if (!r)
+    return;
+  ino_helper (r->left, p, flag);
+  if (r == p)
+    flag = 1;
+  if (flag == 1)
+    print r->data is successor
+  ino_helper(r->right, p , flag);
+}
+###########################################
+Three Colours: dutch national flag problem
+
+The problem was posed with three colours, here `0', `1' and `2'. The array is divided into four sections:
+
+a[1..Lo-1] zeroes (red)
+a[Lo..Mid-] ones (white)
+a[Mid..Hi] unknown
+a[Hi+1..N] twos (blue)
+The unknown region is shrunk while maintaining these conditions
+Lo := 1; Mid := 1; Hi := N;
+while Mid <= Hi do
+Invariant: a[1..Lo-1]=0 and a[Lo..Mid-1]=1 and a[Hi+1..N]=2; a[Mid..Hi] are unknown.
+case a[Mid] in
+0: swap a[Lo] and a[Mid]; Lo++; Mid++
+1: Mid++
+2: swap a[Mid] and a[Hi]; Hi--
+
+
+###########################################
 
 # reverse the bits:
 #
 I am trying to reverse the bits in a number
-The following fucntion successfully reverses the bits, but the runtime is O(n). 
+The following fucntion successfully reverses the bits, but the runtime is O(n).
 
 for ( unsigned i = 0; i < n_bits; ++i ) {
     rev_bit = (rev_bit<<1) | ( val & 1 );
@@ -165,7 +242,7 @@ RecursivePush(Stack s,int x);
   int temp;
   if(isEmpty(s)) {push(s,x) return;}
   temp=pop(s);
-  recursivepush(s,x);
+  RecursivePush(s,x);
   push(s,temp);
  }
 
@@ -1903,6 +1980,25 @@ void Network::dfs(int v, int reach[], int label)
       u = NextVertex(v);
 	}
 }
+
+# using STACK:  mtd: 1
+
+DFS(G,v)   ( v is the vertex where the search starts )
+         Stack S := {};   ( start with an empty stack )
+         for each vertex u, set visited[u] := false;
+         push S, v;
+         while (S is not empty) do
+            u := pop S;
+            if (not visited[u]) then
+               visited[u] := true;
+               for each unvisited neighbour w of u
+                  push S, w;
+            end if
+         end while
+END DFS()
+
+# mtd 2:  http://www.cs.mcgill.ca/~pnguyen/251F09/DFS.pdf
+          important thing is that they use 2 functions to achieve that ...
 
 
 ###########################################

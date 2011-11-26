@@ -2621,10 +2621,10 @@ number of factors.
 
 #if defined(WIN32)
   #include "VxExecPipeW32.h"
-  typedef CVxExecPipeW32 CVxExecPipe;
+  typedef _vkc_cvxExecPipeW32 _vkc_cvxExecPipe;
 #elif defined(SOLARIS)
   #include "VxExecPipeSolaris.h"
-  typedef CVxExecPipeSolaris CVxExecPipe;
+  typedef _vkc_cvxExecPipeSolaris _vkc_cvxExecPipe;
 
   pragma:
   #include<windows.h>
@@ -2665,9 +2665,9 @@ virtual int  ExecPipe(string strCmd, string sCurrentWorkingDir) throw (EVxExecPi
 		   itrenv->c_str(), errno);
 
 	  FOR STATIC DECLARALATION IN A CLASS LIKE:
-		static CVxLock m_Lock;
+		static _vkc_cvxLock m_Lock;
 	DO INITIALISE LIKE:
-		CVxLock CVxExecPipeW32::m_Lock;
+		_vkc_cvxLock _vkc_cvxExecPipeW32::m_Lock;
 
     ===============================THROW + VIRTUAL:=================================
 

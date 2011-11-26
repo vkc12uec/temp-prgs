@@ -670,8 +670,6 @@ IP: Internet Protocol
 
 IP packet encapsulates the TCP/UDP packet.
 
-
-
 ###########################################
 
 # default constructor is called if an array of objects is made

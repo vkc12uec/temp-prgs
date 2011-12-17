@@ -2,6 +2,10 @@ intitle:"index.of" linkin (mp3|mp4|flv|avi|mpg|wmv) -html-htm-php-jsp-asp
 http://www.ihas1337code.com/2010/04/hacking-google-interview-from-mit.html
 
 ###########################################
+Triangle detection in graphs:
+
+It is possible to test whether a graph with m edges is triangle-free in time O(m1.41) (Alon, Yuster & Zwick 1994). Another approach is to find the trace of A3, where A is the adjacency matrix of the graph. The trace is zero if and only if the graph is triangle-free. For dense graphs, it is more efficient to use this simple algorithm which relies on matrix multiplication, since it gets the time complexity down to O(n2.373), where n is the number of vertices.
+###########################################
 #Dynamic linking has many advantages over static linking. Here are two:
 
 Reduced use of disk space. Dynamically linked executables tend to be much smaller than statically linked executables.

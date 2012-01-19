@@ -189,7 +189,7 @@ void insert_in_sorted (int t, Stack S) {
   }
   if (t < S.peek()){    // assumes that S is in ascending order, going downwards
     int x = S.pop();
-    insert (t, S);
+    insert_in_sorted (t, S);
     S.push (x);
   }
   else {

@@ -3,5 +3,6 @@ compile:
 run:
 	java infixValue
 all:
-	g++ -g "combinations.cpp"
+	g++ -g collapse.cpp
+	#g++ -g "combinations.cpp"
 	#g++ -g "print_combi.cpp"

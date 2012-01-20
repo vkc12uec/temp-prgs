@@ -631,6 +631,9 @@ int diameter(struct node * tree)
 /*  The function Compute the "height" of a tree. Height is the
     number f nodes along the longest path from the root node
     down to the farthest leaf node.*/
+
+-     O(n) time
+
 int height(struct node* node)
 {
    /* base case tree is empty */

@@ -1400,7 +1400,8 @@ When we are done, the current candidate is the majority element, if there is a m
 ###########################################
 # make a stack with min/max/push/pop in O(1) time
 #
-use two extra stacks to store min and max at every level
+# use two extra stacks to store min and max at every level
+
 public class MinMaxStack extends Stack{
 Stack min = new Stack();
 Stack max = new Stack();
@@ -1412,6 +1413,7 @@ min.pop();max.pop();
 
 public void push(object){
 super.push(object);
+
 if(min.peek()>=object) min.push(object);
 else min.push(min.peek());
 
@@ -1430,6 +1432,7 @@ return max.pop();
 ###########################################
 # from inorder and level order
 # call like:
+
 #	Tree::levelorderTraversal(Tree::createTreeFromLevelOrder(inorder,levelorder,0,len-1,1));
 
 static TreeNode* createTreeFromLevelOrder(int inorder[],int levelorder[], int start, int end,int level)
@@ -1451,15 +1454,15 @@ static TreeNode* createTreeFromLevelOrder(int inorder[],int levelorder[], int st
     }
 
 	    static int search(int x[],int start, int end,char value)
-072	    {
-073	        for(int i=start; i<end; i++)
-074	        {
-075	            if(x[i]==value)
-076	            {
-077	                return i;
-078	            }
-079	        }
-080	    }
+	    {
+	        for(int i=start; i<end; i++)
+	        {
+	            if(x[i]==value)
+	            {
+	                return i;
+	            }
+	        }
+	    }
 
 
 ###########################################
@@ -1805,6 +1808,10 @@ void Inorder(struct node *root) {
 
 Removing tail recursion - Inorder
 
+# Tail calls are significant because they can be implemented without adding a new stack frame to the call stack. Most of the frame of the current procedure is not needed any more, and it can be replaced by the frame of the tail call, modified as appropriate (similar to overlay for processes, but for function calls). The program can then jump to the called subroutine. Producing such code instead of a standard call sequence is called tail call elimination, or tail call optimization.
+
+# Example here: http://stackoverflow.com/questions/33923/what-is-tail-recursion
+
 void Inorder(struct node *root) {
 while(root) {
 	Inorder(root->left);
@@ -1847,10 +1854,12 @@ int countTrees(int numKeys) {
 /*	return : 	1 little endian
 			0 big endiean	*/
 
+# mtd 1
 	int i = 1;
 	char *c = (char *) &i
-	return *c;
+  printf ("\n [%d]" , *c);  
 
+# mtd 2
 	int test () {
 		union {
 		int theinteger;
@@ -1912,7 +1921,7 @@ bool is_free(int x, int y) { // return true if we can move here };
 global current_path;
 
 void print_paths(int x, int y) {
-  current_path.add( pair(x, y) );
+  current_path.ADD( pair(x, y) );
   if (0 == x && 0 == y) {
     print current_path();
     return;
@@ -1923,7 +1932,7 @@ void print_paths(int x, int y) {
   if (y > 1 && is_free(y - 1, x)) {
     print_paths(y - 1, 1);
   }
-  current_path.remove(path(x, y);
+  current_path.REMOVE(path(x, y);
 }
 
 
@@ -1951,7 +1960,8 @@ bool Network::Topological(int v[])
    // Stack vertices with zero in-degree
    LinkedStack<int> S;
    for (i = 1; i <= n; i++)
-      if (!InDegree[i]) S.Add(i);
+      if (!InDegree[i])  
+          S.Add(i);
 
    // Generate topological order
    i = 0;  // cursor for array v

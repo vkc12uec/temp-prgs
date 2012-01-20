@@ -4,7 +4,7 @@ vids:
 ###########################################
 # AMZN: Given a number,find the next higher number using the same digits in the number. Eg- 15432, Soln- 21345.
 
-algo: look from left to right till there is high to low transition .. say config is S...T...L
+algo: look from right to left till there is high to low transition .. say config is S...T...L
 S start
 T transition
 L low

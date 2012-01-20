@@ -38,6 +38,7 @@ void BruteForce(char *x /* pattern */,
     if (i >= m) {printf("\nMatch found at\n\n->[%d]\n->[%s]\n",j,y+j);}
   }
 }
+'"'
 
 ###########################################
 # code to find the in-order successor of a given p

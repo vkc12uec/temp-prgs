@@ -2397,7 +2397,8 @@ public static void printPar(int l, int r, char[] str, int count) {
   if (l < 0 || r < l) return; // invalid state
   if (l == 0 && r == 0) {
     System.out.println(str); // found one, so print it
-  } else {
+  } 
+  else {
     if (l > 0) { // try a left paren, if there are some available
       str[count] = ‘(‘;
           printPar(l - 1, r, str, count + 1);
@@ -2654,6 +2655,7 @@ void findpath (int s, int tillnow0) {
 ###########################################/
 
 # Largest area under histtogram:
+# http://tech-queries.blogspot.com/2011/03/maximum-area-rectangle-in-histogram.html
 #
 int largestArea(int arr[], int len)
 {
@@ -2719,3 +2721,48 @@ int largestArea(int arr[], int len)
 }
 
 
+# Question: Print a binary tree in zig-zag level order. Zig-zag means print 1st level from left to right, then 2nd level right to left and alternate thereafter
+
+# Pseduoe code:   (Its WRONG, use 2 stacks instead of 2 Queues)
+void zigzag (node *r) {
+  Queue <node *> Q1, Q2;
+  int direc = 1;
+  if (r) 
+  Q1.add (r);
+
+  bool done = true;
+
+  while (done) {
+    if (direc == 1) {
+      while (!Q1.isEmpty)) {
+      node *x = Q1.delete();
+      printf x->data;
+      if (x->right) Q2.add (x->right);
+      if (x->left) Q2.add (x->left);
+    }
+  }
+  else {
+    while (!Q2.isEmpty)) {
+    node *x = Q2.delete();
+    printf x->data;
+    if (x->left) Q2.add (x->left);
+    if (x->right) Q2.add (x->right);
+  }
+  direc *= -1;
+  done = ~ (Q1.isEmpty() & Q2.isEmpty() );
+}
+}
+}
+
+void SimplelevelOrder (node *n) {
+  if (!n) return;
+  Queue <node *> Q(0);
+  Q.add(n);
+
+  while (!Q.isEmpty()) {
+    node *x = Q.delete();
+    print x->data;
+    if (x->left) Q.add (x->left);
+    if (x->right) Q.add (x->right);
+  }
+}

@@ -1558,7 +1558,7 @@ void inOrderIterative(TREEPTR tree){
          if (!s.empty())
          {
              cursor = s.top();
-	     s.pop();
+	           s.pop();
              cout << cursor->data();
              cursor = cursor->right();
          }

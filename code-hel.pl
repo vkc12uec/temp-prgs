@@ -2,6 +2,44 @@
 vids:
 #http://openclassroom.stanford.edu/MainFolder/CoursePage.php?course=IntroToAlgorithms
 ###########################################
+# AMzN:
+# Tree with internal nodes, and leaves ... Given preorder, form the tree .... 
+# http://tech-queries.blogspot.com/search/label/Amazon%20Interview
+#
+tree* newnode(char c)
+{
+    tree *node = new(tree);
+    node->val = c;
+    node->left = node->right = NULL;
+    return node;
+}
+
+tree* construct_tree(char* A, int *i)
+{
+    //Boundary Condition
+    if (A == NULL){
+            return NULL;
+    }
+
+    tree *node = newnode(A[*i]);
+    //On reaching leaf node, return
+    if (A[*i] == 'L'){
+            return node;
+    }
+
+    //Populate left sub tree
+    *i = *i + 1;
+    node->left = construct_tree(A, i);
+
+    //Populate right sub tree
+    *i = *i + 1;
+    node->right = construct_tree(A, i);
+
+    return node;
+}
+
+# 
+###########################################
 # AMZN: Given a number,find the next higher number using the same digits in the number. Eg- 15432, Soln- 21345.
 
 algo: look from right to left till there is high to low transition .. say config is S...T...L
@@ -38,7 +76,6 @@ void BruteForce(char *x /* pattern */,
     if (i >= m) {printf("\nMatch found at\n\n->[%d]\n->[%s]\n",j,y+j);}
   }
 }
-'"'
 
 ###########################################
 # code to find the in-order successor of a given p
@@ -2766,3 +2803,62 @@ void SimplelevelOrder (node *n) {
     if (x->right) Q.add (x->right);
   }
 }
+
+
+# Question: Binary tree structure is defined as:
+
+struct tree{  
+  int val;  
+  tree* left;  
+  tree* right;  
+  tree* rpeer;      
+};  
+
+# ‘rpeer’ will have the address of next node of same level. For last node at any level, rpeer will be NULL.
+# At the beginning, all the rpeer nodes are assigned NULL. Write a program to populate correct value in rpeer for whole tree.
+
+# 
+void set_peer_SimplelevelOrder (node *n) {
+  if (!n) return;
+  /*
+  Queue <node *> Q(0);
+  int nodes = count(n);
+  Q.add(n);
+  Q.add("\n");
+  n->peer = 0;
+  LinkedList <node*> ll(0);
+
+  while (!Q.isEmpty()) {
+    node *x = Q.delete();
+    if (x->data == "\n") {
+      Q.add ("\n");
+        assign peer in array list
+    }
+    else {
+      if (x->left) Q.add (x->left);
+      if (x->right) Q.add (x->right);
+    }
+  } */
+
+  ArrayList <node *> al(0);
+  al.add (n);
+  al.add ("\n");
+  ptr = 0;
+  nodes--;
+
+  while (1) {
+     if (al[ptr]->data == "\n") {
+       al.add ("\n");
+     }
+     else {
+      if (x->left) {  Q.add (x->left); --nodes; }
+      if (x->right) { Q.add (x->right); --nodes; }
+     }
+     if (!nodes)
+      break;
+  }
+
+  // Traverse the list 'al' and assign the 'peer' pointers
+}
+
+

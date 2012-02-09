@@ -1,6 +1,50 @@
 ###########################################
 vids:
 #http://openclassroom.stanford.edu/MainFolder/CoursePage.php?course=IntroToAlgorithms
+
+topcoder:
+http://community.topcoder.com/tc?module=Static&d1=tutorials&d2=geometry1
+
+###########################################
+
+# polygon area by triangulation:
+
+The reason this works is that the positive and negative number cancel each other out by exactly the right amount. The area of ABC and ACD ended up contributing positively to the final area, while the area of ADE contributed negatively. Looking at the original polygon, it is obvious that the area of the polygon is the area of ABCD (which is the same as ABC + ABD) minus the area of ADE. One final note, if the total area we end up with is negative, it means that the points in the polygon were given to us in clockwise order. Now, just to make this a little more concrete, lets write a little bit of code to find the area of a polygon, given the coordinates as a 2-D array, p.
+int area = 0;
+int N = lengthof(p);
+//We will triangulate the polygon
+//into triangles with points p[0],p[i],p[i+1]
+
+for(int i = 1; i+1<N; i++){
+    int x1 = p[i][0] - p[0][0];
+    int y1 = p[i][1] - p[0][1];
+    int x2 = p[i+1][0] - p[0][0];
+    int y2 = p[i+1][1] - p[0][1];
+    int cross = x1*y2 - x2*y1;
+    area += cross;
+}
+return abs(cross/2.0);
+
+###########################################
+
+# Seive of Erasthones
+
+public boolean[] sieve(int n)
+{
+   boolean[] prime=new boolean[n+1];
+   Arrays.fill(prime,true);
+   prime[0]=false;
+   prime[1]=false;
+   int m=Math.sqrt(n);
+
+   for (int i=2; i<=m; i++)
+      if (prime[i])
+         for (int k=i*i; k<=n; k+=i)
+            prime[k]=false;
+
+   return prime;
+} 
+
 ###########################################
 # AMzN:
 # Tree with internal nodes, and leaves ... Given preorder, form the tree .... 
@@ -2437,11 +2481,11 @@ public static void printPar(int l, int r, char[] str, int count) {
   } 
   else {
     if (l > 0) { // try a left paren, if there are some available
-      str[count] = ‘(‘;
+      str[count] = '(';
           printPar(l - 1, r, str, count + 1);
           }
     if (r > l) { // try a right paren, if there’s a matching left
-          str[count] = ‘)’;
+          str[count] = ')';
       printPar(l, r - 1, str, count + 1);
           }
   }
@@ -2805,18 +2849,43 @@ void SimplelevelOrder (node *n) {
 }
 
 
+<<<<<<< local
+####################################
+# Number of inversions in an Array:
+####################################
+=======
 # Question: Binary tree structure is defined as:
+>>>>>>> other
 
+<<<<<<< local
+#include<iostream>
+using namespace std;
+=======
 struct tree{  
   int val;  
   tree* left;  
   tree* right;  
   tree* rpeer;      
 };  
+>>>>>>> other
 
+<<<<<<< local
+int merge(int arr[],int beg,int mid,int end) {
+  int counter = 0;
+  int *aux = new int[end-beg+1];
+  int size = mid-beg+1;
+  int i=beg,j=mid+1,k;
+=======
 # ‘rpeer’ will have the address of next node of same level. For last node at any level, rpeer will be NULL.
 # At the beginning, all the rpeer nodes are assigned NULL. Write a program to populate correct value in rpeer for whole tree.
+>>>>>>> other
 
+<<<<<<< local
+  for(k=0;i<=mid&&j<=end;k++) {
+    if(arr[i]<=arr[j]) {
+      aux[k] = arr[i++];
+      size--;
+=======
 # 
 void set_peer_SimplelevelOrder (node *n) {
   if (!n) return;
@@ -2833,11 +2902,19 @@ void set_peer_SimplelevelOrder (node *n) {
     if (x->data == "\n") {
       Q.add ("\n");
         assign peer in array list
+>>>>>>> other
     }
     else {
+<<<<<<< local
+      aux[k] = arr[j++];
+      counter += size;            /* MAGIC: Important, we add size becoz this number of elements have index less than right ele. */
+=======
       if (x->left) Q.add (x->left);
       if (x->right) Q.add (x->right);
+>>>>>>> other
     }
+<<<<<<< local
+=======
   } */
 
   ArrayList <node *> al(0);
@@ -2856,9 +2933,53 @@ void set_peer_SimplelevelOrder (node *n) {
      }
      if (!nodes)
       break;
+>>>>>>> other
   }
+<<<<<<< local
+  if(size>0)
+    while(i<=mid)
+      aux[k++] = arr[i++];
+  else
+    while(j<=end)
+      aux[k++] = arr[j++];
+=======
+>>>>>>> other
 
+<<<<<<< local
+  for(i=beg,k=0;i<=end;i++,k++)
+    arr[i] = aux[k];
+
+  return counter;
+=======
   // Traverse the list 'al' and assign the 'peer' pointers
+>>>>>>> other
 }
 
+<<<<<<< local
+int inversn(int arr[],int beg,int end) {
+  static int count = 0;
+  if(beg<end) {
+      int mid = (beg+end)/2;
+    inversn(arr,beg,mid);
+    inversn(arr,mid+1,end);
+    count += merge(arr,beg,mid,end);
+  }
+  return count;
+}
+=======
+>>>>>>> other
 
+<<<<<<< local
+int main() {
+  int arr[] = {10,2,30,4,50,6,7,8};
+  cout<<inversn(arr,0,7)<<endl;
+
+  system("pause");
+  return 0;
+}
+
+######################################################
+
+
+=======
+>>>>>>> other

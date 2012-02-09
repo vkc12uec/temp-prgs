@@ -6,3 +6,6 @@ all:
 	g++ -g collapse.cpp
 	#g++ -g "combinations.cpp"
 	#g++ -g "print_combi.cpp"
+
+clean:
+	rm -rf *.o

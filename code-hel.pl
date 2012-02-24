@@ -2903,48 +2903,48 @@ void set_peer_SimplelevelOrder (node *n) {
 ####################################
 
 int merge(int arr[],int beg,int mid,int end) {
-int counter = 0;
-int *aux = new int[end-beg+1];
-int size = mid-beg+1;
-int i=beg,j=mid+1,k;
+  int counter = 0;
+  int *aux = new int[end-beg+1];
+  int size = mid-beg+1;
+  int i=beg,j=mid+1,k;
 
-for(k=0;i<=mid&&j<=end;k++) {
-if(arr[i]<=arr[j]) {
-aux[k] = arr[i++];
-size--;
-}
-else {
-aux[k] = arr[j++];
-counter += size;
-}
-}
-if(size>0)
-while(i<=mid)
-aux[k++] = arr[i++];
-else
-while(j<=end)
-aux[k++] = arr[j++];
+  for(k=0;i<=mid&&j<=end;k++) {
+    if(arr[i]<=arr[j]) {
+      aux[k] = arr[i++];
+      size--;
+    }
+    else {
+      aux[k] = arr[j++];
+      counter += size;    /* just count when a[i] > a[j] , so mid-i+1 will be no. of inver for a[i] */
+    }
+  }
+  if(size>0)
+  while(i<=mid)
+  aux[k++] = arr[i++];
+  else
+  while(j<=end)
+  aux[k++] = arr[j++];
 
-for(i=beg,k=0;i<=end;i++,k++)
-arr[i] = aux[k];
+  for(i=beg,k=0;i<=end;i++,k++)
+  arr[i] = aux[k];
 
-return counter;
+  return counter;
 }
 
 int inversn(int arr[],int beg,int end) {
-static int count = 0;
-if(beg<end) {
-int mid = (beg+end)/2;
-inversn(arr,beg,mid);
-inversn(arr,mid+1,end);
-count += merge(arr,beg,mid,end);
-}
-return count;
+  static int count = 0;
+  if(beg<end) {
+    int mid = (beg+end)/2;
+    inversn(arr,beg,mid);
+    inversn(arr,mid+1,end);
+    count += merge(arr,beg,mid,end);
+  }
+  return count;
 }
 
 int main() {
-int arr[] = {10,2,30,4,50,6,7,8};
-cout<<inversn(arr,0,7)<<endl;
+  int arr[] = {10,2,30,4,50,6,7,8};
+  cout<<inversn(arr,0,7)<<endl;
 
 system("pause");
 return 0;

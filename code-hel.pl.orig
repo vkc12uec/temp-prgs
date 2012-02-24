@@ -1,89 +1,6 @@
 ###########################################
 vids:
 #http://openclassroom.stanford.edu/MainFolder/CoursePage.php?course=IntroToAlgorithms
-
-topcoder:
-http://community.topcoder.com/tc?module=Static&d1=tutorials&d2=geometry1
-
-###########################################
-
-# polygon area by triangulation:
-
-The reason this works is that the positive and negative number cancel each other out by exactly the right amount. The area of ABC and ACD ended up contributing positively to the final area, while the area of ADE contributed negatively. Looking at the original polygon, it is obvious that the area of the polygon is the area of ABCD (which is the same as ABC + ABD) minus the area of ADE. One final note, if the total area we end up with is negative, it means that the points in the polygon were given to us in clockwise order. Now, just to make this a little more concrete, lets write a little bit of code to find the area of a polygon, given the coordinates as a 2-D array, p.
-
-int area = 0;
-int N = lengthof(p);
-//We will triangulate the polygon
-//into triangles with points p[0],p[i],p[i+1]
-
-for(int i = 1; i+1<N; i++){
-    int x1 = p[i][0] - p[0][0];
-    int y1 = p[i][1] - p[0][1];
-    int x2 = p[i+1][0] - p[0][0];
-    int y2 = p[i+1][1] - p[0][1];
-    int cross = x1*y2 - x2*y1;
-    area += cross;
-}
-return abs(cross/2.0);
-
-###########################################
-
-# Seive of Erasthones
-
-public boolean[] sieve(int n)
-{
-   boolean[] prime=new boolean[n+1];
-   Arrays.fill(prime,true);
-   prime[0]=false;
-   prime[1]=false;
-   int m=Math.sqrt(n);
-
-   for (int i=2; i<=m; i++)
-      if (prime[i])
-         for (int k=i*i; k<=n; k+=i)
-            prime[k]=false;
-
-   return prime;
-} 
-
-###########################################
-# AMzN:
-# Tree with internal nodes, and leaves ... Given preorder, form the tree .... 
-# http://tech-queries.blogspot.com/search/label/Amazon%20Interview
-#
-tree* newnode(char c)
-{
-    tree *node = new(tree);
-    node->val = c;
-    node->left = node->right = NULL;
-    return node;
-}
-
-tree* construct_tree(char* A, int *i)
-{
-    //Boundary Condition
-    if (A == NULL){
-            return NULL;
-    }
-
-    tree *node = newnode(A[*i]);
-    //On reaching leaf node, return
-    if (A[*i] == 'L'){
-            return node;
-    }
-
-    //Populate left sub tree
-    *i = *i + 1;
-    node->left = construct_tree(A, i);
-
-    //Populate right sub tree
-    *i = *i + 1;
-    node->right = construct_tree(A, i);
-
-    return node;
-}
-
-# 
 ###########################################
 # AMZN: Given a number,find the next higher number using the same digits in the number. Eg- 15432, Soln- 21345.
 
@@ -97,7 +14,7 @@ L low
 
 e.g. 12345  =>  12354
 
-12453	->	12435 (mid)	->	12534
+12453	->	12435 (mid)	->	12543
 
 ###########################################
 # strstr in C:
@@ -121,13 +38,14 @@ void BruteForce(char *x /* pattern */,
     if (i >= m) {printf("\nMatch found at\n\n->[%d]\n->[%s]\n",j,y+j);}
   }
 }
+'"'
 
 ###########################################
 # code to find the in-order successor of a given p
 #
 void ino (node *r, node *p) {
   if (p == r)
-    cout << r->right->data;     // err, it shud be lowest element in r's right subtree
+    cout << r->right->data;
   int flag = 0;
   ino_helper (r, p, flag);
 }
@@ -136,10 +54,10 @@ void ino_helper (node *r, node *p, int &flag) {
   if (!r)
     return;
   ino_helper (r->left, p, flag);
+  if (r == p)
+    flag = 1;
   if (flag == 1)
     print r->data is successor
-  if (r == p)   /*this order of 2 if s is important*/
-    flag = 1;
   ino_helper(r->right, p , flag);
 }
 ###########################################
@@ -323,14 +241,11 @@ void ReverseStack(Stack s)
 RecursivePush(Stack s,int x);
  {
   int temp;
-  if(isEmpty(s)) {
-    push(s,x);
-     return;
-  }
+  if(isEmpty(s)) {push(s,x) return;}
   temp=pop(s);
   RecursivePush(s,x);
   push(s,temp);
-}
+ }
 
 # mtd 2:
 void revStack () {
@@ -893,7 +808,6 @@ int maxSum (int a[], int length)
 			int sum1 = maxSum(a, lo, mid);
 			int sum2 = maxSum(a, mid1, hi);
 			int sum3 = maxSuffix(a, lo, mid) + maxPrefix(a, mid1, hi);
-      /*do this for sequence 6, -8, -2, 5*/
 			return Math.max(Math.max(sum1, sum2), sum3);
 		}
 	}
@@ -1163,13 +1077,13 @@ http://www.ihas1337code.com/2010/10/amazon-bar-raiser-interview-question.html
 
 #1
 string numToStr(int n) {
-  string str(1, 'a' + n%26);
-  n = n/26;
-  while (n != 0) {
-    str = (char)('a' + (n-1)%26) + str;
-    n = (n-1)/26;
-  }
-  return str;
+  string str(1, 'a' + n%26);
+  n = n/26;
+  while (n != 0) {
+    str = (char)('a' + (n-1)%26) + str;
+    n = (n-1)/26;
+  }
+  return str;
 }
 
 #2
@@ -2840,61 +2754,17 @@ void zigzag (node *r) {
 }
 }
 
-####################################
-# Question: Binary tree structure is defined as:
-
-struct tree{  
-  int val;  
-  tree* left;  
-  tree* right;  
-  tree* rpeer;      
-};  
-
-# ‘rpeer’ will have the address of next node of same level. For last node at any level, rpeer will be NULL.
-# At the beginning, all the rpeer nodes are assigned NULL. Write a program to populate correct value in rpeer for whole tree.
-
-# 
-void set_peer_SimplelevelOrder (node *n) {
+void SimplelevelOrder (node *n) {
   if (!n) return;
-  /*
   Queue <node *> Q(0);
-  int nodes = count(n);
   Q.add(n);
-  Q.add("\n");
-  n->peer = 0;
-  LinkedList <node*> ll(0);
 
   while (!Q.isEmpty()) {
     node *x = Q.delete();
-    if (x->data == "\n") {
-      Q.add ("\n");
-        assign peer in array list
-    }
-    else {
-      if (x->left) Q.add (x->left);
-      if (x->right) Q.add (x->right);
-    }
-  } */
-
-  ArrayList <node *> al(0);
-  al.add (n);
-  al.add ("\n");
-  ptr = 0;
-  nodes--;
-
-  while (1) {
-     if (al[ptr]->data == "\n") {
-       al.add ("\n");
-     }
-     else {
-      if (x->left) {  Q.add (x->left); --nodes; }
-      if (x->right) { Q.add (x->right); --nodes; }
-     }
-     if (!nodes)
-      break;
+    print x->data;
+    if (x->left) Q.add (x->left);
+    if (x->right) Q.add (x->right);
   }
-
-  // Traverse the list 'al' and assign the 'peer' pointers
 }
 
 
@@ -2902,51 +2772,57 @@ void set_peer_SimplelevelOrder (node *n) {
 # Number of inversions in an Array:
 ####################################
 
+#include<iostream>
+using namespace std;
+
 int merge(int arr[],int beg,int mid,int end) {
-int counter = 0;
-int *aux = new int[end-beg+1];
-int size = mid-beg+1;
-int i=beg,j=mid+1,k;
+  int counter = 0;
+  int *aux = new int[end-beg+1];
+  int size = mid-beg+1;
+  int i=beg,j=mid+1,k;
 
-for(k=0;i<=mid&&j<=end;k++) {
-if(arr[i]<=arr[j]) {
-aux[k] = arr[i++];
-size--;
-}
-else {
-aux[k] = arr[j++];
-counter += size;
-}
-}
-if(size>0)
-while(i<=mid)
-aux[k++] = arr[i++];
-else
-while(j<=end)
-aux[k++] = arr[j++];
+  for(k=0;i<=mid&&j<=end;k++) {
+    if(arr[i]<=arr[j]) {
+      aux[k] = arr[i++];
+      size--;
+    }
+    else {
+      aux[k] = arr[j++];
+      counter += size;            /* MAGIC: Important, we add size becoz this number of elements have index less than right ele. */
+    }
+  }
+  if(size>0)
+    while(i<=mid)
+      aux[k++] = arr[i++];
+  else
+    while(j<=end)
+      aux[k++] = arr[j++];
 
-for(i=beg,k=0;i<=end;i++,k++)
-arr[i] = aux[k];
+  for(i=beg,k=0;i<=end;i++,k++)
+    arr[i] = aux[k];
 
-return counter;
+  return counter;
 }
 
 int inversn(int arr[],int beg,int end) {
-static int count = 0;
-if(beg<end) {
-int mid = (beg+end)/2;
-inversn(arr,beg,mid);
-inversn(arr,mid+1,end);
-count += merge(arr,beg,mid,end);
-}
-return count;
+  static int count = 0;
+  if(beg<end) {
+      int mid = (beg+end)/2;
+    inversn(arr,beg,mid);
+    inversn(arr,mid+1,end);
+    count += merge(arr,beg,mid,end);
+  }
+  return count;
 }
 
 int main() {
-int arr[] = {10,2,30,4,50,6,7,8};
-cout<<inversn(arr,0,7)<<endl;
+  int arr[] = {10,2,30,4,50,6,7,8};
+  cout<<inversn(arr,0,7)<<endl;
 
-system("pause");
-return 0;
+  system("pause");
+  return 0;
 }
+
+######################################################
+
 

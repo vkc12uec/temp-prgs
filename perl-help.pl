@@ -2,6 +2,17 @@ intitle:"index.of" linkin (mp3|mp4|flv|avi|mpg|wmv) -html-htm-php-jsp-asp
 http://www.ihas1337code.com/2010/04/hacking-google-interview-from-mit.html
 
 ###########################################
+# Circular buffer impl. using circular pointers.
+Note that a circular buffer with n elements is usually used to implement a queue with n-1 elements--there is always one empty element in the buffer. Otherwise, it becomes difficult to distinguish between a full and empty queue--the read and write pointers would be identical in both cases.
+
+How many items are in the queue ?
+Some people use a integer to remember exactly how many items are in the queue.
+With this "extra" data, a buffer of n elements can hold the full n data items, rather than n-1 data items. When both pointers point to the same location (buffer.insert == buffer.remove), then buffer.size distinguishes between the empty buffer (0 == buffer.size) or a full buffer ( n == buffer.size ).
+Other people don't like this "extra" data -- it's too much hassle to keep it synchronized with the pointers. (It violates OnceAndOnlyOnce). Easier just to make the buffer 1 element larger. If we ever want to know the size, use
+   size = (n + buffer.insert - buffer.remove) mod n;
+.
+
+###########################################
 Triangle detection in graphs:
 
 It is possible to test whether a graph with m edges is triangle-free in time O(m1.41) (Alon, Yuster & Zwick 1994). Another approach is to find the trace of A3, where A is the adjacency matrix of the graph. The trace is zero if and only if the graph is triangle-free. For dense graphs, it is more efficient to use this simple algorithm which relies on matrix multiplication, since it gets the time complexity down to O(n2.373), where n is the number of vertices.

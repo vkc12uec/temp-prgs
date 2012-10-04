@@ -1,6 +1,101 @@
 ###########################################
 vids:
 #http://openclassroom.stanford.edu/MainFolder/CoursePage.php?course=IntroToAlgorithms
+
+topcoder:
+http://community.topcoder.com/tc?module=Static&d1=tutorials&d2=geometry1
+
+###########################################
+  // Assigns a String object to this object.  Self-assignment works.
+
+  const String& operator=(const String& rhs) {
+
+    if (this != &rhs) {
+
+      delete[] c_str_;
+
+      if (rhs.c_str() == NULL) {
+
+        c_str_ = NULL;
+
+        length_ = 0;
+
+      } else {
+
+        ConstructNonNull(rhs.c_str(), rhs.length());
+
+      }
+
+    }
+
+
+    return *this;
+
+  }
+
+###########################################
+#include <iostream>
+using namespace std;
+
+template <typename T, size_t N>
+inline
+size_t SizeOfArray( const T(&)[ N ] )
+{
+  return N;
+}
+
+int main()
+{
+  const char s[] = "Hello world!";
+
+  cout << "s[] is " << SizeOfArray( s )
+       << " characters long.\n";
+  cout << "(That includes the null at the end.)\n";
+
+  return 0;
+}
+''"
+###########################################
+
+# polygon area by triangulation:
+
+The reason this works is that the positive and negative number cancel each other out by exactly the right amount. The area of ABC and ACD ended up contributing positively to the final area, while the area of ADE contributed negatively. Looking at the original polygon, it is obvious that the area of the polygon is the area of ABCD (which is the same as ABC + ABD) minus the area of ADE. One final note, if the total area we end up with is negative, it means that the points in the polygon were given to us in clockwise order. Now, just to make this a little more concrete, lets write a little bit of code to find the area of a polygon, given the coordinates as a 2-D array, p.
+
+int area = 0;
+int N = lengthof(p);
+//We will triangulate the polygon
+//into triangles with points p[0],p[i],p[i+1]
+
+for(int i = 1; i+1<N; i++){
+    int x1 = p[i][0] - p[0][0];
+    int y1 = p[i][1] - p[0][1];
+    int x2 = p[i+1][0] - p[0][0];
+    int y2 = p[i+1][1] - p[0][1];
+    int cross = x1*y2 - x2*y1;
+    area += cross;
+}
+return abs(cross/2.0);
+
+###########################################
+
+# Seive of Erasthones
+
+public boolean[] sieve(int n)
+{
+   boolean[] prime=new boolean[n+1];
+   Arrays.fill(prime,true);
+   prime[0]=false;
+   prime[1]=false;
+   int m=Math.sqrt(n);
+
+   for (int i=2; i<=m; i++)
+      if (prime[i])
+         for (int k=i*i; k<=n; k+=i)
+            prime[k]=false;
+
+   return prime;
+} 
+
 ###########################################
 # AMzN:
 # Tree with internal nodes, and leaves ... Given preorder, form the tree .... 
@@ -52,7 +147,7 @@ L low
 
 e.g. 12345  =>  12354
 
-12453	->	12435 (mid)	->	12543
+12453	->	12435 (mid)	->	12534
 
 ###########################################
 # strstr in C:
@@ -82,7 +177,7 @@ void BruteForce(char *x /* pattern */,
 #
 void ino (node *r, node *p) {
   if (p == r)
-    cout << r->right->data;
+    cout << r->right->data;     // err, it shud be lowest element in r's right subtree
   int flag = 0;
   ino_helper (r, p, flag);
 }
@@ -91,10 +186,10 @@ void ino_helper (node *r, node *p, int &flag) {
   if (!r)
     return;
   ino_helper (r->left, p, flag);
-  if (r == p)
-    flag = 1;
   if (flag == 1)
     print r->data is successor
+  if (r == p)   /*this order of 2 if s is important*/
+    flag = 1;
   ino_helper(r->right, p , flag);
 }
 ###########################################
@@ -278,11 +373,14 @@ void ReverseStack(Stack s)
 RecursivePush(Stack s,int x);
  {
   int temp;
-  if(isEmpty(s)) {push(s,x) return;}
+  if(isEmpty(s)) {
+    push(s,x);
+     return;
+  }
   temp=pop(s);
   RecursivePush(s,x);
   push(s,temp);
- }
+}
 
 # mtd 2:
 void revStack () {
@@ -845,6 +943,7 @@ int maxSum (int a[], int length)
 			int sum1 = maxSum(a, lo, mid);
 			int sum2 = maxSum(a, mid1, hi);
 			int sum3 = maxSuffix(a, lo, mid) + maxPrefix(a, mid1, hi);
+      /*do this for sequence 6, -8, -2, 5*/
 			return Math.max(Math.max(sum1, sum2), sum3);
 		}
 	}
@@ -1114,13 +1213,13 @@ http://www.ihas1337code.com/2010/10/amazon-bar-raiser-interview-question.html
 
 #1
 string numToStr(int n) {
-  string str(1, 'a' + n%26);
-  n = n/26;
-  while (n != 0) {
-    str = (char)('a' + (n-1)%26) + str;
-    n = (n-1)/26;
-  }
-  return str;
+  string str(1, 'a' + n%26);
+  n = n/26;
+  while (n != 0) {
+    str = (char)('a' + (n-1)%26) + str;
+    n = (n-1)/26;
+  }
+  return str;
 }
 
 #2
@@ -1595,7 +1694,7 @@ void inOrderIterative(TREEPTR tree){
          if (!s.empty())
          {
              cursor = s.top();
-	     s.pop();
+	           s.pop();
              cout << cursor->data();
              cursor = cursor->right();
          }
@@ -2437,11 +2536,11 @@ public static void printPar(int l, int r, char[] str, int count) {
   } 
   else {
     if (l > 0) { // try a left paren, if there are some available
-      str[count] = ‘(‘;
+      str[count] = '(';
           printPar(l - 1, r, str, count + 1);
           }
     if (r > l) { // try a right paren, if there’s a matching left
-          str[count] = ‘)’;
+          str[count] = ')';
       printPar(l, r - 1, str, count + 1);
           }
   }
@@ -2791,20 +2890,7 @@ void zigzag (node *r) {
 }
 }
 
-void SimplelevelOrder (node *n) {
-  if (!n) return;
-  Queue <node *> Q(0);
-  Q.add(n);
-
-  while (!Q.isEmpty()) {
-    node *x = Q.delete();
-    print x->data;
-    if (x->left) Q.add (x->left);
-    if (x->right) Q.add (x->right);
-  }
-}
-
-
+####################################
 # Question: Binary tree structure is defined as:
 
 struct tree{  
@@ -2861,4 +2947,56 @@ void set_peer_SimplelevelOrder (node *n) {
   // Traverse the list 'al' and assign the 'peer' pointers
 }
 
+
+####################################
+# Number of inversions in an Array:
+####################################
+
+int merge(int arr[],int beg,int mid,int end) {
+  int counter = 0;
+  int *aux = new int[end-beg+1];
+  int size = mid-beg+1;
+  int i=beg,j=mid+1,k;
+
+  for(k=0;i<=mid&&j<=end;k++) {
+    if(arr[i]<=arr[j]) {
+      aux[k] = arr[i++];
+      size--;
+    }
+    else {
+      aux[k] = arr[j++];
+      counter += size;    /* just count when a[i] > a[j] , so mid-i+1 will be no. of inver for a[i] */
+    }
+  }
+  if(size>0)
+  while(i<=mid)
+  aux[k++] = arr[i++];
+  else
+  while(j<=end)
+  aux[k++] = arr[j++];
+
+  for(i=beg,k=0;i<=end;i++,k++)
+  arr[i] = aux[k];
+
+  return counter;
+}
+
+int inversn(int arr[],int beg,int end) {
+  static int count = 0;
+  if(beg<end) {
+    int mid = (beg+end)/2;
+    inversn(arr,beg,mid);
+    inversn(arr,mid+1,end);
+    count += merge(arr,beg,mid,end);
+  }
+  return count;
+}
+
+int main() {
+  int arr[] = {10,2,30,4,50,6,7,8};
+  cout<<inversn(arr,0,7)<<endl;
+
+system("pause");
+return 0;
+}
 

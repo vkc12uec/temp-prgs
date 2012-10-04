@@ -6,6 +6,56 @@ topcoder:
 http://community.topcoder.com/tc?module=Static&d1=tutorials&d2=geometry1
 
 ###########################################
+  // Assigns a String object to this object.  Self-assignment works.
+
+  const String& operator=(const String& rhs) {
+
+    if (this != &rhs) {
+
+      delete[] c_str_;
+
+      if (rhs.c_str() == NULL) {
+
+        c_str_ = NULL;
+
+        length_ = 0;
+
+      } else {
+
+        ConstructNonNull(rhs.c_str(), rhs.length());
+
+      }
+
+    }
+
+
+    return *this;
+
+  }
+
+###########################################
+#include <iostream>
+using namespace std;
+
+template <typename T, size_t N>
+inline
+size_t SizeOfArray( const T(&)[ N ] )
+{
+  return N;
+}
+
+int main()
+{
+  const char s[] = "Hello world!";
+
+  cout << "s[] is " << SizeOfArray( s )
+       << " characters long.\n";
+  cout << "(That includes the null at the end.)\n";
+
+  return 0;
+}
+''"
+###########################################
 
 # polygon area by triangulation:
 

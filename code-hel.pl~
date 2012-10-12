@@ -3,6 +3,20 @@ vids:
 #http://openclassroom.stanford.edu/MainFolder/CoursePage.php?course=IntroToAlgorithms
 
 ###########################################
+To lower the overhead a more elaborate locking protocol test and test-and-set is used. The main idea is not to spin in test-and-set but increase the likelihood of successful test-and-set by using the following entry protocol to the lock:
+boolean locked := false // shared lock variable
+procedure EnterCritical() {
+  do {
+    while (locked == true) skip // spin until lock seems free
+  } while TestAndSet(locked) // actual atomic locking
+}
+Exit protocol is:
+procedure ExitCritical() {
+  locked := false
+}
+The entry protocol uses normal memory reads to spin, waiting for the lock to become free. Test-and-set is only used to try to get the lock when normal memory read says it's free. Thus the expensive atomic memory operations happens less often than in simple spin around test-and-set.
+'
+###########################################
 Area of polygon by triangulation:
 
           int area = 0;
@@ -2552,7 +2566,7 @@ Logger* Logger::Instance()
 {
 if (!m_pInstance)   // Only allow one instance of class to be generated.
 	lock.acquire();
-	if (! m_pInstance)
+	if (! m_pInstance)    // this is done to prevent double assignment of the pointer by 2nd thread
        		m_pInstance = new Logger;
 	lock.release();
 

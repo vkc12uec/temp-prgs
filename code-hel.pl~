@@ -35,6 +35,42 @@ Area of polygon by triangulation:
           return abs(cross/2.0);
 
 
+######################
+
+          
+* convex hull simple:
+
+    convexHull(point[] X){
+        int N = lengthof(X);
+        int p = 0;
+        //First find the leftmost point
+        for(int i = 1; i<N; i++){
+            if(X[i] < X[p])
+                p = i;
+        }
+        int start = p;
+        do{
+            int n = -1;
+            for(int i = 0; i<N; i++){
+
+                //Don't go back to the same point you came from
+                if(i == p)continue;
+
+                //If there is no N yet, set it to i
+                if(n == -1)n = i;
+                int cross = (X[i] - X[p]) x (X[n] - X[p]);
+
+                if(cross < 0){
+                    //As described above, set N=X
+                    n = i;
+                }
+            }
+            p = n;
+        }while(start!=p);
+    }
+
+
+    ""''//\\
 * Convex hull code (when we can have multiple points on the hull edge)
 
     //If onEdge is true, use as many points as possible for

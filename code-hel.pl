@@ -3147,4 +3147,10 @@ int main() {
 system("pause");
 return 0;
 }
+'''"//
+################################################
 
+std::auto_ptr and std::tr:ptr are used for storing ptrs so that desctructor are called when var is out of scope item13:
+  they are not gud with arrays
+
+    e.g. std:tr1:shared_ptr<Widget> pw (new Widget());

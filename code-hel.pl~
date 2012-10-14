@@ -275,6 +275,8 @@ e.g. 12345  =>  12354
 
 12453	->	12435 (mid)	->	12534
 
+e.g. 12532 -> 12235(mid) -> 13225
+
 ###########################################
 # strstr in C:
 
@@ -303,10 +305,13 @@ void BruteForce(char *x /* pattern */,
 #
 void ino (node *r, node *p) {
   if (p == r)
-    cout << r->right->data;     // err, it shud be lowest element in r's right subtree
+    cout << r->right->data;     // err, it shud be lowest element in r's right subtree'
   int flag = 0;
   ino_helper (r, p, flag);
 }
+
+# version 1 (to stop the immediate exectution after printint the successor, 'flag' shud be such that progressive recurvise calls
+# are also stopped
 
 void ino_helper (node *r, node *p, int &flag) {
   if (!r)
@@ -318,6 +323,22 @@ void ino_helper (node *r, node *p, int &flag) {
     flag = 1;
   ino_helper(r->right, p , flag);
 }
+
+# version 2: stopping progressive calls, either use 'flag' very outside or use iteraitve inorder with extra condition
+
+void ino_helper (node *r, node *p, int &flag) {
+  if (flag == STOP)
+    return;
+  if (!r)
+    return;
+  ino_helper (r->left, p, flag);
+  if (flag == 1)
+    print r->data is successor
+  if (r == p)   /*this order of 2 if s is important*/
+    flag = 1;
+  ino_helper(r->right, p , flag);
+}
+
 ###########################################
 Three Colours: dutch national flag problem
 
@@ -334,7 +355,7 @@ Invariant: a[1..Lo-1]=0 and a[Lo..Mid-1]=1 and a[Hi+1..N]=2; a[Mid..Hi] are unkn
 case a[Mid] in
 0: swap a[Lo] and a[Mid]; Lo++; Mid++
 1: Mid++
-2: swap a[Mid] and a[Hi]; Hi--
+2: swap a[Mid] and a[Hi]; Hi--  (no mid-- becoz u still have to see that value)
 
 
 ###########################################
@@ -354,7 +375,7 @@ for ( unsigned i = 0; i < n_bits; ++i ) {
 #
 srand;
 open FILE, "<filename" or die "Could not open filename: $!\n";
-rand($.)<1 and ($line=$_) while <FILE>;
+rand($.)<1 and ($line=$_) while <FILE>;       # The function call rand ($.) picks a random number between 0 and the current line number
 close FILE;
 print "Random line is $line\n";
 
@@ -478,7 +499,7 @@ void pushsmallest (s, int level, int small) {
 		if (to_be_pushed < small) {
       to_be_pushed = small;     # corrected
 			small = to_be_pushed;
-      flag = 1;
+      #flag = 1;
     }
 		pushsmallest (s, level-1, small)
 		s.push (to_be_pushed);
@@ -565,6 +586,7 @@ void pushhelper (s, int value, int level) {
       curr++;
   }
   reverse_part (a, word_st, curr-1);
+
 
 
 ###########################################
@@ -1004,7 +1026,7 @@ http://cs.fit.edu/~ryan/cse1002/sedgewick/42sort.pdf	slide:38
 # for maximum contiguous product, if no. of negative nos. is even , no problem.
 # if their no. is odd, you have to leave one of the -ve no. which is at the boundary ....
 # u have to callculate which -ve no. to leave so that u get bigger prodcut.
-#
+# initially partition acroos zero elements
 http://rajeevprasanna.blogspot.com/2011/07/maximum-contiguous-product-in-array.html
 ###########################################
 # max contiguous sum
@@ -3125,4 +3147,10 @@ int main() {
 system("pause");
 return 0;
 }
+'''"//
+################################################
 
+std::auto_ptr and std::tr:ptr are used for storing ptrs so that desctructor are called when var is out of scope item13:
+  they are not gud with arrays
+
+    e.g. std:tr1:shared_ptr<Widget> pw (new Widget());

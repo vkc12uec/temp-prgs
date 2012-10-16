@@ -2789,7 +2789,7 @@ void permutate( char[] str, int index )
   }
 }
 
-# if duplicates are there : (this is possibly wrong)
+# if duplicates are there : (this is possibly wrong) ... sort string first , then possilbly correct
 
 void permutate( char[] str, int index )
 {
@@ -2943,65 +2943,65 @@ void findpath (int s, int tillnow0) {
 #
 int largestArea(int arr[], int len)
 {
-  int area[len]; //initialize it to 0
-  int n, i, t;
-  stack<int> St;  //include stack for using this #include<stack>
-  bool done;
+int area[len]; //initialize it to 0
+int n, i, t;
+stack<int> St;  //include stack for using this #include<stack>
+bool done;
 
-  for (i=0; i<len; i++)
-  {
-    while (!St.empty())
-    {
-      if(arr[i] <= arr[St.top()])
-      {
-        St.pop();
-      }
-      else
-        break;
-    }
-    if(St.empty())
-      t = -1;
-    else
-      t = St.top();
-    //Calculating Li
-    area[i] = i - t - 1;
-    St.push(i);
-  }
-
-  //clearing stack for finding Ri
+for (i=0; i<len; i++)
+{
   while (!St.empty())
-    St.pop();
-
-  for (i=len-1; i>=0; i--)
   {
-    while (!St.empty())
+    if(arr[i] <= arr[St.top()])
     {
-      if(arr[i] <= arr[St.top()])
-      {
-        St.pop();
-      }
-      else
-        break;
+      St.pop();
     }
-    if(St.empty())
-      t = len;
     else
-      t = St.top();
-    //calculating Ri, after this step area[i] = Li + Ri
-    area[i] += t - i -1;
-    St.push(i);
+    break;
   }
+  if(St.empty())
+  t = -1;
+  else
+  t = St.top();
+  //Calculating Li
+  area[i] = i - t - 1;
+  St.push(i);
+}
 
-  int max = 0;
-  //Calculating Area[i] and find max Area
-  for (i=0; i<len; i++)
+//clearing stack for finding Ri
+while (!St.empty())
+St.pop();
+
+for (i=len-1; i>=0; i--)
+{
+  while (!St.empty())
   {
-    area[i] = arr[i] * (area[i] + 1);
-    if (area[i] > max)
-      max = area[i];
+    if(arr[i] <= arr[St.top()])
+    {
+      St.pop();
+    }
+    else
+    break;
   }
+  if(St.empty())
+  t = len;
+  else
+  t = St.top();
+  //calculating Ri, after this step area[i] = Li + Ri
+  area[i] += t - i -1;
+  St.push(i);
+}
 
-  return max;
+int max = 0;
+//Calculating Area[i] and find max Area
+for (i=0; i<len; i++)
+{
+  area[i] = arr[i] * (area[i] + 1);
+  if (area[i] > max)
+  max = area[i];
+}
+
+return max;
 }
 
 
@@ -3063,15 +3063,15 @@ void set_peer_SimplelevelOrder (node *n) {
   LinkedList <node*> ll(0);
 
   while (!Q.isEmpty()) {
-    node *x = Q.delete();
-    if (x->data == "\n") {
-      Q.add ("\n");
-        assign peer in array list
-    }
-    else {
-      if (x->left) Q.add (x->left);
-      if (x->right) Q.add (x->right);
-    }
+  node *x = Q.delete();
+  if (x->data == "\n") {
+  Q.add ("\n");
+  assign peer in array list
+  }
+  else {
+  if (x->left) Q.add (x->left);
+  if (x->right) Q.add (x->right);
+  }
   } */
 
   ArrayList <node *> al(0);
@@ -3081,15 +3081,15 @@ void set_peer_SimplelevelOrder (node *n) {
   nodes--;
 
   while (1) {
-     if (al[ptr]->data == "\n") {
-       al.add ("\n");
-     }
-     else {
+    if (al[ptr]->data == "\n") {
+      al.add ("\n");
+    }
+    else {
       if (x->left) {  Q.add (x->left); --nodes; }
       if (x->right) { Q.add (x->right); --nodes; }
-     }
-     if (!nodes)
-      break;
+    }
+    if (!nodes)
+    break;
   }
 
   // Traverse the list 'al' and assign the 'peer' pointers
@@ -3118,10 +3118,10 @@ int merge(int arr[],int beg,int mid,int end) {
   }
   if(size>0)
   while(i<=mid)
-  aux[k++] = arr[i++];
+    aux[k++] = arr[i++];
   else
-  while(j<=end)
-  aux[k++] = arr[j++];
+    while(j<=end)
+      aux[k++] = arr[j++];
 
   for(i=beg,k=0;i<=end;i++,k++)
   arr[i] = aux[k];

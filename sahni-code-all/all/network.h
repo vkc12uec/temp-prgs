@@ -34,13 +34,16 @@ void Network::BFS(int v, int reach[], int label)
       int w;
       Q.Delete(w);  // get a labeled vertex
       int u = Begin(w);
-      while (u) {// visit adj vertices of w
-         if (!reach[u]) {// an unreached vertex
+      while (u) 
+      {// visit adj vertices of w
+         if (!reach[u]) 
+         {// an unreached vertex
             Q.Add(u);
-            reach[u] = label;} // mark reached
+            reach[u] = label;
+         } // mark reached
          u = NextVertex(w); // next adj vertex of w
-         }
       }
+   }
    DeactivatePos(); // free iterator array
 }
 
@@ -55,8 +58,10 @@ void Network::dfs(int v, int reach[], int label)
 {// Actual depth-first search code.
    reach[v] = label;
    int u = Begin(v);
-   while (u) {// u is adj to v
-      if (!reach[u]) dfs(u, reach, label);
+   while (u) 
+   {// u is adj to v
+      if (!reach[u]) 
+        dfs(u, reach, label);
       u = NextVertex(v);}
 }
 

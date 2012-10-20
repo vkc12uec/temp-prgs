@@ -2960,9 +2960,10 @@ for (i=0; i<len; i++)
     break;
   }
   if(St.empty())
-  t = -1;
+    t = -1;
   else
-  t = St.top();
+    t = St.top();
+
   //Calculating Li
   area[i] = i - t - 1;
   St.push(i);

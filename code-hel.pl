@@ -3032,9 +3032,10 @@ for (i=0; i<len; i++)
     break;
   }
   if(St.empty())
-  t = -1;
+    t = -1;
   else
-  t = St.top();
+    t = St.top();
+
   //Calculating Li
   area[i] = i - t - 1;
   St.push(i);
@@ -3056,9 +3057,10 @@ for (i=len-1; i>=0; i--)
     break;
   }
   if(St.empty())
-  t = len;
+    t = len;
   else
-  t = St.top();
+    t = St.top();
+
   //calculating Ri, after this step area[i] = Li + Ri
   area[i] += t - i -1;
   St.push(i);

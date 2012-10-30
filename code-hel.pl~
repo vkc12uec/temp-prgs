@@ -977,6 +977,7 @@ Algorithm:
    becomes 2.
 6) If size of the two arrays is 2 then use below formula to get
   the median.
+q
     Median = (max(ar1[0], ar2[0]) + min(ar1[1], ar2[1]))/2
 Example:
 
@@ -2382,6 +2383,77 @@ DFS / BFS space/time cplz. same.	O ( v+e)
 	Best case = O(n)	No palindromes in string.
 	Worst case = O(n2)	String like "aaaaaaaaa"
 
+  string expandAroundCenter(string s, int c1, int c2) {
+    int l = c1, r = c2;
+    int n = s.length();
+    while (l >= 0 && r <= n-1 && s[l] == s[r]) {
+      l--;
+      r++;
+    }
+    return s.substr(l+1, r-l-1);
+  }
+
+    string longestPalindromeSimple(string s) {
+      int n = s.length();
+      if (n == 0) return "";
+      string longest = s.substr(0, 1);  // a single char itself is a palindrome
+      for (int i = 0; i < n-1; i++) {
+        string p1 = expandAroundCenter(s, i, i);
+        if (p1.length() > longest.length())
+          longest = p1;
+
+        string p2 = expandAroundCenter(s, i, i+1);
+        if (p2.length() > longest.length())
+          longest = p2;
+      }
+      return longest;
+    }
+
+
+###########################################
+
+uint swapBits(uint x, uint i, uint j) {
+  uint lo = ((x >> i) & 1);
+  uint hi = ((x >> j) & 1);
+  if (lo ^ hi) {
+    x ^= ((1U << i) | (1U << j));
+  }
+  return x;
+}
+ 
+uint reverseXor(uint x) {
+  uint n = sizeof(x) * 8;
+  for (uint i = 0; i < n/2; i++) {
+    x = swapBits(x, i, n-i-1);
+  }
+  return x;
+}
+Reverse bits O(n)
+
+Better here @ 
+http://www.leetcode.com/2011/08/reverse-bits.html 
+###########################################
+
+http://www.leetcode.com/2011/09/regular-expression-matching.html
+REGEX dfa matching
+
+    bool isMatch(const char *s, const char *p) {
+      assert(s && p);
+      if (*p == '\0') return *s == '\0';
+     
+      // next char is not '*': must match current character
+      if (*(p+1) != '*') {
+        assert(*p != '*');
+        return ((*p == *s) || (*p == '.' && *s != '\0')) && isMatch(s+1, p+1);
+      }
+      // next char is '*'
+      while ((*p == *s) || (*p == '.' && *s != '\0')) {
+        if (isMatch(s, p+2)) return true;
+        s++;
+      }
+      return isMatch(s, p+2);
+    }
+
 ###########################################
 
 ###########################################
@@ -2985,9 +3057,10 @@ for (i=len-1; i>=0; i--)
     break;
   }
   if(St.empty())
-  t = len;
+    t = len;
   else
-  t = St.top();
+    t = St.top();
+
   //calculating Ri, after this step area[i] = Li + Ri
   area[i] += t - i -1;
   St.push(i);
@@ -3155,3 +3228,42 @@ std::auto_ptr and std::tr:ptr are used for storing ptrs so that desctructor are 
   they are not gud with arrays
 
     e.g. std:tr1:shared_ptr<Widget> pw (new Widget());
+################################################
+
+Clone a graph (use BFS or DFS but with a global hashmap)
+################################################
+
+Sliding window question: use Dqueue and store max. at the last
+
+void maxSlidingWindow(int A[], int n, int w, int B[])
+{
+  deque<int> Q;
+
+  //Initilize deque Q for first window
+  for (int i = 0; i < w; i++)
+  {
+    while (!Q.empty() && A[i] >= A[Q.back()])
+      Q.pop_back();
+    Q.push_back(i);
+  }
+
+  for (int i = w; i < n; i++)
+  {
+    B[i-w] = A[Q.front()];
+
+    //update Q for new window
+    while (!Q.empty() && A[i] >= A[Q.back()])
+      Q.pop_back();
+
+    //Pop older element outside window from Q    
+    while (!Q.empty() && Q.front() <= i-w)
+      Q.pop_front();
+
+    //Insert current element in Q
+    Q.push_back(i);
+  }
+  B[n-w] = A[Q.front()];
+}
+
+
+

@@ -3266,4 +3266,19 @@ void maxSlidingWindow(int A[], int n, int w, int B[])
 }
 
 
+###################################################
+int cout_numof1(int n)
+{
+ 
+   int cnt = 0;
+
+   while(n)
+   {
+      n = n & (n-1);
+      cnt++;
+   }
+  
+   return cnt;
+}
+
 

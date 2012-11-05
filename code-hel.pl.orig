@@ -1,6 +1,295 @@
 ###########################################
 vids:
 #http://openclassroom.stanford.edu/MainFolder/CoursePage.php?course=IntroToAlgorithms
+
+http://www.cs.pitt.edu/~kirk/algorithmcourses/index.html
+
+
+###########################################
+To lower the overhead a more elaborate locking protocol test and test-and-set is used. The main idea is not to spin in test-and-set but increase the likelihood of successful test-and-set by using the following entry protocol to the lock:
+boolean locked := false // shared lock variable
+procedure EnterCritical() {
+  do {
+    while (locked == true) skip // spin until lock seems free
+  } while TestAndSet(locked) // actual atomic locking
+}
+Exit protocol is:
+procedure ExitCritical() {
+  locked := false
+}
+The entry protocol uses normal memory reads to spin, waiting for the lock to become free. Test-and-set is only used to try to get the lock when normal memory read says it's free. Thus the expensive atomic memory operations happens less often than in simple spin around test-and-set.
+'
+###########################################
+Area of polygon by triangulation:
+
+          int area = 0;
+          int N = lengthof(p);
+          //We will triangulate the polygon
+          //into triangles with points p[0],p[i],p[i+1]
+
+          for(int i = 1; i+1<N; i++){
+              int x1 = p[i][0] - p[0][0];
+              int y1 = p[i][1] - p[0][1];
+              int x2 = p[i+1][0] - p[0][0];
+              int y2 = p[i+1][1] - p[0][1];
+              int cross = x1*y2 - x2*y1;
+              area += cross;
+          }
+          return abs(cross/2.0);
+
+
+######################
+
+          
+* convex hull simple:
+
+    convexHull(point[] X){
+        int N = lengthof(X);
+        int p = 0;
+        //First find the leftmost point
+        for(int i = 1; i<N; i++){
+            if(X[i] < X[p])
+                p = i;
+        }
+        int start = p;
+        do{
+            int n = -1;
+            for(int i = 0; i<N; i++){
+
+                //Don't go back to the same point you came from
+                if(i == p)continue;
+
+                //If there is no N yet, set it to i
+                if(n == -1)n = i;
+                int cross = (X[i] - X[p]) x (X[n] - X[p]);
+
+                if(cross < 0){
+                    //As described above, set N=X
+                    n = i;
+                }
+            }
+            p = n;
+        }while(start!=p);
+    }
+
+
+    ""''//\\
+* Convex hull code (when we can have multiple points on the hull edge)
+
+    //If onEdge is true, use as many points as possible for
+    //the convex hull, otherwise as few as possible.
+    convexHull(point[] X, boolean onEdge){
+        int N = lengthof(X);
+        int p = 0;
+        boolean[] used = new boolean[N];
+        //First find the leftmost point
+        for(int i = 1; i<N; i++){
+            if(X[i] < X[p])
+                p = i;
+        }
+        int start = p;
+        do{
+            int n = -1;
+            int dist = onEdge?INF:0;
+            for(int i = 0; i<N; i++){
+                //X[i] is the X in the discussion
+
+                //Don't go back to the same point you came from
+                if(i==p)continue;
+
+                //Don't go to a visited point
+                if(used[i])continue;
+
+                //If there is no N yet, set it to X
+                if(n == -1)n = i;
+                int cross = (X[i] - X[p]) x (X[n] - X[p]);
+
+                //d is the distance from P to X
+                int d = (X[i] - X[p]) · (X[i] - X[p]);
+                if(cross < 0){
+                    //As described above, set N=X
+                    n = i;
+                    dist = d;
+                }else if(cross == 0){
+                    //In this case, both N and X are in the
+                    //same direction.  If onEdge is true, pick the
+                    //closest one, otherwise pick the farthest one.
+                    if(onEdge && d < dist){
+                        dist = d;
+                        n = i;
+                    }else if(!onEdge && d > dist){
+                        dist = d;
+                        n = i;
+                    }
+                }
+            }
+            p = n;
+            used[p] = true;
+        }while(start!=p);
+    }
+
+
+
+###########################################
+topcoder:
+http://community.topcoder.com/tc?module=Static&d1=tutorials&d2=geometry1
+
+###########################################
+  // Assigns a String object to this object.  Self-assignment works.
+
+  const String& operator=(const String& rhs) {
+
+    if (this != &rhs) {
+
+      delete[] c_str_;
+
+      if (rhs.c_str() == NULL) {
+
+        c_str_ = NULL;
+
+        length_ = 0;
+
+      } else {
+
+        ConstructNonNull(rhs.c_str(), rhs.length());
+
+      }
+
+    }
+
+
+    return *this;
+
+  }
+
+###########################################
+#include <iostream>
+using namespace std;
+
+template <typename T, size_t N>
+inline
+size_t SizeOfArray( const T(&)[ N ] )
+{
+  return N;
+}
+
+int main()
+{
+  const char s[] = "Hello world!";
+
+  cout << "s[] is " << SizeOfArray( s )
+       << " characters long.\n";
+  cout << "(That includes the null at the end.)\n";
+
+  return 0;
+}
+''"
+###########################################
+
+# polygon area by triangulation:
+
+The reason this works is that the positive and negative number cancel each other out by exactly the right amount. The area of ABC and ACD ended up contributing positively to the final area, while the area of ADE contributed negatively. Looking at the original polygon, it is obvious that the area of the polygon is the area of ABCD (which is the same as ABC + ABD) minus the area of ADE. One final note, if the total area we end up with is negative, it means that the points in the polygon were given to us in clockwise order. Now, just to make this a little more concrete, lets write a little bit of code to find the area of a polygon, given the coordinates as a 2-D array, p.
+
+int area = 0;
+int N = lengthof(p);
+//We will triangulate the polygon
+//into triangles with points p[0],p[i],p[i+1]
+
+for(int i = 1; i+1<N; i++){
+    int x1 = p[i][0] - p[0][0];
+    int y1 = p[i][1] - p[0][1];
+    int x2 = p[i+1][0] - p[0][0];
+    int y2 = p[i+1][1] - p[0][1];
+    int cross = x1*y2 - x2*y1;
+    area += cross;
+}
+return abs(cross/2.0);
+
+###########################################
+
+# Seive of Erasthones
+
+public boolean[] sieve(int n)
+{
+   boolean[] prime=new boolean[n+1];
+   Arrays.fill(prime,true);
+   prime[0]=false;
+   prime[1]=false;
+   int m=Math.sqrt(n);
+
+   for (int i=2; i<=m; i++)
+      if (prime[i])
+         for (int k=i*i; k<=n; k+=i)
+            prime[k]=false;
+
+   return prime;
+} 
+
+###########################################
+# AMzN:
+# Tree with internal nodes, and leaves ... Given preorder, form the tree .... 
+# http://tech-queries.blogspot.com/search/label/Amazon%20Interview
+#
+tree* newnode(char c)
+{
+    tree *node = new(tree);
+    node->val = c;
+    node->left = node->right = NULL;
+    return node;
+}
+
+tree* construct_tree(char* A, int *i)
+{
+    //Boundary Condition
+    if (A == NULL){
+            return NULL;
+    }
+
+    tree *node = newnode(A[*i]);
+    //On reaching leaf node, return
+    if (A[*i] == 'L'){
+            return node;
+    }
+
+    //Populate left sub tree
+    *i = *i + 1;
+    node->left = construct_tree(A, i);
+
+    //Populate right sub tree
+    *i = *i + 1;
+    node->right = construct_tree(A, i);
+
+    return node;
+}
+
+http://tristan-interview.blogspot.com/search/label/recursion
+
+Solution: The key is to understand what can uniquely denote a tree (or serialize a tree). A good way to serialize a tree is to record the pre-order traversal of a binary tree plus the nil virtual leaf information. If we denote an actual node as "1", the nil virtual leaf as "0". The sequence "10100" will stand for the following tree:
+
+
+                  *           
+               /      \                     
+             nil       *
+                      /    \
+                   nil    nil
+
+The way to decide the nil leaf is to check the children of a node. If a node is a leaf in the tree, it will have two nil virtual leaves, since a leaf won't have any children.  Similarly, we can know the sequence "11000" will stand for the following tree:
+
+
+                  *           
+                 /  \                 
+               *    nil
+              /  \
+           nil  nil
+
+Therefore,  our target is to enumerate all possible sequences. There are several constraints on the sequences:
+
+For a n node tree, the length of the sequence will be 2n+1 with n "1" and n+1 "0".
+For any position i in the sequence s and i != 2n,  the number of "1" should always be no smaller than the number of "0" in the sub-sequence s[0, i].
+
+
+
+# 
 ###########################################
 # AMZN: Given a number,find the next higher number using the same digits in the number. Eg- 15432, Soln- 21345.
 
@@ -14,7 +303,9 @@ L low
 
 e.g. 12345  =>  12354
 
-12453	->	12435 (mid)	->	12543
+12453	->	12435 (mid)	->	12534
+
+e.g. 12532 -> 12235(mid) -> 13225
 
 ###########################################
 # strstr in C:
@@ -38,28 +329,46 @@ void BruteForce(char *x /* pattern */,
     if (i >= m) {printf("\nMatch found at\n\n->[%d]\n->[%s]\n",j,y+j);}
   }
 }
-'"'
 
 ###########################################
 # code to find the in-order successor of a given p
 #
 void ino (node *r, node *p) {
   if (p == r)
-    cout << r->right->data;
+    cout << r->right->data;     // err, it shud be lowest element in r's right subtree'
   int flag = 0;
   ino_helper (r, p, flag);
 }
+
+# version 1 (to stop the immediate exectution after printint the successor, 'flag' shud be such that progressive recurvise calls
+# are also stopped
 
 void ino_helper (node *r, node *p, int &flag) {
   if (!r)
     return;
   ino_helper (r->left, p, flag);
-  if (r == p)
-    flag = 1;
   if (flag == 1)
     print r->data is successor
+  if (r == p)   /*this order of 2 if s is important*/
+    flag = 1;
   ino_helper(r->right, p , flag);
 }
+
+# version 2: stopping progressive calls, either use 'flag' very outside or use iteraitve inorder with extra condition
+
+void ino_helper (node *r, node *p, int &flag) {
+  if (flag == STOP)
+    return;
+  if (!r)
+    return;
+  ino_helper (r->left, p, flag);
+  if (flag == 1)
+    print r->data is successor
+  if (r == p)   /*this order of 2 if s is important*/
+    flag = 1;
+  ino_helper(r->right, p , flag);
+}
+
 ###########################################
 Three Colours: dutch national flag problem
 
@@ -76,7 +385,7 @@ Invariant: a[1..Lo-1]=0 and a[Lo..Mid-1]=1 and a[Hi+1..N]=2; a[Mid..Hi] are unkn
 case a[Mid] in
 0: swap a[Lo] and a[Mid]; Lo++; Mid++
 1: Mid++
-2: swap a[Mid] and a[Hi]; Hi--
+2: swap a[Mid] and a[Hi]; Hi--  (no mid-- becoz u still have to see that value)
 
 
 ###########################################
@@ -96,7 +405,7 @@ for ( unsigned i = 0; i < n_bits; ++i ) {
 #
 srand;
 open FILE, "<filename" or die "Could not open filename: $!\n";
-rand($.)<1 and ($line=$_) while <FILE>;
+rand($.)<1 and ($line=$_) while <FILE>;       # The function call rand ($.) picks a random number between 0 and the current line number
 close FILE;
 print "Random line is $line\n";
 
@@ -220,7 +529,7 @@ void pushsmallest (s, int level, int small) {
 		if (to_be_pushed < small) {
       to_be_pushed = small;     # corrected
 			small = to_be_pushed;
-      flag = 1;
+      #flag = 1;
     }
 		pushsmallest (s, level-1, small)
 		s.push (to_be_pushed);
@@ -241,11 +550,14 @@ void ReverseStack(Stack s)
 RecursivePush(Stack s,int x);
  {
   int temp;
-  if(isEmpty(s)) {push(s,x) return;}
+  if(isEmpty(s)) {
+    push(s,x);
+     return;
+  }
   temp=pop(s);
   RecursivePush(s,x);
   push(s,temp);
- }
+}
 
 # mtd 2:
 void revStack () {
@@ -304,6 +616,7 @@ void pushhelper (s, int value, int level) {
       curr++;
   }
   reverse_part (a, word_st, curr-1);
+
 
 
 ###########################################
@@ -694,6 +1007,7 @@ Algorithm:
    becomes 2.
 6) If size of the two arrays is 2 then use below formula to get
   the median.
+q
     Median = (max(ar1[0], ar2[0]) + min(ar1[1], ar2[1]))/2
 Example:
 
@@ -743,7 +1057,7 @@ http://cs.fit.edu/~ryan/cse1002/sedgewick/42sort.pdf	slide:38
 # for maximum contiguous product, if no. of negative nos. is even , no problem.
 # if their no. is odd, you have to leave one of the -ve no. which is at the boundary ....
 # u have to callculate which -ve no. to leave so that u get bigger prodcut.
-#
+# initially partition acroos zero elements
 http://rajeevprasanna.blogspot.com/2011/07/maximum-contiguous-product-in-array.html
 ###########################################
 # max contiguous sum
@@ -808,6 +1122,7 @@ int maxSum (int a[], int length)
 			int sum1 = maxSum(a, lo, mid);
 			int sum2 = maxSum(a, mid1, hi);
 			int sum3 = maxSuffix(a, lo, mid) + maxPrefix(a, mid1, hi);
+      /*do this for sequence 6, -8, -2, 5*/
 			return Math.max(Math.max(sum1, sum2), sum3);
 		}
 	}
@@ -1077,13 +1392,13 @@ http://www.ihas1337code.com/2010/10/amazon-bar-raiser-interview-question.html
 
 #1
 string numToStr(int n) {
-  string str(1, 'a' + n%26);
-  n = n/26;
-  while (n != 0) {
-    str = (char)('a' + (n-1)%26) + str;
-    n = (n-1)/26;
-  }
-  return str;
+  string str(1, 'a' + n%26);
+  n = n/26;
+  while (n != 0) {
+    str = (char)('a' + (n-1)%26) + str;
+    n = (n-1)/26;
+  }
+  return str;
 }
 
 #2
@@ -1822,6 +2137,10 @@ while(root) {
 
 
 ###########################################
+Towers of hanoi N, K pegs
+
+http://tristan-interview.blogspot.com/2012/02/n-disks-and-k-pegs-extension-problem-of.html
+
 ###########################################
 /* Strategy: consider that each value could be the root.
  Recursively find the size of the left and right subtrees.
@@ -2098,6 +2417,77 @@ DFS / BFS space/time cplz. same.	O ( v+e)
 	Best case = O(n)	No palindromes in string.
 	Worst case = O(n2)	String like "aaaaaaaaa"
 
+  string expandAroundCenter(string s, int c1, int c2) {
+    int l = c1, r = c2;
+    int n = s.length();
+    while (l >= 0 && r <= n-1 && s[l] == s[r]) {
+      l--;
+      r++;
+    }
+    return s.substr(l+1, r-l-1);
+  }
+
+    string longestPalindromeSimple(string s) {
+      int n = s.length();
+      if (n == 0) return "";
+      string longest = s.substr(0, 1);  // a single char itself is a palindrome
+      for (int i = 0; i < n-1; i++) {
+        string p1 = expandAroundCenter(s, i, i);
+        if (p1.length() > longest.length())
+          longest = p1;
+
+        string p2 = expandAroundCenter(s, i, i+1);
+        if (p2.length() > longest.length())
+          longest = p2;
+      }
+      return longest;
+    }
+
+
+###########################################
+
+uint swapBits(uint x, uint i, uint j) {
+  uint lo = ((x >> i) & 1);
+  uint hi = ((x >> j) & 1);
+  if (lo ^ hi) {
+    x ^= ((1U << i) | (1U << j));
+  }
+  return x;
+}
+ 
+uint reverseXor(uint x) {
+  uint n = sizeof(x) * 8;
+  for (uint i = 0; i < n/2; i++) {
+    x = swapBits(x, i, n-i-1);
+  }
+  return x;
+}
+Reverse bits O(n)
+
+Better here @ 
+http://www.leetcode.com/2011/08/reverse-bits.html 
+###########################################
+
+http://www.leetcode.com/2011/09/regular-expression-matching.html
+REGEX dfa matching
+
+    bool isMatch(const char *s, const char *p) {
+      assert(s && p);
+      if (*p == '\0') return *s == '\0';
+     
+      // next char is not '*': must match current character
+      if (*(p+1) != '*') {
+        assert(*p != '*');
+        return ((*p == *s) || (*p == '.' && *s != '\0')) && isMatch(s+1, p+1);
+      }
+      // next char is '*'
+      while ((*p == *s) || (*p == '.' && *s != '\0')) {
+        if (isMatch(s, p+2)) return true;
+        s++;
+      }
+      return isMatch(s, p+2);
+    }
+
 ###########################################
 
 ###########################################
@@ -2340,7 +2730,7 @@ Logger* Logger::Instance()
 {
 if (!m_pInstance)   // Only allow one instance of class to be generated.
 	lock.acquire();
-	if (! m_pInstance)
+	if (! m_pInstance)    // this is done to prevent double assignment of the pointer by 2nd thread
        		m_pInstance = new Logger;
 	lock.release();
 
@@ -2505,7 +2895,7 @@ void permutate( char[] str, int index )
   }
 }
 
-# if duplicates are there : (this is possibly wrong)
+# if duplicates are there : (this is possibly wrong) ... sort string first , then possilbly correct
 
 void permutate( char[] str, int index )
 {
@@ -2659,65 +3049,65 @@ void findpath (int s, int tillnow0) {
 #
 int largestArea(int arr[], int len)
 {
-  int area[len]; //initialize it to 0
-  int n, i, t;
-  stack<int> St;  //include stack for using this #include<stack>
-  bool done;
+int area[len]; //initialize it to 0
+int n, i, t;
+stack<int> St;  //include stack for using this #include<stack>
+bool done;
 
-  for (i=0; i<len; i++)
-  {
-    while (!St.empty())
-    {
-      if(arr[i] <= arr[St.top()])
-      {
-        St.pop();
-      }
-      else
-        break;
-    }
-    if(St.empty())
-      t = -1;
-    else
-      t = St.top();
-    //Calculating Li
-    area[i] = i - t - 1;
-    St.push(i);
-  }
-
-  //clearing stack for finding Ri
+for (i=0; i<len; i++)
+{
   while (!St.empty())
-    St.pop();
-
-  for (i=len-1; i>=0; i--)
   {
-    while (!St.empty())
+    if(arr[i] <= arr[St.top()])
     {
-      if(arr[i] <= arr[St.top()])
-      {
-        St.pop();
-      }
-      else
-        break;
+      St.pop();
     }
-    if(St.empty())
-      t = len;
     else
-      t = St.top();
-    //calculating Ri, after this step area[i] = Li + Ri
-    area[i] += t - i -1;
-    St.push(i);
+    break;
   }
+  if(St.empty())
+  t = -1;
+  else
+  t = St.top();
+  //Calculating Li
+  area[i] = i - t - 1;
+  St.push(i);
+}
 
-  int max = 0;
-  //Calculating Area[i] and find max Area
-  for (i=0; i<len; i++)
+//clearing stack for finding Ri
+while (!St.empty())
+St.pop();
+
+for (i=len-1; i>=0; i--)
+{
+  while (!St.empty())
   {
-    area[i] = arr[i] * (area[i] + 1);
-    if (area[i] > max)
-      max = area[i];
+    if(arr[i] <= arr[St.top()])
+    {
+      St.pop();
+    }
+    else
+    break;
   }
+  if(St.empty())
+  t = len;
+  else
+  t = St.top();
+  //calculating Ri, after this step area[i] = Li + Ri
+  area[i] += t - i -1;
+  St.push(i);
+}
 
-  return max;
+int max = 0;
+//Calculating Area[i] and find max Area
+for (i=0; i<len; i++)
+{
+  area[i] = arr[i] * (area[i] + 1);
+  if (area[i] > max)
+  max = area[i];
+}
+
+return max;
 }
 
 
@@ -2754,26 +3144,67 @@ void zigzag (node *r) {
 }
 }
 
-void SimplelevelOrder (node *n) {
+####################################
+# Question: Binary tree structure is defined as:
+
+struct tree{  
+  int val;  
+  tree* left;  
+  tree* right;  
+  tree* rpeer;      
+};  
+
+# ‘rpeer’ will have the address of next node of same level. For last node at any level, rpeer will be NULL.
+# At the beginning, all the rpeer nodes are assigned NULL. Write a program to populate correct value in rpeer for whole tree.
+
+# 
+void set_peer_SimplelevelOrder (node *n) {
   if (!n) return;
+  /*
   Queue <node *> Q(0);
+  int nodes = count(n);
   Q.add(n);
+  Q.add("\n");
+  n->peer = 0;
+  LinkedList <node*> ll(0);
 
   while (!Q.isEmpty()) {
-    node *x = Q.delete();
-    print x->data;
-    if (x->left) Q.add (x->left);
-    if (x->right) Q.add (x->right);
+  node *x = Q.delete();
+  if (x->data == "\n") {
+  Q.add ("\n");
+  assign peer in array list
   }
+  else {
+  if (x->left) Q.add (x->left);
+  if (x->right) Q.add (x->right);
+  }
+  } */
+
+  ArrayList <node *> al(0);
+  al.add (n);
+  al.add ("\n");
+  ptr = 0;
+  nodes--;
+
+  while (1) {
+    if (al[ptr]->data == "\n") {
+      al.add ("\n");
+    }
+    else {
+      if (x->left) {  Q.add (x->left); --nodes; }
+      if (x->right) { Q.add (x->right); --nodes; }
+    }
+    if (!nodes)
+    break;
+  }
+
+  // Traverse the list 'al' and assign the 'peer' pointers
 }
 
 
 ####################################
 # Number of inversions in an Array:
 ####################################
-
-#include<iostream>
-using namespace std;
 
 int merge(int arr[],int beg,int mid,int end) {
   int counter = 0;
@@ -2788,18 +3219,18 @@ int merge(int arr[],int beg,int mid,int end) {
     }
     else {
       aux[k] = arr[j++];
-      counter += size;            /* MAGIC: Important, we add size becoz this number of elements have index less than right ele. */
+      counter += size;    /* just count when a[i] > a[j] , so mid-i+1 will be no. of inver for a[i] */
     }
   }
   if(size>0)
-    while(i<=mid)
-      aux[k++] = arr[i++];
+  while(i<=mid)
+    aux[k++] = arr[i++];
   else
     while(j<=end)
       aux[k++] = arr[j++];
 
   for(i=beg,k=0;i<=end;i++,k++)
-    arr[i] = aux[k];
+  arr[i] = aux[k];
 
   return counter;
 }
@@ -2807,7 +3238,7 @@ int merge(int arr[],int beg,int mid,int end) {
 int inversn(int arr[],int beg,int end) {
   static int count = 0;
   if(beg<end) {
-      int mid = (beg+end)/2;
+    int mid = (beg+end)/2;
     inversn(arr,beg,mid);
     inversn(arr,mid+1,end);
     count += merge(arr,beg,mid,end);
@@ -2819,10 +3250,92 @@ int main() {
   int arr[] = {10,2,30,4,50,6,7,8};
   cout<<inversn(arr,0,7)<<endl;
 
-  system("pause");
-  return 0;
+system("pause");
+return 0;
+}
+'''"//
+################################################
+
+std::auto_ptr and std::tr:ptr are used for storing ptrs so that desctructor are called when var is out of scope item13:
+  they are not gud with arrays
+
+    e.g. std:tr1:shared_ptr<Widget> pw (new Widget());
+################################################
+
+Clone a graph (use BFS or DFS but with a global hashmap)
+################################################
+
+Sliding window question: use Dqueue and store max. at the last
+
+void maxSlidingWindow(int A[], int n, int w, int B[])
+{
+  deque<int> Q;
+
+  //Initilize deque Q for first window
+  for (int i = 0; i < w; i++)
+  {
+    while (!Q.empty() && A[i] >= A[Q.back()])
+      Q.pop_back();
+    Q.push_back(i);
+  }
+
+  for (int i = w; i < n; i++)
+  {
+    B[i-w] = A[Q.front()];
+
+    //update Q for new window
+    while (!Q.empty() && A[i] >= A[Q.back()])
+      Q.pop_back();
+
+    //Pop older element outside window from Q    
+    while (!Q.empty() && Q.front() <= i-w)
+      Q.pop_front();
+
+    //Insert current element in Q
+    Q.push_back(i);
+  }
+  B[n-w] = A[Q.front()];
 }
 
-######################################################
 
+################################################
+
+Water in histrogram:
+
+Solution: This is a relatively simple DP problem. Here we only give the main idea.
+- For a particular bar bi, if we know the highest bar on its left Li and highest bar on its right Ri.  If the height of bi is smaller than both Li and Ri, the water volume can be held on this bar is min(Li, Ri) - hi; otherwise, it can't hold water.
+- To calculate Li and Ri, we just need to record the maximum height we had observed so far from the left (and from the right). Therefore, a O(n) algorithm is straightforward here.
+
+################################################
+
+Min Vertex cover of Tree:
+
+Solution: The minimum vertex cover for a general graph is a NP-hard problem. However, for a tree, there is a linear solution. The idea here is to do DFS search plus post-order traversal. If we encounter a leaf node and the edge connecting this leaf node with its parent, we know in order to construct a vertex cover, we must include at least one of the node (the leaf node, or its parent). Here we can use a greedy approach. We can see selecting the leaf doesn't give us any extra benefit, while selecting the parent can give us some benefit, since the parent must be also connected to other nodes. By selecting the parent node, we can further "cover" some extra edges. With this strategy in mind, our algorithm is as follow:
+
+we do a DFS search. When a DFS call on a child node returns, we check if the child and the parent are both unselected. If yes, we select the parent node.
+After all the DFS finishes (we traverse the tree), those selected nodes form the minimum vertex cover. The cost is O(N).
+
+Solution 2:
+
+
+Preprocessing: First, use a slight variation on BFS or DFS to build a list L of leaves of T.  In the process of building L, initialize mark bits to FALSE for each node. 
+
+while L is not empty
+do f  remove first leaf from L
+      if f is in T 
+           then if mark[f] is FALSE and parent[f] is null
+              then mark[f]  TRUE
+              else if mark[f] is FALSE and parent[f] is not null
+                                then mark[parent[f]]  TRUE                     
+                                                remove f from T
+                                                (this implicitly removes leaf-parent edge if it exists) 
+                                                                if parent[f] is not null and parent[f] is not root[T]
+                                                                           then if children[parent[f]] is null 
+                                                                                                   then append parent[f] to L
+
+
+##############################################
+fibbonaci faster:
+
+ A^n = {[fibo(n+1), fibo(n)], [fibo(n), fibo(n-1)]}.
 

@@ -2,6 +2,9 @@
 vids:
 #http://openclassroom.stanford.edu/MainFolder/CoursePage.php?course=IntroToAlgorithms
 
+http://www.cs.pitt.edu/~kirk/algorithmcourses/index.html
+
+
 ###########################################
 To lower the overhead a more elaborate locking protocol test and test-and-set is used. The main idea is not to spin in test-and-set but increase the likelihood of successful test-and-set by using the following entry protocol to the lock:
 boolean locked := false // shared lock variable
@@ -258,6 +261,33 @@ tree* construct_tree(char* A, int *i)
 
     return node;
 }
+
+http://tristan-interview.blogspot.com/search/label/recursion
+
+Solution: The key is to understand what can uniquely denote a tree (or serialize a tree). A good way to serialize a tree is to record the pre-order traversal of a binary tree plus the nil virtual leaf information. If we denote an actual node as "1", the nil virtual leaf as "0". The sequence "10100" will stand for the following tree:
+
+
+                  *           
+               /      \                     
+             nil       *
+                      /    \
+                   nil    nil
+
+The way to decide the nil leaf is to check the children of a node. If a node is a leaf in the tree, it will have two nil virtual leaves, since a leaf won't have any children.  Similarly, we can know the sequence "11000" will stand for the following tree:
+
+
+                  *           
+                 /  \                 
+               *    nil
+              /  \
+           nil  nil
+
+Therefore,  our target is to enumerate all possible sequences. There are several constraints on the sequences:
+
+For a n node tree, the length of the sequence will be 2n+1 with n "1" and n+1 "0".
+For any position i in the sequence s and i != 2n,  the number of "1" should always be no smaller than the number of "0" in the sub-sequence s[0, i].
+
+
 
 # 
 ###########################################
@@ -2107,6 +2137,10 @@ while(root) {
 
 
 ###########################################
+Towers of hanoi N, K pegs
+
+http://tristan-interview.blogspot.com/2012/02/n-disks-and-k-pegs-extension-problem-of.html
+
 ###########################################
 /* Strategy: consider that each value could be the root.
  Recursively find the size of the left and right subtrees.
@@ -3032,10 +3066,9 @@ for (i=0; i<len; i++)
     break;
   }
   if(St.empty())
-    t = -1;
+  t = -1;
   else
-    t = St.top();
-
+  t = St.top();
   //Calculating Li
   area[i] = i - t - 1;
   St.push(i);
@@ -3057,10 +3090,9 @@ for (i=len-1; i>=0; i--)
     break;
   }
   if(St.empty())
-    t = len;
+  t = len;
   else
-    t = St.top();
-
+  t = St.top();
   //calculating Ri, after this step area[i] = Li + Ri
   area[i] += t - i -1;
   St.push(i);
@@ -3266,19 +3298,44 @@ void maxSlidingWindow(int A[], int n, int w, int B[])
 }
 
 
-###################################################
-int cout_numof1(int n)
-{
- 
-   int cnt = 0;
+################################################
 
-   while(n)
-   {
-      n = n & (n-1);
-      cnt++;
-   }
-  
-   return cnt;
-}
+Water in histrogram:
 
+Solution: This is a relatively simple DP problem. Here we only give the main idea.
+- For a particular bar bi, if we know the highest bar on its left Li and highest bar on its right Ri.  If the height of bi is smaller than both Li and Ri, the water volume can be held on this bar is min(Li, Ri) - hi; otherwise, it can't hold water.
+- To calculate Li and Ri, we just need to record the maximum height we had observed so far from the left (and from the right). Therefore, a O(n) algorithm is straightforward here.
+
+################################################
+
+Min Vertex cover of Tree:
+
+Solution: The minimum vertex cover for a general graph is a NP-hard problem. However, for a tree, there is a linear solution. The idea here is to do DFS search plus post-order traversal. If we encounter a leaf node and the edge connecting this leaf node with its parent, we know in order to construct a vertex cover, we must include at least one of the node (the leaf node, or its parent). Here we can use a greedy approach. We can see selecting the leaf doesn't give us any extra benefit, while selecting the parent can give us some benefit, since the parent must be also connected to other nodes. By selecting the parent node, we can further "cover" some extra edges. With this strategy in mind, our algorithm is as follow:
+
+we do a DFS search. When a DFS call on a child node returns, we check if the child and the parent are both unselected. If yes, we select the parent node.
+After all the DFS finishes (we traverse the tree), those selected nodes form the minimum vertex cover. The cost is O(N).
+
+Solution 2:
+
+
+Preprocessing: First, use a slight variation on BFS or DFS to build a list L of leaves of T.  In the process of building L, initialize mark bits to FALSE for each node. 
+
+while L is not empty
+do f  remove first leaf from L
+      if f is in T 
+           then if mark[f] is FALSE and parent[f] is null
+              then mark[f]  TRUE
+              else if mark[f] is FALSE and parent[f] is not null
+                                then mark[parent[f]]  TRUE                     
+                                                remove f from T
+                                                (this implicitly removes leaf-parent edge if it exists) 
+                                                                if parent[f] is not null and parent[f] is not root[T]
+                                                                           then if children[parent[f]] is null 
+                                                                                                   then append parent[f] to L
+
+
+##############################################
+fibbonaci faster:
+
+ A^n = {[fibo(n+1), fibo(n)], [fibo(n), fibo(n-1)]}.
 

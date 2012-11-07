@@ -7,16 +7,19 @@ http://www.cs.pitt.edu/~kirk/algorithmcourses/index.html
 
 ###########################################
 To lower the overhead a more elaborate locking protocol test and test-and-set is used. The main idea is not to spin in test-and-set but increase the likelihood of successful test-and-set by using the following entry protocol to the lock:
+
 boolean locked := false // shared lock variable
 procedure EnterCritical() {
   do {
     while (locked == true) skip // spin until lock seems free
   } while TestAndSet(locked) // actual atomic locking
 }
+
 Exit protocol is:
 procedure ExitCritical() {
   locked := false
 }
+
 The entry protocol uses normal memory reads to spin, waiting for the lock to become free. Test-and-set is only used to try to get the lock when normal memory read says it's free. Thus the expensive atomic memory operations happens less often than in simple spin around test-and-set.
 '
 ###########################################
@@ -39,8 +42,6 @@ Area of polygon by triangulation:
 
 
 ######################
-
-          
 * convex hull simple:
 
     convexHull(point[] X){
@@ -73,7 +74,6 @@ Area of polygon by triangulation:
     }
 
 
-    ""''//\\
 * Convex hull code (when we can have multiple points on the hull edge)
 
     //If onEdge is true, use as many points as possible for
@@ -127,8 +127,6 @@ Area of polygon by triangulation:
             used[p] = true;
         }while(start!=p);
     }
-
-
 
 ###########################################
 topcoder:
@@ -802,6 +800,7 @@ void readBST(BinaryTree *&root, ifstream &fin) {
 
 ###########################################
 # LCA of bt
+# RMQ and LCA = http://community.topcoder.com/tc?module=Static&d1=tutorials&d2=lowestCommonAncestor
 #
 node *LowestCommonAncestor( node *root , node *p , node *q)
 {
@@ -2882,12 +2881,12 @@ void permutate( char[] str, int index )
   int i;
   for( i = index; i < strlen(str); i++ )
   {
-    if( (int)used[arr[i]] != 0)
+    if( (int)used[str[i]] != 0)
     {
       continue;
     }
 
-    used[arr[i]] = 1;
+    used[str[i]] = 1;
 
     swap( str[index], str[i] ); // It doesn't matter how you swap.'
     permutate( str, index + 1 );
@@ -3302,9 +3301,15 @@ void maxSlidingWindow(int A[], int n, int w, int B[])
 
 Water in histrogram:
 
+1:
 Solution: This is a relatively simple DP problem. Here we only give the main idea.
 - For a particular bar bi, if we know the highest bar on its left Li and highest bar on its right Ri.  If the height of bi is smaller than both Li and Ri, the water volume can be held on this bar is min(Li, Ri) - hi; otherwise, it can't hold water.
 - To calculate Li and Ri, we just need to record the maximum height we had observed so far from the left (and from the right). Therefore, a O(n) algorithm is straightforward here.
+
+2:
+http://sumitpal.wordpress.com/2012/08/17/histogram-based-water-volume-calculation-algorithm/#comment-223
+  based on divide and conquer
+  Calculate strip of water over each bar.
 
 ################################################
 

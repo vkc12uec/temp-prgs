@@ -230,7 +230,7 @@ hash_map (unordered_map in TR1 and Boost; use those instead) use a hash table wh
 
 map is implemented as a balanced binary search tree (usually a red/black tree).
 
-An unordered_map should give slightly better performance for accessing known elements of the collection, but a map will have additional useful characteristics (e.g. it is stored in sorted order, which allows traversal from start to finish). Unordered_map will be faster on insert and delete than a ma
+An unordered_map should give slightly better performance for accessing known elements of the collection, but a map will have additional useful characteristics (e.g. it is stored in sorted order, which allows traversal from start to finish). Unordered_map will be faster on insert and delete than a map
 
 ###########################################
 # loadbalancing:
@@ -453,16 +453,16 @@ foreground in RR
 
 * test-and-set
 
-function Lock(boolean *lock) {
-	while (test_and_set (lock) == 1)
-	;
-}
+        function Lock(boolean *lock) {
+          while (test_and_set (lock) == 1)
+          ;
+        }
 
-function TestAndSet(boolean lock) {
-	boolean initial = lock
-	lock = true
-	return initial
-}
+        function TestAndSet(boolean lock) {
+          boolean initial = lock
+          lock = true
+          return initial
+        }
 
 * The efficient implementation of spinlocks is of great concern because spinlocks are the usual foundation for synchronization, expecially in multiprocessor systems. They are used everywhere and very frequently. As the use of multiprocessor systems increases so will the interest in efficient spinlocks and in alternative synchronization mechanisms
 
@@ -560,19 +560,20 @@ method 1:
 # search for its relevant text
 
 
+# method 1: using 2 processes
 semaphore s [N] = {1};    # this shud be 0 ... check
 semaphore all_arrived = 0;
 
 process_i () {
-signal(s[i]);
-wait(all_arrived);
+  signal(s[i]);
+  wait(all_arrived);
 }
 
 process_barrier () {
-for (int i =0;i<N;i++)
-wait(s[i]);
-for (int i =0;i<N;i++)
-signal[all_arrived];
+  for (int i =0;i<N;i++)
+  wait(s[i]);
+  for (int i =0;i<N;i++)
+  signal[all_arrived];
 }
 
 # method 2: (taken from Sema book)
@@ -1414,20 +1415,20 @@ Snapshot is point in time image of any individual file/directory or entire File 
 
 ###########################################
 todo:
-operator overloading in classes
-the way done in sartaj sahni for outputtting..
+      operator overloading in classes
+      the way done in sartaj sahni for outputtting..
 
-template<class T>
-void LinearList<T>::Output(ostream& out) const
-{// Put the list into the stream out.
-	for (int i = 0; i < length; i++)
-	out << element[i] << "  ";
-	}
+      template<class T>
+      void LinearList<T>::Output(ostream& out) const
+      {// Put the list into the stream out.
+        for (int i = 0; i < length; i++)
+        out << element[i] << "  ";
+        }
 
-	// overload <<
-	template <class T>
-	ostream& operator<<(ostream& out, const LinearList<T>& x)
-	   {x.Output(out); return out;}
+        // overload <<
+        template <class T>
+        ostream& operator<<(ostream& out, const LinearList<T>& x)
+           {x.Output(out); return out;}
 
 ################################################
 

@@ -6,6 +6,15 @@ http://www.cs.pitt.edu/~kirk/algorithmcourses/index.html
 
 
 ###########################################
+Directed acyclic word graph
+
+This is a tree whuich u can form by compressing Trie (prefix tree). In this, prefix and suffixes are shared.
+
+
+# Print all the combination from a candidate set that sum to a target value
+achieved thru recursion
+
+###########################################
 To lower the overhead a more elaborate locking protocol test and test-and-set is used. The main idea is not to spin in test-and-set but increase the likelihood of successful test-and-set by using the following entry protocol to the lock:
 
 boolean locked := false // shared lock variable

@@ -6,6 +6,149 @@ http://www.cs.pitt.edu/~kirk/algorithmcourses/index.html
 
 
 ###########################################
+# for passing c++ vector<> to functions
+
+Instead, use the following construction:
+ void some_function(const vector<int>& v) { // OK 
+      // ... 
+ } 
+If you are going to change the contents of vector in the function, just omit the .const. modifier.
+ int modify_vector(vector<int>& v) { // Correct 
+      V[0]++; 
+ } 
+
+# pairs < int , int >
+The great advantage of pairs is that they have built-in operations to compare themselves. Pairs are compared first-to-second element. If the first elements are not equal, the result will be based on the comparison of the first elements only; the second elements will be compared only if the first ones are equal. The array (or vector) of pairs can easily be sorted by STL internal functions. 
+
+# The end iterator is pointing not to the last object, however, but to the first invalid object, or the object directly following the last one. It.s often very convenient. 
+
+
+# To get the index of element found, one should subtract the beginning iterator from the result of find():
+
+ int i = (find(v.begin(), v.end(), 49) - v.begin(); 
+ if(i < v.size()) { 
+      // ... 
+ } 
+
+# max and min in vector<>
+ int data[5] = { 1, 5, 2, 4, 3 }; 
+ vector<int> X(data, data+5); 
+ int v1 = *max_element(X.begin(), X.end()); // Returns value of max element in vector 
+ int i1 = min_element(X.begin(), X.end()) . X.begin; // Returns index of min element in vector 
+
+ int v2 = *max_element(data, data+5); // Returns value of max element in array 
+ int i3 = min_element(data, data+5) . data; // Returns index of min element in array 
+
+# const vector shud have a const_iterator
+
+# It gives us a simple way to get rid of duplicates in vector, and sort it:
+   vector<int> v; 
+   // . 
+   set<int> s(all(v)); 
+   vector<int> v2(all(s)); 
+  Here 'v2' will contain the same elements as 'v' but sorted in ascending order and with duplicates removed. 
+
+# map <int , char> info
+
+There is one important difference between map::find() and map::operator []. While map::find() will never change the contents of map, operator [] will create an element if it does not exist. In some cases this could be very convenient, but it's definitly a bad idea to use operator [] many times in a loop, when you do not want to add new elements. That.s why operator [] may not be used if map is passed as a const reference parameter to some function:
+
+'Algorithm sort() is also widely used. The call to sort(begin, end) sorts an interval in ascending order. Notice that sort() requires random access iterators, so it will not work on all containers. However, you probably won't ever call sort() on set, which is already ordered. 
+'
+# next_permutation
+         vector<int> v; 
+
+         for(int i = 0; i < 10; i++) { 
+              v.push_back(i); 
+         } 
+
+         do { 
+              Solve(..., v); 
+         } while(next_permutation(all(v)); 
+Don.t forget to ensure that the elements in a container are sorted before your first call to next_permutation(...). Their initial state should form the very first permutation; otherwise, some permutations will not be checked. 
+
+
+# copy vec2 to end of vec1
+
+      // Now copy v2 to the end of v1
+      v1.resize(v1.size() + v2.size()); 
+      // Ensure v1 have enough space 
+      copy(all(v2), v1.end() - v2.size()); 
+      // Copy v2 elements right after v1 ones 
+
+# copy vector -> set : v1 into s1
+  copy (all(v1), std::inserter(s1, s1.end()));
+
+
+# set intersection, union etc. (THE INPUT DATA LIST SHUD BE SORTED, HENCE DIRECTLY APPLICABLE TO SET, MAP )
+
+        int data1[] = { 1, 2, 5, 6, 8, 9, 10 }; 
+        int data2[] = { 0, 2, 3, 4, 7, 8, 10 }; 
+         
+        vector<int> v1(data1, data1+sizeof(data1)/sizeof(data1[0]));
+        vector<int> v2(data2, data2+sizeof(data2)/sizeof(data2[0])); 
+         
+        vector<int> tmp(max(v1.size(), v2.size()); 
+         
+        vector<int> res = vector<int> (tmp.begin(), set_intersection(all(v1), all(v2), tmp.begin());
+
+
+    ## Actually, I would never use a construction like ' vector<int> tmp'. I don't think it's a good idea to allocate memory for each set_*** algorithm invoking. Instead, I define the global or static variable of appropriate type and enough size. See below:
+
+                  set<int> s1, s2; 
+                  for(int i = 0; i < 500; i++) { 
+                          s1.insert(i*(i+1) % 1000); 
+                          s2.insert(i*i*i % 1000); 
+                  } 
+                   
+                  static int temp[5000]; // greater than we need 
+                   
+                  vector<int> res = vi(temp, set_symmetric_difference(all(s1), all(s2), temp)); 
+                  int cnt = set_symmetric_difference(all(s1), all(s2), temp) . temp;
+
+
+# ACCUMULATE
+
+      int sum = accumulate(all(v), 0); 
+      long long sum = accumulate(all(v), (long long)0); # specify the 3rd param as type in case int is not sufficient 
+      double product = accumulate(all(v), double(1), multiplies<double>());   # product
+        // don.t forget to start with 1 !
+
+# using STL sort(), you always implement operator '<'
+
+    Again, you should understand it in this way: "I only need to implement operator < for objects to be stored in set/map." 
+
+# split string on ' '
+      vector<string> tokens;
+      copy(istream_iterator<string>(iss),
+      istream_iterator<string>(),
+      back_inserter<vector<string> >(tokens));
+
+
+#########################################
+# WAP to connect the level wise pointers in a full binary tree
+
+class node {
+  node *left;
+  node *right;
+  node *next;
+}
+
+void pre(node *n, node *pn) {
+  if (n) {
+    n->next = (pn == 0) ? 0 : pn->right;
+    if (n->next == pn->right) {
+      n->next = pn->next->left;
+    }
+    pre (n->left, n);
+    pre (n->right, n);
+  }
+}
+
+# when this is not a full binary tree; for e.g. skewed tree
+
+Same above funda will solve the skewed tree, just that if (pn->next->left == null) then you check for (pn->next->right == null) ; if both null, you assign null
+
+###########################################
 Directed acyclic word graph
 
 This is a tree whuich u can form by compressing Trie (prefix tree). In this, prefix and suffixes are shared.
@@ -2495,6 +2638,25 @@ REGEX dfa matching
       }
       return isMatch(s, p+2);
     }
+
+
+# two sigma question about wildcard matching using '?' and '*'
+#     http://www.glassdoor.com/Interview/TWO-Sigma-Interview-RVW1827179.htm
+
+bool isMatch (const char *t, const char *g) {
+  if (*t == '\0' && *g == '\0')
+    return true;
+  else if ( *t == '\0' || *g == '\0')
+    return false;
+  else if (*t == *g || *g == '?')
+    return isMatch (t+1, g+1);
+  else if (*g == '*') {
+    int limit = strlen(t);
+    for (int eat = 0; eat <= limit; eat++)
+      if (isMatch(t+eat, g+1))
+        return true;
+  }
+}
 
 ###########################################
 

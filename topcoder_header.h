@@ -11,14 +11,16 @@
 #include <map>
 #include <algorithm>
 #include <stdlib.h>
-#include <boost/algorithm/string.hpp>
+//#include <boost/algorithm/string.hpp>
 
 using namespace std;
-using namespace boost;
+//using namespace boost;
 
 typedef vector<int> vi; 
 typedef vector<vi> vvi; 
 typedef pair<int,int> ii; 
+typedef map<int,char> mic; 
+typedef map<char,int> mci; 
 #define sz(a) int((a).size()) 
 #define pb push_back 
 #define all(c) (c).begin(),(c).end() 

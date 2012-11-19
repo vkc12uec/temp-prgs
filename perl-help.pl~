@@ -2,6 +2,21 @@ intitle:"index.of" linkin (mp3|mp4|flv|avi|mpg|wmv) -html-htm-php-jsp-asp
 http://www.ihas1337code.com/2010/04/hacking-google-interview-from-mit.html
 
 ###########################################
+# Circular buffer impl. using circular pointers.
+Note that a circular buffer with n elements is usually used to implement a queue with n-1 elements--there is always one empty element in the buffer. Otherwise, it becomes difficult to distinguish between a full and empty queue--the read and write pointers would be identical in both cases.
+
+How many items are in the queue ?
+Some people use a integer to remember exactly how many items are in the queue.
+With this "extra" data, a buffer of n elements can hold the full n data items, rather than n-1 data items. When both pointers point to the same location (buffer.insert == buffer.remove), then buffer.size distinguishes between the empty buffer (0 == buffer.size) or a full buffer ( n == buffer.size ).
+Other people don't like this "extra" data -- it's too much hassle to keep it synchronized with the pointers. (It violates OnceAndOnlyOnce). Easier just to make the buffer 1 element larger. If we ever want to know the size, use
+   size = (n + buffer.insert - buffer.remove) mod n;
+.
+
+###########################################
+Triangle detection in graphs:
+
+It is possible to test whether a graph with m edges is triangle-free in time O(m1.41) (Alon, Yuster & Zwick 1994). Another approach is to find the trace of A3, where A is the adjacency matrix of the graph. The trace is zero if and only if the graph is triangle-free. For dense graphs, it is more efficient to use this simple algorithm which relies on matrix multiplication, since it gets the time complexity down to O(n2.373), where n is the number of vertices.
+###########################################
 #Dynamic linking has many advantages over static linking. Here are two:
 
 Reduced use of disk space. Dynamically linked executables tend to be much smaller than statically linked executables.
@@ -215,7 +230,7 @@ hash_map (unordered_map in TR1 and Boost; use those instead) use a hash table wh
 
 map is implemented as a balanced binary search tree (usually a red/black tree).
 
-An unordered_map should give slightly better performance for accessing known elements of the collection, but a map will have additional useful characteristics (e.g. it is stored in sorted order, which allows traversal from start to finish). Unordered_map will be faster on insert and delete than a ma
+An unordered_map should give slightly better performance for accessing known elements of the collection, but a map will have additional useful characteristics (e.g. it is stored in sorted order, which allows traversal from start to finish). Unordered_map will be faster on insert and delete than a map
 
 ###########################################
 # loadbalancing:
@@ -438,16 +453,16 @@ foreground in RR
 
 * test-and-set
 
-function Lock(boolean *lock) {
-	while (test_and_set (lock) == 1)
-	;
-}
+        function Lock(boolean *lock) {
+          while (test_and_set (lock) == 1)
+          ;
+        }
 
-function TestAndSet(boolean lock) {
-	boolean initial = lock
-	lock = true
-	return initial
-}
+        function TestAndSet(boolean lock) {
+          boolean initial = lock
+          lock = true
+          return initial
+        }
 
 * The efficient implementation of spinlocks is of great concern because spinlocks are the usual foundation for synchronization, expecially in multiprocessor systems. They are used everywhere and very frequently. As the use of multiprocessor systems increases so will the interest in efficient spinlocks and in alternative synchronization mechanisms
 
@@ -545,19 +560,20 @@ method 1:
 # search for its relevant text
 
 
+# method 1: using 2 processes
 semaphore s [N] = {1};    # this shud be 0 ... check
 semaphore all_arrived = 0;
 
 process_i () {
-signal(s[i]);
-wait(all_arrived);
+  signal(s[i]);
+  wait(all_arrived);
 }
 
 process_barrier () {
-for (int i =0;i<N;i++)
-wait(s[i]);
-for (int i =0;i<N;i++)
-signal[all_arrived];
+  for (int i =0;i<N;i++)
+  wait(s[i]);
+  for (int i =0;i<N;i++)
+  signal[all_arrived];
 }
 
 # method 2: (taken from Sema book)
@@ -1399,20 +1415,20 @@ Snapshot is point in time image of any individual file/directory or entire File 
 
 ###########################################
 todo:
-operator overloading in classes
-the way done in sartaj sahni for outputtting..
+      operator overloading in classes
+      the way done in sartaj sahni for outputtting..
 
-template<class T>
-void LinearList<T>::Output(ostream& out) const
-{// Put the list into the stream out.
-	for (int i = 0; i < length; i++)
-	out << element[i] << "  ";
-	}
+      template<class T>
+      void LinearList<T>::Output(ostream& out) const
+      {// Put the list into the stream out.
+        for (int i = 0; i < length; i++)
+        out << element[i] << "  ";
+        }
 
-	// overload <<
-	template <class T>
-	ostream& operator<<(ostream& out, const LinearList<T>& x)
-	   {x.Output(out); return out;}
+        // overload <<
+        template <class T>
+        ostream& operator<<(ostream& out, const LinearList<T>& x)
+           {x.Output(out); return out;}
 
 ################################################
 

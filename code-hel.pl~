@@ -2,18 +2,216 @@
 vids:
 #http://openclassroom.stanford.edu/MainFolder/CoursePage.php?course=IntroToAlgorithms
 
+http://www.cs.pitt.edu/~kirk/algorithmcourses/index.html
+
+
+###########################################
+# amazon (trick, thought)
+given an ASCII string, return the longest substring with unique characters. Ex: dabcade => Ans: bcade.
+
+###########################################
+typedef vector<int> vi; 
+typedef vector<vi> vvi; 
+typedef pair<int,int> ii; 
+#define sz(a) int((a).size()) 
+#define pb push_back 
+#define all(c) (c).begin(),(c).end() 
+//#define tr(c,i) for(typeof((c).begin() i = (c).begin(); i != (c).end(); i++))
+#define tr(c,i) for( typeof((c).begin()) i = (c).begin(); i != (c).end(); i++ )
+#define present(c,x) ((c).find(x) != (c).end()) 
+#define cpresent(c,x) (find(all(c),x) != (c).end()) 
+//Here, 'present()' returns whether the element presents in the container with member function 'find()' (i.e. set/map, etc.) while 'cpresent' is for vector. 
+
+###########################################
+# for passing c++ vector<> to functions
+
+Instead, use the following construction:
+     void some_function(const vector<int>& v) { // OK 
+          // ... 
+     } 
+If you are going to change the contents of vector in the function, just omit the .const. modifier.
+     int modify_vector(vector<int>& v) { // Correct 
+          V[0]++; 
+     } 
+
+# pairs < int , int >
+The great advantage of pairs is that they have built-in operations to compare themselves. Pairs are compared first-to-second element. If the first elements are not equal, the result will be based on the comparison of the first elements only; the second elements will be compared only if the first ones are equal. The array (or vector) of pairs can easily be sorted by STL internal functions. 
+
+# The end iterator is pointing not to the last object, however, but to the first invalid object, or the object directly following the last one. It.s often very convenient. 
+
+
+# To get the index of element found, one should subtract the beginning iterator from the result of find():
+
+     int i = (find(v.begin(), v.end(), 49) - v.begin(); 
+     if(i < v.size()) { 
+          // ... 
+     } 
+
+# max and min in vector<>
+ int data[5] = { 1, 5, 2, 4, 3 }; 
+ vector<int> X(data, data+5); 
+ int v1 = *max_element(X.begin(), X.end()); // Returns value of max element in vector 
+ int i1 = min_element(X.begin(), X.end()) . X.begin; // Returns index of min element in vector 
+
+ int v2 = *max_element(data, data+5); // Returns value of max element in array 
+ int i3 = min_element(data, data+5) . data; // Returns index of min element in array 
+
+# const vector shud have a const_iterator
+
+# It gives us a simple way to get rid of duplicates in vector and sort it:  INSERT INTO set<>
+   vector<int> v; 
+   // . 
+   set<int> s(all(v)); 
+   vector<int> v2(all(s)); 
+  Here 'v2' will contain the same elements as 'v' but sorted in ascending order and with duplicates removed. 
+
+# map <int , char> info
+
+There is one important difference between map::find() and map::operator []. While map::find() will never change the contents of map, operator [] will create an element if it does not exist. In some cases this could be very convenient, but it's definitly a bad idea to use operator [] many times in a loop, when you do not want to add new elements. That.s why operator [] may not be used if map is passed as a const reference parameter to some function:
+
+'Algorithm sort() is also widely used. The call to sort(begin, end) sorts an interval in ascending order. Notice that sort() requires random access iterators, so it will not work on all containers. However, you probably won't ever call sort() on set, which is already ordered. 
+'
+# next_permutation
+         vector<int> v; 
+
+         for(int i = 0; i < 10; i++) { 
+              v.push_back(i); 
+         } 
+
+         do { 
+              Solve(..., v); 
+         } while(next_permutation(all(v)); 
+# Don.t forget to ensure that the elements in a container are sorted before your first call to next_permutation(...). Their initial state should form the very first permutation; otherwise, some permutations will not be checked. 
+
+
+# copy vec2 to end of vec1
+      // Now copy v2 to the end of v1
+      v1.resize(v1.size() + v2.size()); 
+      // Ensure v1 have enough space 
+      copy(all(v2), v1.end() - v2.size()); 
+      // Copy v2 elements right after v1 ones 
+
+# copy vector -> set : v1 into s1
+  copy (all(v1), std::inserter(s1, s1.end()));
+
+
+# set intersection, union etc. (THE INPUT DATA LIST SHUD BE SORTED, HENCE DIRECTLY APPLICABLE TO SET, MAP )
+
+        int data1[] = { 1, 2, 5, 6, 8, 9, 10 }; 
+        int data2[] = { 0, 2, 3, 4, 7, 8, 10 }; 
+         
+        vector<int> v1(data1, data1+sizeof(data1)/sizeof(data1[0]));
+        vector<int> v2(data2, data2+sizeof(data2)/sizeof(data2[0])); 
+         
+        vector<int> tmp(max(v1.size(), v2.size()); 
+         
+        vector<int> res = vector<int> (tmp.begin(), set_intersection(all(v1), all(v2), tmp.begin());
+
+
+    ## Actually, I would never use a construction like ' vector<int> tmp'. I don't think it's a good idea to allocate memory for each set_*** algorithm invoking. Instead, I define the global or static variable of appropriate type and enough size. See below:
+
+                  set<int> s1, s2; 
+                  for(int i = 0; i < 500; i++) { 
+                          s1.insert(i*(i+1) % 1000); 
+                          s2.insert(i*i*i % 1000); 
+                  } 
+                   
+                  static int temp[5000]; // greater than we need 
+                   
+                  vector<int> res = vi(temp, set_symmetric_difference(all(s1), all(s2), temp)); 
+                  int cnt = set_symmetric_difference(all(s1), all(s2), temp) . temp;
+
+
+# ACCUMULATE
+
+      int sum = accumulate(all(v), 0); 
+      long long sum = accumulate(all(v), (long long)0); # specify the 3rd param as LONG LONG type in case int is not sufficient 
+      double product = accumulate(all(v), double(1), multiplies<double>());   # product #// don.t forget to start with 1 !
+
+
+# using STL sort(), you always implement operator '<'
+    Again, you should understand it in this way: "I only need to implement operator < for objects to be stored in set/map." 
+
+# split string on ' '
+      istringstream iss(input);   # make a stream of 'input' string
+      vector<string> tokens;
+      copy(istream_iterator<string>(iss), istream_iterator<string>(), back_inserter<vector<string> >(tokens));
+
+
+#########################################
+# WAP to connect the level wise pointers in a full binary tree w/o using Queue
+# Idea is : Assume level i next pointers are connected, that will help in connecting i+1 level.
+
+class node {    // this code is for full binary tree
+  node *left;
+  node *right;
+  node *next;
+}
+
+void pre(node *n, node *pn) {
+  if (n) {
+    n->next = (pn == 0) ? 0 : pn->right;
+    if (n->next == pn->right) {
+      n->next = pn->next->left;
+    }
+    pre (n->left, n);   // it has to be 'preorder'
+    pre (n->right, n);
+  }
+}
+
+# when this is not a full binary tree; for e.g. skewed tree
+
+Same above funda will solve the skewed tree, just that if (pn->next->left == null) then you check for (pn->next->right == null) ; if both null, then 
+  you have to keep moving right using ur parents next pointer until u reach a node or lastly NULL
+
+###########################################
+Directed acyclic word graph
+
+This is a tree whuich u can form by compressing Trie (prefix tree). In this, prefix and suffixes are shared.
+
+
+# Print all the combination from a candidate set that sum to a target value
+achieved thru recursion   "subset_sum_equal_n.cpp"
+
+###########################################
+Consistent hashing (used in web cacheing etc.). 
+  When you add a node, in linear hashing u move around n/(n+1) amt. of data
+  n => # servers
+
+  In consistent hashing this amt. ~ 1/(n+1) 
+
+http://www.linux-mag.com/id/7561/
+The basic idea is to avoid re-hashing most keys to a new server when a server is removed or added. We do this by trying to make hash keys consistently map to the same 
+servers in most (but obviously not all) cases. The code required to accomplish this is a bit longer than is worth pasting here, but the theory behind it is fairly easy to describe. Instead of having a one-to-one relationship between hash “slots” and servers, in consistent hashing, each server is given a larger number of slots-
+say 1,000 of them. So if you want to add “serverA” to the list, behind the scenes, you end up with “serverA-0001? … “serverA-1000? on the list. Each of those names can be mapped to a 64bit number (using a hash function, of course) and stored in a sorted list (or similar data structure). The values will be semi-randomly and semi-evenly spread out in the 64bit number space.
+
+That means instead of 10 servers and 10 slots in a hash, we actually have 10 servers mapping to total of 10,000 slots. To map a key to a server, you run that key 
+through the hash function, just as before, but this time you don’t simply “mod $num_servers” to find the server. Instead, you take the resulting 64bit value and consult the sorted list. The server immediately after that number in the list is the one that is responsible for the data. So if your 64bit value was closest to the hashed value for “serverD-0532?, the server-D is your answer.
+
+Now, here’s where the real magic happens. If you add a server to the list, that adds another 1,000 slots to the list. But instead of having to rehash all the keys, you end up with only a percentage of them moving to the new server. Similarly, if you need to remove a server from the list, you remove its 1,000 points and only a fraction of the keys and up having to map to other servers (those that lived on the removed server). Understanding Consistent Hashing provides a more visual version of this technique.
+
+
+other text[]
+http://www.lexemetech.com/2007/11/consistent-hashing.html
+Clockwise movement: This works well, except the size of the intervals assigned to each cache is pretty hit and miss. Since it is essentially random it is possible to have a very non-uniform distribution of objects between caches. The solution to this problem is to introduce the idea of "virtual nodes", which are replicas of cache points in the circle. So whenever we add a cache we create a number of points in the circle for it.
+
+
+
 ###########################################
 To lower the overhead a more elaborate locking protocol test and test-and-set is used. The main idea is not to spin in test-and-set but increase the likelihood of successful test-and-set by using the following entry protocol to the lock:
+
 boolean locked := false // shared lock variable
 procedure EnterCritical() {
   do {
     while (locked == true) skip // spin until lock seems free
   } while TestAndSet(locked) // actual atomic locking
 }
+
 Exit protocol is:
 procedure ExitCritical() {
   locked := false
 }
+
 The entry protocol uses normal memory reads to spin, waiting for the lock to become free. Test-and-set is only used to try to get the lock when normal memory read says it's free. Thus the expensive atomic memory operations happens less often than in simple spin around test-and-set.
 '
 ###########################################
@@ -36,9 +234,7 @@ Area of polygon by triangulation:
 
 
 ######################
-
-          
-* convex hull simple:
+* convex hull simple:   http://community.topcoder.com/tc?module=Static&d1=tutorials&d2=geometry2#convexhull
 
     convexHull(point[] X){
         int N = lengthof(X);
@@ -69,8 +265,7 @@ Area of polygon by triangulation:
         }while(start!=p);
     }
 
-
-    ""''//\\
+'
 * Convex hull code (when we can have multiple points on the hull edge)
 
     //If onEdge is true, use as many points as possible for
@@ -124,8 +319,6 @@ Area of polygon by triangulation:
             used[p] = true;
         }while(start!=p);
     }
-
-
 
 ###########################################
 topcoder:
@@ -259,6 +452,33 @@ tree* construct_tree(char* A, int *i)
     return node;
 }
 
+http://tristan-interview.blogspot.com/search/label/recursion
+
+Solution: The key is to understand what can uniquely denote a tree (or serialize a tree). A good way to serialize a tree is to record the pre-order traversal of a binary tree plus the nil virtual leaf information. If we denote an actual node as "1", the nil virtual leaf as "0". The sequence "10100" will stand for the following tree:
+
+
+                  *           
+               /      \                     
+             nil       *
+                      /    \
+                   nil    nil
+
+The way to decide the nil leaf is to check the children of a node. If a node is a leaf in the tree, it will have two nil virtual leaves, since a leaf won't have any children.  Similarly, we can know the sequence "11000" will stand for the following tree:
+
+
+                  *           
+                 /  \                 
+               *    nil
+              /  \
+           nil  nil
+
+Therefore,  our target is to enumerate all possible sequences. There are several constraints on the sequences:
+
+For a n node tree, the length of the sequence will be 2n+1 with n "1" and n+1 "0".
+For any position i in the sequence s and i != 2n,  the number of "1" should always be no smaller than the number of "0" in the sub-sequence s[0, i].
+
+
+
 # 
 ###########################################
 # AMZN: Given a number,find the next higher number using the same digits in the number. Eg- 15432, Soln- 21345.
@@ -334,7 +554,7 @@ void ino_helper (node *r, node *p, int &flag) {
   ino_helper (r->left, p, flag);
   if (flag == 1)
     print r->data is successor
-  if (r == p)   /*this order of 2 if s is important*/
+  if (r == p)   /*this order of 2 if {} is important*/
     flag = 1;
   ino_helper(r->right, p , flag);
 }
@@ -365,6 +585,7 @@ case a[Mid] in
 I am trying to reverse the bits in a number
 The following fucntion successfully reverses the bits, but the runtime is O(n).
 
+rev_bit = 0;
 for ( unsigned i = 0; i < n_bits; ++i ) {
     rev_bit = (rev_bit<<1) | ( val & 1 );
     val >>= 1;
@@ -744,6 +965,8 @@ void rIno (node *n, node *&su) {
 	}
 }
 
+YOU CALL ABOVE FUNCTION LIKE : rIno (root, 0);
+
 ###########################################
 # read a BST preorder string from a file and convert it to tree:
 #
@@ -772,6 +995,7 @@ void readBST(BinaryTree *&root, ifstream &fin) {
 
 ###########################################
 # LCA of bt
+# RMQ and LCA = http://community.topcoder.com/tc?module=Static&d1=tutorials&d2=lowestCommonAncestor
 #
 node *LowestCommonAncestor( node *root , node *p , node *q)
 {
@@ -2107,6 +2331,10 @@ while(root) {
 
 
 ###########################################
+Towers of hanoi N, K pegs
+
+http://tristan-interview.blogspot.com/2012/02/n-disks-and-k-pegs-extension-problem-of.html
+
 ###########################################
 /* Strategy: consider that each value could be the root.
  Recursively find the size of the left and right subtrees.
@@ -2453,6 +2681,25 @@ REGEX dfa matching
       }
       return isMatch(s, p+2);
     }
+
+
+# two sigma question about wildcard matching using '?' and '*'
+#     http://www.glassdoor.com/Interview/TWO-Sigma-Interview-RVW1827179.htm
+
+bool isMatch (const char *t, const char *g) {
+  if (*t == '\0' && *g == '\0')
+    return true;
+  else if ( *t == '\0' || *g == '\0')
+    return false;
+  else if (*t == *g || *g == '?')
+    return isMatch (t+1, g+1);
+  else if (*g == '*') {
+    int limit = strlen(t);
+    for (int eat = 0; eat <= limit; eat++)
+      if (isMatch(t+eat, g+1))
+        return true;
+  }
+}
 
 ###########################################
 
@@ -2848,12 +3095,12 @@ void permutate( char[] str, int index )
   int i;
   for( i = index; i < strlen(str); i++ )
   {
-    if( (int)used[arr[i]] != 0)
+    if( (int)used[str[i]] != 0)
     {
       continue;
     }
 
-    used[arr[i]] = 1;
+    used[str[i]] = 1;
 
     swap( str[index], str[i] ); // It doesn't matter how you swap.'
     permutate( str, index + 1 );
@@ -3032,10 +3279,9 @@ for (i=0; i<len; i++)
     break;
   }
   if(St.empty())
-    t = -1;
+  t = -1;
   else
-    t = St.top();
-
+  t = St.top();
   //Calculating Li
   area[i] = i - t - 1;
   St.push(i);
@@ -3057,10 +3303,9 @@ for (i=len-1; i>=0; i--)
     break;
   }
   if(St.empty())
-    t = len;
+  t = len;
   else
-    t = St.top();
-
+  t = St.top();
   //calculating Ri, after this step area[i] = Li + Ri
   area[i] += t - i -1;
   St.push(i);
@@ -3266,4 +3511,50 @@ void maxSlidingWindow(int A[], int n, int w, int B[])
 }
 
 
+################################################
+
+Water in histrogram:
+
+1:
+Solution: This is a relatively simple DP problem. Here we only give the main idea.
+- For a particular bar bi, if we know the highest bar on its left Li and highest bar on its right Ri.  If the height of bi is smaller than both Li and Ri, the water volume can be held on this bar is min(Li, Ri) - hi; otherwise, it can't hold water.
+- To calculate Li and Ri, we just need to record the maximum height we had observed so far from the left (and from the right). Therefore, a O(n) algorithm is straightforward here.
+
+2:
+http://sumitpal.wordpress.com/2012/08/17/histogram-based-water-volume-calculation-algorithm/#comment-223
+  based on divide and conquer
+  Calculate strip of water over each bar.
+
+################################################
+
+Min Vertex cover of Tree:
+
+Solution: The minimum vertex cover for a general graph is a NP-hard problem. However, for a tree, there is a linear solution. The idea here is to do DFS search plus post-order traversal. If we encounter a leaf node and the edge connecting this leaf node with its parent, we know in order to construct a vertex cover, we must include at least one of the node (the leaf node, or its parent). Here we can use a greedy approach. We can see selecting the leaf doesn't give us any extra benefit, while selecting the parent can give us some benefit, since the parent must be also connected to other nodes. By selecting the parent node, we can further "cover" some extra edges. With this strategy in mind, our algorithm is as follow:
+
+we do a DFS search. When a DFS call on a child node returns, we check if the child and the parent are both unselected. If yes, we select the parent node.
+After all the DFS finishes (we traverse the tree), those selected nodes form the minimum vertex cover. The cost is O(N).
+
+Solution 2:
+
+
+Preprocessing: First, use a slight variation on BFS or DFS to build a list L of leaves of T.  In the process of building L, initialize mark bits to FALSE for each node. 
+
+while L is not empty
+do f  remove first leaf from L
+      if f is in T 
+           then if mark[f] is FALSE and parent[f] is null
+              then mark[f]  TRUE
+              else if mark[f] is FALSE and parent[f] is not null
+                                then mark[parent[f]]  TRUE                     
+                                                remove f from T
+                                                (this implicitly removes leaf-parent edge if it exists) 
+                                                                if parent[f] is not null and parent[f] is not root[T]
+                                                                           then if children[parent[f]] is null 
+                                                                                                   then append parent[f] to L
+
+
+##############################################
+fibbonaci faster:
+
+ A^n = {[fibo(n+1), fibo(n)], [fibo(n), fibo(n-1)]}.
 

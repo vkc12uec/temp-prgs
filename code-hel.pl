@@ -6,16 +6,33 @@ http://www.cs.pitt.edu/~kirk/algorithmcourses/index.html
 
 
 ###########################################
+# amazon (trick, thought)
+given an ASCII string, return the longest substring with unique characters. Ex: dabcade => Ans: bcade.
+
+###########################################
+typedef vector<int> vi; 
+typedef vector<vi> vvi; 
+typedef pair<int,int> ii; 
+#define sz(a) int((a).size()) 
+#define pb push_back 
+#define all(c) (c).begin(),(c).end() 
+//#define tr(c,i) for(typeof((c).begin() i = (c).begin(); i != (c).end(); i++))
+#define tr(c,i) for( typeof((c).begin()) i = (c).begin(); i != (c).end(); i++ )
+#define present(c,x) ((c).find(x) != (c).end()) 
+#define cpresent(c,x) (find(all(c),x) != (c).end()) 
+//Here, 'present()' returns whether the element presents in the container with member function 'find()' (i.e. set/map, etc.) while 'cpresent' is for vector. 
+
+###########################################
 # for passing c++ vector<> to functions
 
 Instead, use the following construction:
- void some_function(const vector<int>& v) { // OK 
-      // ... 
- } 
+     void some_function(const vector<int>& v) { // OK 
+          // ... 
+     } 
 If you are going to change the contents of vector in the function, just omit the .const. modifier.
- int modify_vector(vector<int>& v) { // Correct 
-      V[0]++; 
- } 
+     int modify_vector(vector<int>& v) { // Correct 
+          V[0]++; 
+     } 
 
 # pairs < int , int >
 The great advantage of pairs is that they have built-in operations to compare themselves. Pairs are compared first-to-second element. If the first elements are not equal, the result will be based on the comparison of the first elements only; the second elements will be compared only if the first ones are equal. The array (or vector) of pairs can easily be sorted by STL internal functions. 
@@ -25,10 +42,10 @@ The great advantage of pairs is that they have built-in operations to compare th
 
 # To get the index of element found, one should subtract the beginning iterator from the result of find():
 
- int i = (find(v.begin(), v.end(), 49) - v.begin(); 
- if(i < v.size()) { 
-      // ... 
- } 
+     int i = (find(v.begin(), v.end(), 49) - v.begin(); 
+     if(i < v.size()) { 
+          // ... 
+     } 
 
 # max and min in vector<>
  int data[5] = { 1, 5, 2, 4, 3 }; 
@@ -41,7 +58,7 @@ The great advantage of pairs is that they have built-in operations to compare th
 
 # const vector shud have a const_iterator
 
-# It gives us a simple way to get rid of duplicates in vector, and sort it:
+# It gives us a simple way to get rid of duplicates in vector and sort it:  INSERT INTO set<>
    vector<int> v; 
    // . 
    set<int> s(all(v)); 
@@ -64,11 +81,10 @@ There is one important difference between map::find() and map::operator []. Whil
          do { 
               Solve(..., v); 
          } while(next_permutation(all(v)); 
-Don.t forget to ensure that the elements in a container are sorted before your first call to next_permutation(...). Their initial state should form the very first permutation; otherwise, some permutations will not be checked. 
+# Don.t forget to ensure that the elements in a container are sorted before your first call to next_permutation(...). Their initial state should form the very first permutation; otherwise, some permutations will not be checked. 
 
 
 # copy vec2 to end of vec1
-
       // Now copy v2 to the end of v1
       v1.resize(v1.size() + v2.size()); 
       // Ensure v1 have enough space 
@@ -109,25 +125,24 @@ Don.t forget to ensure that the elements in a container are sorted before your f
 # ACCUMULATE
 
       int sum = accumulate(all(v), 0); 
-      long long sum = accumulate(all(v), (long long)0); # specify the 3rd param as type in case int is not sufficient 
-      double product = accumulate(all(v), double(1), multiplies<double>());   # product
-        // don.t forget to start with 1 !
+      long long sum = accumulate(all(v), (long long)0); # specify the 3rd param as LONG LONG type in case int is not sufficient 
+      double product = accumulate(all(v), double(1), multiplies<double>());   # product #// don.t forget to start with 1 !
+
 
 # using STL sort(), you always implement operator '<'
-
     Again, you should understand it in this way: "I only need to implement operator < for objects to be stored in set/map." 
 
 # split string on ' '
+      istringstream iss(input);   # make a stream of 'input' string
       vector<string> tokens;
-      copy(istream_iterator<string>(iss),
-      istream_iterator<string>(),
-      back_inserter<vector<string> >(tokens));
+      copy(istream_iterator<string>(iss), istream_iterator<string>(), back_inserter<vector<string> >(tokens));
 
 
 #########################################
-# WAP to connect the level wise pointers in a full binary tree
+# WAP to connect the level wise pointers in a full binary tree w/o using Queue
+# Idea is : Assume level i next pointers are connected, that will help in connecting i+1 level.
 
-class node {
+class node {    // this code is for full binary tree
   node *left;
   node *right;
   node *next;
@@ -139,14 +154,15 @@ void pre(node *n, node *pn) {
     if (n->next == pn->right) {
       n->next = pn->next->left;
     }
-    pre (n->left, n);
+    pre (n->left, n);   // it has to be 'preorder'
     pre (n->right, n);
   }
 }
 
 # when this is not a full binary tree; for e.g. skewed tree
 
-Same above funda will solve the skewed tree, just that if (pn->next->left == null) then you check for (pn->next->right == null) ; if both null, you assign null
+Same above funda will solve the skewed tree, just that if (pn->next->left == null) then you check for (pn->next->right == null) ; if both null, then 
+  you have to keep moving right using ur parents next pointer until u reach a node or lastly NULL
 
 ###########################################
 Directed acyclic word graph
@@ -155,7 +171,31 @@ This is a tree whuich u can form by compressing Trie (prefix tree). In this, pre
 
 
 # Print all the combination from a candidate set that sum to a target value
-achieved thru recursion
+achieved thru recursion   "subset_sum_equal_n.cpp"
+
+###########################################
+Consistent hashing (used in web cacheing etc.). 
+  When you add a node, in linear hashing u move around n/(n+1) amt. of data
+  n => # servers
+
+  In consistent hashing this amt. ~ 1/(n+1) 
+
+http://www.linux-mag.com/id/7561/
+The basic idea is to avoid re-hashing most keys to a new server when a server is removed or added. We do this by trying to make hash keys consistently map to the same 
+servers in most (but obviously not all) cases. The code required to accomplish this is a bit longer than is worth pasting here, but the theory behind it is fairly easy to describe. Instead of having a one-to-one relationship between hash “slots” and servers, in consistent hashing, each server is given a larger number of slots-
+say 1,000 of them. So if you want to add “serverA” to the list, behind the scenes, you end up with “serverA-0001? … “serverA-1000? on the list. Each of those names can be mapped to a 64bit number (using a hash function, of course) and stored in a sorted list (or similar data structure). The values will be semi-randomly and semi-evenly spread out in the 64bit number space.
+
+That means instead of 10 servers and 10 slots in a hash, we actually have 10 servers mapping to total of 10,000 slots. To map a key to a server, you run that key 
+through the hash function, just as before, but this time you don’t simply “mod $num_servers” to find the server. Instead, you take the resulting 64bit value and consult the sorted list. The server immediately after that number in the list is the one that is responsible for the data. So if your 64bit value was closest to the hashed value for “serverD-0532?, the server-D is your answer.
+
+Now, here’s where the real magic happens. If you add a server to the list, that adds another 1,000 slots to the list. But instead of having to rehash all the keys, you end up with only a percentage of them moving to the new server. Similarly, if you need to remove a server from the list, you remove its 1,000 points and only a fraction of the keys and up having to map to other servers (those that lived on the removed server). Understanding Consistent Hashing provides a more visual version of this technique.
+
+
+other text[]
+http://www.lexemetech.com/2007/11/consistent-hashing.html
+Clockwise movement: This works well, except the size of the intervals assigned to each cache is pretty hit and miss. Since it is essentially random it is possible to have a very non-uniform distribution of objects between caches. The solution to this problem is to introduce the idea of "virtual nodes", which are replicas of cache points in the circle. So whenever we add a cache we create a number of points in the circle for it.
+
+
 
 ###########################################
 To lower the overhead a more elaborate locking protocol test and test-and-set is used. The main idea is not to spin in test-and-set but increase the likelihood of successful test-and-set by using the following entry protocol to the lock:
@@ -194,7 +234,7 @@ Area of polygon by triangulation:
 
 
 ######################
-* convex hull simple:
+* convex hull simple:   http://community.topcoder.com/tc?module=Static&d1=tutorials&d2=geometry2#convexhull
 
     convexHull(point[] X){
         int N = lengthof(X);
@@ -225,7 +265,7 @@ Area of polygon by triangulation:
         }while(start!=p);
     }
 
-
+'
 * Convex hull code (when we can have multiple points on the hull edge)
 
     //If onEdge is true, use as many points as possible for
@@ -514,7 +554,7 @@ void ino_helper (node *r, node *p, int &flag) {
   ino_helper (r->left, p, flag);
   if (flag == 1)
     print r->data is successor
-  if (r == p)   /*this order of 2 if s is important*/
+  if (r == p)   /*this order of 2 if {} is important*/
     flag = 1;
   ino_helper(r->right, p , flag);
 }
@@ -545,6 +585,7 @@ case a[Mid] in
 I am trying to reverse the bits in a number
 The following fucntion successfully reverses the bits, but the runtime is O(n).
 
+rev_bit = 0;
 for ( unsigned i = 0; i < n_bits; ++i ) {
     rev_bit = (rev_bit<<1) | ( val & 1 );
     val >>= 1;
@@ -923,6 +964,8 @@ void rIno (node *n, node *&su) {
 		rIno(n->left, su);
 	}
 }
+
+YOU CALL ABOVE FUNCTION LIKE : rIno (root, 0);
 
 ###########################################
 # read a BST preorder string from a file and convert it to tree:
@@ -2707,21 +2750,14 @@ Towards a recurrence relation for making change
 # Explanation
 
 #   For dynamic programming to work, one needs a recurrence relation for the optimized objective function
-
 #   Now analyze what the optimal way to make change is if denominations 1...i are allowed ( as opposed to just 1...i-1):
-
 #   Case 1. You don't use any tokens ("coins") of the largest denomination:
 #	then the optimal number of tokens is just c(i-1,j)
-
 #   Case 2. You do use tokens of the largest denomination d(i):
 #	then the optimal number of tokens is 1 + c(i,j-d(i))
-
 #	*notice that the right-hand side allows d(i) to be used again*
-
 #   The minimum number of tokens is the best you can do across both cases
-
 #   The recurrence relation is therefore:
-
 #      c(i,j) = min( c(i-1,j), 1 + c(i,j-d(i)) )
 
 ###########################################

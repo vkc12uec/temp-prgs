@@ -6,6 +6,11 @@ http://www.cs.pitt.edu/~kirk/algorithmcourses/index.html
 
 
 ###########################################
+My rule of thumb is:  POINTERS vs REFERENCES
+
+      Use pointers if you want to do arithmetic with them or if you ever have to pass a NULL-pointer.
+      Use references otherwise.
+###########################################
 # amazon (trick, thought)
 given an ASCII string, return the longest substring with unique characters. Ex: dabcade => Ans: bcade.
 

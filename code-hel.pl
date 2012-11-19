@@ -2765,6 +2765,35 @@ Towards a recurrence relation for making change
 http://www.ccs.neu.edu/home/jaa/CSG713.04F/Information/Handouts/dyn_prog.pdf
 
 ###########################################
+0-1 KNAPSACK SOLN.
+
+Here is a dynamic programming algorithm to solve the 0-1
+Knapsack problem:
+
+Input: S, a set of n items as described earlier, W the total
+weight of the knapsack. (Assume that the weights and values
+are stored in separate arrays named w and v, respectively.)
+
+B[k, w] = B[k - 1,w], if w[k] > w
+        = max { B[k - 1,w], B[k - 1,w - w[k]] + v[k]}
+
+
+Output: The maximal value of items in a valid knapsack.
+
+int w, k;
+for (w=0; w <= W; w++)
+B[w] = 0
+
+for (k=0; k<n; k++) {   // items
+  for (w = W; w>= w[k]; w--) {    // weigth
+
+    if (B[w - w[k]] + v[k] > B[w])
+      B[w] = B[w - w[k]] + v[k]
+
+  }
+
+}
+###########################################
 
 http://www.ics.uci.edu/~eppstein/161/960109.html
 

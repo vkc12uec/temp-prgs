@@ -6,6 +6,13 @@ http://www.cs.pitt.edu/~kirk/algorithmcourses/index.html
 
 
 ###########################################
+
+###########################################
+My rule of thumb is:  POINTERS vs REFERENCES
+
+      Use pointers if you want to do arithmetic with them or if you ever have to pass a NULL-pointer.
+      Use references otherwise.
+###########################################
 # amazon (trick, thought)
 given an ASCII string, return the longest substring with unique characters. Ex: dabcade => Ans: bcade.
 
@@ -2528,6 +2535,25 @@ END DFS()
           important thing is that they use 2 functions to achieve that ...
 
 
+bool dfs (int v, L[]) {
+  L[v] = GREY;
+
+  int u = begin(v);
+  while (u) {
+    if (L[u] == GREY) 
+      return TRUE;
+
+    else if (L[u] == WHITE) {
+        if (dfs (u, L[]))
+          TRUE;
+    }
+  }   // end while
+  
+  L[u] = BLACK;
+
+  return FALSE;
+}
+
 ###########################################
 void Network::BFS(int v, int reach[], int label)
 {// Breadth first search.
@@ -2750,27 +2776,49 @@ Towards a recurrence relation for making change
 # Explanation
 
 #   For dynamic programming to work, one needs a recurrence relation for the optimized objective function
-
 #   Now analyze what the optimal way to make change is if denominations 1...i are allowed ( as opposed to just 1...i-1):
-
 #   Case 1. You don't use any tokens ("coins") of the largest denomination:
 #	then the optimal number of tokens is just c(i-1,j)
-
 #   Case 2. You do use tokens of the largest denomination d(i):
 #	then the optimal number of tokens is 1 + c(i,j-d(i))
-
 #	*notice that the right-hand side allows d(i) to be used again*
-
 #   The minimum number of tokens is the best you can do across both cases
-
 #   The recurrence relation is therefore:
-
 #      c(i,j) = min( c(i-1,j), 1 + c(i,j-d(i)) )
 
 ###########################################
 # coin change with infinite repetition	good
 http://www.ccs.neu.edu/home/jaa/CSG713.04F/Information/Handouts/dyn_prog.pdf
 
+###########################################
+0-1 KNAPSACK SOLN.
+
+Here is a dynamic programming algorithm to solve the 0-1
+Knapsack problem:
+
+Input: S, a set of n items as described earlier, W the total
+weight of the knapsack. (Assume that the weights and values
+are stored in separate arrays named w and v, respectively.)
+
+B[k, w] = B[k - 1,w], if w[k] > w
+        = max { B[k - 1,w], B[k - 1,w - w[k]] + v[k]}
+
+
+Output: The maximal value of items in a valid knapsack.
+
+int w, k;
+for (w=0; w <= W; w++)
+B[w] = 0
+
+for (k=0; k<n; k++) {   // items
+  for (w = W; w>= w[k]; w--) {    // weigth
+
+    if (B[w - w[k]] + v[k] > B[w])
+      B[w] = B[w - w[k]] + v[k]
+
+  }
+
+}
 ###########################################
 
 http://www.ics.uci.edu/~eppstein/161/960109.html

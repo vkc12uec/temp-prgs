@@ -6,6 +6,8 @@ http://www.cs.pitt.edu/~kirk/algorithmcourses/index.html
 
 
 ###########################################
+
+###########################################
 My rule of thumb is:  POINTERS vs REFERENCES
 
       Use pointers if you want to do arithmetic with them or if you ever have to pass a NULL-pointer.
@@ -2532,6 +2534,25 @@ END DFS()
 # mtd 2:  http://www.cs.mcgill.ca/~pnguyen/251F09/DFS.pdf
           important thing is that they use 2 functions to achieve that ...
 
+
+bool dfs (int v, L[]) {
+  L[v] = GREY;
+
+  int u = begin(v);
+  while (u) {
+    if (L[u] == GREY) 
+      return TRUE;
+
+    else if (L[u] == WHITE) {
+        if (dfs (u, L[]))
+          TRUE;
+    }
+  }   // end while
+  
+  L[u] = BLACK;
+
+  return FALSE;
+}
 
 ###########################################
 void Network::BFS(int v, int reach[], int label)

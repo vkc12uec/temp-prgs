@@ -23,11 +23,9 @@ typedef pair<int,int> ii;
 #define sz(a) int((a).size()) 
 #define pb push_back 
 #define all(c) (c).begin(),(c).end() 
-//#define tr(c,i) for(typeof((c).begin() i = (c).begin(); i != (c).end(); i++))
 #define tr(c,i) for( typeof((c).begin()) i = (c).begin(); i != (c).end(); i++ )
-#define present(c,x) ((c).find(x) != (c).end()) 
-#define cpresent(c,x) (find(all(c),x) != (c).end()) 
-//Here, 'present()' returns whether the element presents in the container with member function 'find()' (i.e. set/map, etc.) while 'cpresent' is for vector. 
+#define present(c,x) ((c).find(x) != (c).end())     // use if STL has find() e.g. set/map
+#define cpresent(c,x) (find(all(c),x) != (c).end())   // use with vector
 
 ###########################################
 # for passing c++ vector<> to functions
@@ -73,11 +71,11 @@ The great advantage of pairs is that they have built-in operations to compare th
   Here 'v2' will contain the same elements as 'v' but sorted in ascending order and with duplicates removed. 
 
 # map <int , char> info
+  There is one important difference between map::find() and map::operator []. While map::find() will never change the contents of map, operator [] will create an element if it does not exist. In some cases this could be very convenient, but it's definitly a bad idea to use operator [] many times in a loop, when you do not want to add new elements. That.s why operator [] may not be used if map is passed as a const reference parameter to some function:
 
-There is one important difference between map::find() and map::operator []. While map::find() will never change the contents of map, operator [] will create an element if it does not exist. In some cases this could be very convenient, but it's definitly a bad idea to use operator [] many times in a loop, when you do not want to add new elements. That.s why operator [] may not be used if map is passed as a const reference parameter to some function:
-
-'Algorithm sort() is also widely used. The call to sort(begin, end) sorts an interval in ascending order. Notice that sort() requires random access iterators, so it will not work on all containers. However, you probably won't ever call sort() on set, which is already ordered. 
+  'Algorithm sort() is also widely used. The call to sort(begin, end) sorts an interval in ascending order. Notice that sort() requires random access iterators, so it will not work on all containers. However, you probably won't ever call sort() on set, which is already ordered. 
 '
+
 # next_permutation
          vector<int> v; 
 
@@ -88,6 +86,7 @@ There is one important difference between map::find() and map::operator []. Whil
          do { 
               Solve(..., v); 
          } while(next_permutation(all(v)); 
+
 # Don.t forget to ensure that the elements in a container are sorted before your first call to next_permutation(...). Their initial state should form the very first permutation; otherwise, some permutations will not be checked. 
 
 

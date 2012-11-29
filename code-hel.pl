@@ -39,23 +39,21 @@ typedef pair<int,int> ii;
 ###########################################
 # for passing c++ vector<> to functions
 
-Instead, use the following construction:
-     void some_function(const vector<int>& v) { // OK 
-          // ... 
-     } 
-If you are going to change the contents of vector in the function, just omit the .const. modifier.
-     int modify_vector(vector<int>& v) { // Correct 
-          V[0]++; 
-     } 
+    Instead, use the following construction:
+         void some_function(const vector<int>& v) { // OK 
+              // ... 
+         } 
+    If you are going to change the contents of vector in the function, just omit the .const. modifier.
+         int modify_vector(vector<int>& v) { // Correct 
+              V[0]++; 
+         } 
 
 # pairs < int , int >
-The great advantage of pairs is that they have built-in operations to compare themselves. Pairs are compared first-to-second element. If the first elements are not equal, the result will be based on the comparison of the first elements only; the second elements will be compared only if the first ones are equal. The array (or vector) of pairs can easily be sorted by STL internal functions. 
+    The great advantage of pairs is that they have built-in operations to compare themselves. Pairs are compared first-to-second element. If the first elements are not equal, the result will be based on the comparison of the first elements only; the second elements will be compared only if the first ones are equal. The array (or vector) of pairs can easily be sorted by STL internal functions. 
 
 # The end iterator is pointing not to the last object, however, but to the first invalid object, or the object directly following the last one. It.s often very convenient. 
 
-
 # To get the index of element found, one should subtract the beginning iterator from the result of find():
-
      int i = (find(v.begin(), v.end(), 49) - v.begin(); 
      if(i < v.size()) { 
           // ... 
@@ -368,6 +366,15 @@ http://community.topcoder.com/tc?module=Static&d1=tutorials&d2=geometry1
   }
 
 ###########################################
+# code to insert a # in a string
+
+  for (int p = 0; p<=st.length(); p++ ) {
+    mod = st.substr(0, p) + "#" + st.substr(p);
+    cout << "\n mod = " << mod;
+    }
+    '"
+
+###########################################
 #include <iostream>
 using namespace std;
 
@@ -492,6 +499,32 @@ Therefore,  our target is to enumerate all possible sequences. There are several
 For a n node tree, the length of the sequence will be 2n+1 with n "1" and n+1 "0".
 For any position i in the sequence s and i != 2n,  the number of "1" should always be no smaller than the number of "0" in the sub-sequence s[0, i].
 
+      //print all possible trees
+      void output_all_possible_trees(int *seq, int n, int num1, int num0)
+      {
+           
+           if((num1 + num0) == 2*n)
+           {
+              seq[2*n] = 0;
+              TreeNode *root = rebuild_tree(seq, 2*n+1);
+              print_tree(root);
+              return;
+           }
+              
+          if(num1 >= num0 && num1 < n)
+          {
+              seq[num1+num0] = 1;
+              output_all_possible_trees(seq, n, num1+1, num0); 
+          }       
+          
+          if(num0 < num1 && num1 <=n)
+          {
+              seq[num1+num0] = 0;
+              output_all_possible_trees(seq, n, num1, num0+1);  
+          
+          }
+         
+      }
 
 
 # 
@@ -2763,21 +2796,50 @@ look at some dynamic programming code	<todo>
 # W is the width or max. amt. of weight a knapsack can have
 	# infinite supply of coins
 #####
-int coins( int[] coins, int amount ) {
-	int[] table = new int[amount+1];
+      int coins( int[] coins, int amount ) {
+        int[] table = new int[amount+1];
 
-Arrays.fill( table, Integer.MAX_VALUE - 100 );
-	table[0] = 0;
+      Arrays.fill( table, Integer.MAX_VALUE - 100 );
+        table[0] = 0;
 
-for ( int i = 1; i < table.length; i++ ) {
-		for ( int j = 0; j < coins.length; j++ ) {
-			if ( coins[j] <= i && table[i - coins[j]] + 1 < table[i] ) {
-                            table[i] = table[i - coins[j]] + 1;
-                        }
-                }
-        }
-return table[amount];
-}
+      for ( int i = 1; i < table.length; i++ ) {
+          for ( int j = 0; j < coins.length; j++ ) {
+            if ( coins[j] <= i && table[i - coins[j]] + 1 < table[i] ) {
+                                  table[i] = table[i - coins[j]] + 1;
+                              }
+                      }
+              }
+      return table[amount];
+      }
+
+https://docs.google.com/file/d/18Ls8SnBofO3daV0VNn7-OHCQWEw_1nDmvvwy27qsGME0TO5SbkF9Auz6kowf/edit
+Change(d, k, n)
+  1 C[0] . 0
+  2 for p . 1 to n
+  3
+  min . .
+  4
+  for i . 1 to k
+  5
+  if d[i] . p then
+  6
+  if 1 + C[p . d[i]] < min then
+  7
+  min . 1 + C[p . d[i]]
+  8
+  coin . i
+  9
+  C[p] . min
+  10
+  S[p] . coin
+  11 return C and S
+
+# what coin denomination are used ?
+Make-Change(S, d, n)
+ while n > 0
+  Print S[n]
+  n = n - d[S[n]]
+
 
 Towards a recurrence relation for making change
 
@@ -2799,6 +2861,24 @@ Towards a recurrence relation for making change
 http://www.ccs.neu.edu/home/jaa/CSG713.04F/Information/Handouts/dyn_prog.pdf
 
 ###########################################
+
+0-1 Knapsack Algorithm
+
+    for w = 0 to W
+      B[0,w] = 0
+    for i = 1 to n
+      B[i,0] = 0
+
+    for i = 1 to n
+      for w = 0 to W
+        if wi <= w // item i can be part of the solution
+          if bi + B[i-1,w-wi] > B[i-1,w]
+            B[i,w] = bi + B[i-1,w- wi]
+          else
+            B[i,w] = B[i-1,w]
+        else B[i,w] = B[i-1,w] // wi > w
+
+-------------------------
 0-1 KNAPSACK SOLN.
 
 Here is a dynamic programming algorithm to solve the 0-1
@@ -2814,19 +2894,19 @@ B[k, w] = B[k - 1,w], if w[k] > w
 
 Output: The maximal value of items in a valid knapsack.
 
-int w, k;
-for (w=0; w <= W; w++)
-B[w] = 0
+      int w, k;
+      for (w=0; w <= W; w++)
+      B[w] = 0
 
-for (k=0; k<n; k++) {   // items
-  for (w = W; w>= w[k]; w--) {    // weigth
+      for (k=0; k<n; k++) {   // items
+        for (w = W; w>= w[k]; w--) {    // weigth
 
-    if (B[w - w[k]] + v[k] > B[w])
-      B[w] = B[w - w[k]] + v[k]
+          if (B[w - w[k]] + v[k] > B[w])
+            B[w] = B[w - w[k]] + v[k]
 
-  }
+        }
 
-}
+      }
 ###########################################
 
 http://www.ics.uci.edu/~eppstein/161/960109.html

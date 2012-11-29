@@ -6,6 +6,15 @@ http://www.cs.pitt.edu/~kirk/algorithmcourses/index.html
 
 
 ###########################################
+# largest subarray with 0's = 1's
+# http://www.geeksforgeeks.org/archives/20586
+#
+# http://tech-queries.blogspot.com/2011/09/find-largest-sub-matrix-with-all-1s-not.html
+    Use largest area in histogram as helper
+ 
+# largest square sub matrix with all 1's = Dynamic prog. HW
+
+# largest rectangular submatrix with 0's = 1's    ? TODO
 
 ###########################################
 My rule of thumb is:  POINTERS vs REFERENCES

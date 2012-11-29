@@ -18,6 +18,7 @@ using namespace std;
 //using namespace boost;
 
 typedef vector<int> vi; 
+typedef vector<string> vs; 
 typedef vector<vi> vvi; 
 typedef pair<int,int> ii; 
 typedef map<int,char> mic; 
@@ -30,5 +31,13 @@ typedef map<char,int> mci;
 #define present(c,x) ((c).find(x) != (c).end()) 
 #define cpresent(c,x) (find(all(c),x) != (c).end()) 
 //Here, 'present()' returns whether the element presents in the container with member function 'find()' (i.e. set/map, etc.) while 'cpresent' is for vector. 
+
+template <typename T, size_t N>
+inline
+size_t SizeOfArray( const T(&)[ N ] )
+{
+  return N;
+}
+
 
 #endif

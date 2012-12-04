@@ -6,15 +6,24 @@ http://www.cs.pitt.edu/~kirk/algorithmcourses/index.html
 
 
 ###########################################
-# largest subarray with 0's = 1's
+# code to print partitions of N=8  amz_N_as_sumElements.cpp
+
+8->{[8], [6, 2], [5, 3], [4, 4], [4, 2, 2], [3, 3, 2], [2, 2, 2, 2]}
+
+###########################################
+# largest subarray with 0's = 1's       (use cumulative sums)
 # http://www.geeksforgeeks.org/archives/20586
 #
 # http://tech-queries.blogspot.com/2011/09/find-largest-sub-matrix-with-all-1s-not.html
     Use largest area in histogram as helper
  
-# largest square sub matrix with all 1's = Dynamic prog. HW
+# largest square sub matrix with all 1's = Dynamic prog. HW - cs580
 
 # largest rectangular submatrix with 0's = 1's    ? TODO
+
+# largest k*k submatrix with max sum (done by DP youtube vid)
+
+# insert spaces or split a sentences into as many words as possible ( @ ggl2.cpp )
 
 ###########################################
 My rule of thumb is:  POINTERS vs REFERENCES

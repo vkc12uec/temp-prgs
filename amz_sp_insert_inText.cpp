@@ -26,6 +26,14 @@ void debug (string s) {
   cout << "\n " << s;
 }
 
+void Getonecombs (vs &v1, string st, char in) {
+string newstr;
+  for (int i=0; i<= st.length(); i++) {
+    newstr = st.substr(0, i) + in + st.substr(i);
+    v1.pb(newstr);
+  }
+}
+
 void interpol (char *sp, int len, char *t) {
 
   vector<string> combs;
@@ -35,11 +43,14 @@ void interpol (char *sp, int len, char *t) {
   if (len == 1) {
     char in = sp[0];
 
+  #if 0
     for (int i=0; i<= st.length(); i++) {
       newstr = st.substr(0, i) + in + st.substr(i);
       combs.pb(newstr);
     }
+    #endif
 
+    Getonecombs (combs, st, in);
     for_each (all(combs), debug);
   }
   else {
@@ -49,6 +60,13 @@ void interpol (char *sp, int len, char *t) {
     char two=sp[1];
     vs onecomb, twocomb;
 
+    Getonecombs (onecomb, st, one);
+
+    tr (onecomb, it) {
+      Getonecombs (twocomb, *it, two);
+    }
+
+  #if 0
     for (int i=0; i<= st.length(); i++) {
       newstr = st.substr(0, i) + one + st.substr(i);
       onecomb.pb(newstr);
@@ -64,6 +82,7 @@ void interpol (char *sp, int len, char *t) {
         twocomb.pb(newstr);
       }
     }
+    #endif
 
     for_each (all(twocomb), debug);
   }
@@ -75,14 +94,14 @@ int main () {
   char *sp[] = { "#", "12" };
   int s2 = SizeOfArray(sp);
 
-  #if 0
+#if 0
   string st = "test", mod;
 
   for (int p = 0; p<=st.length(); p++ ) {
     mod = st.substr(0, p) + "#" + st.substr(p);
     cout << "\n mod = " << mod;
   }
-  #endif
+#endif
 
 #if 0
   cout << st.substr(0) << "|"
@@ -103,5 +122,5 @@ int main () {
   for (int i = 0; i<s2; i++)
     interpol (sp[i], strlen (sp[i]), s);
 
-    return 0;
+  return 0;
 }

@@ -4,11 +4,46 @@ vids:
 
 http://www.cs.pitt.edu/~kirk/algorithmcourses/index.html
 
+http://basicalgos.blogspot.com/2012/03/10-regular-expression-matching.html
+
+
+###########################################
+# fb interview: find all words in dict which can appear in a 2D matrix. Boogle game
+  http://basicalgos.blogspot.com/2012/04/42-find-all-possible-words-from-2d.html
+
 
 ###########################################
 # code to print partitions of N=8  amz_N_as_sumElements.cpp
 
 8->{[8], [6, 2], [5, 3], [4, 4], [4, 2, 2], [3, 3, 2], [2, 2, 2, 2]}
+
+# code to get subarray whose sum is = K . Given = {15, 2, 4, 8, 9, 5, 10, 23}
+  either O(n) or O(n^2)   : subarray_sum_K.cpp
+
+# amz. Q. 
+      How to find maximum path sum in a binary tree.
+      The path need not be a top-bottom, can start and end nodes need not be root or leaf, path can start in left/right subtree and end in right/left subtree wrt any node
+
+      # Sol: There can be 2 types of sum. (1) passing thru LCA (2) on a linear path
+      private static TreeSum findMaxSum(TreeNode root)
+          {
+              if (root == null)
+              {
+                  return new TreeSum(0, 0);
+              }
+              TreeSum leftTreeSum = findMaxSum(root.getLeft());
+              TreeSum rightTreeSum = findMaxSum(root.getRight());
+              int maxSumBetweenTwoNodesOfChildren =
+                      Math.max(leftTreeSum.maxSumBetweenTwoNodes, rightTreeSum.maxSumBetweenTwoNodes);
+              maxSumBetweenTwoNodesOfChildren =
+                      Math.max(maxSumBetweenTwoNodesOfChildren, leftTreeSum.maxSumFromRootToLeaf
+                              + rightTreeSum.maxSumFromRootToLeaf + root.getData());
+              int maxSumFromRootToLeaf =
+                      leftTreeSum.maxSumFromRootToLeaf > rightTreeSum.maxSumFromRootToLeaf
+                              ? leftTreeSum.maxSumFromRootToLeaf + root.getData()
+                              : rightTreeSum.maxSumFromRootToLeaf + root.data;
+              return new TreeSum(maxSumBetweenTwoNodesOfChildren, maxSumFromRootToLeaf);
+          }
 
 ###########################################
 # largest subarray with 0's = 1's       (use cumulative sums)

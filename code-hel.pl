@@ -8,9 +8,96 @@ http://basicalgos.blogspot.com/2012/03/10-regular-expression-matching.html
 
 
 ###########################################
+# level order printing can be done using 2 counters which count the nodes in curr_level and next_level
+
+###########################################
+# how to read nos. in a faster way rather than one by one
+
+# 1 by 1 
+
+      int i=0;
+           file.read(reinterpret_cast < char* >(&i), sizeof(unsigned int));
+
+# bunch read
+      void read_file()
+      {
+         int buffer[4096];
+         int i=0;
+         long sum=0;
+       
+         ifstream file("binary.dat", ios::in|ios::binary);
+         if(file.is_open())
+         {
+            while(!file.eof()) {
+               int num_bytes = file.read(reinterpret_cast < char* >(buffer), sizeof(buffer));
+       
+               for (i = 0; i < num_bytes / sizeof(unsigned int); i++){
+                   sum += buffer[i];
+               }
+            } 
+         }
+         file.close();
+      }
+
+###########################################
 # fb interview: find all words in dict which can appear in a 2D matrix. Boogle game
   http://basicalgos.blogspot.com/2012/04/42-find-all-possible-words-from-2d.html
 
+
+# serialze any N tree or binary-tree
+
+      string serialize_tree(Node * root)
+      {
+        queue<Node*> q;
+        stringstream ss;
+        Node * nd;
+       
+        q.push(root);
+         
+        while (! q.empty() ){
+          nd = q.front();
+          q.pop();
+           
+          ss << nd->data << "  " << nd->children.size() <<" ";
+       
+          for (int i = 0; i < nd->children.size(); i++){
+            q.push(nd->children[i]);
+          }
+        }
+       
+        return ss.str();
+      }
+       
+       
+      Node * deserialize_tree(string str)
+      {
+        if (str.length() == 0) return NULL;
+       
+        queue<Node*> q;
+        int data = 0, num_children;  
+        stringstream ss(str, ios_base::in);
+       
+        Node * root = NULL;
+        ss >> data >> num_children;
+        root = new Node(data, num_children);
+         
+        q.push(root);
+       
+        while (!q.empty()){
+          Node * parent = q.front();
+          q.pop();
+           
+          for (int i = 0; i < parent->children.size(); i++){
+            ss >>  data >>  num_children;      
+            parent->children[i]= new Node(data, num_children);
+            if (num_children > 0)  q.push(parent->children[i]);
+          }
+        }
+       
+        return root;
+      }
+
+'""''' ->> <<- > <
 
 ###########################################
 # code to print partitions of N=8  amz_N_as_sumElements.cpp

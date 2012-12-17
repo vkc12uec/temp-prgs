@@ -8,15 +8,51 @@ http://basicalgos.blogspot.com/2012/03/10-regular-expression-matching.html
 
 
 ###########################################
-# level order printing can be done using 2 counters which count the nodes in curr_level and next_level
+# this is how u print a vector
 
+  vector<int> lis = find_lis(A);
+ 
+  ostream_iterator<int> oit(cout, " ");
+  copy(lis.begin(), lis.end(), oit);
+
+# longest common subsequence
+  http://basicalgos.blogspot.com/2012/03/36-longest-common-sequence.html    important is how to construct the characters back ?
+
+###########################################
+# metd 1:
+  level order printing can be done using 2 counters which count the nodes in curr_level and next_level
+
+# mtd 2:
+  void printlevel (node *n) {
+  if (!n)
+    return;
+  Q.add(n);
+  Q.add(new node *("\n"));
+
+  while (1) {
+    node *t = Q.delete();
+
+    if (t->data != "\n" ) {
+      if (lc) Q.add(lc);
+      if (rc) Q.add(rc);
+    }
+    else {
+      //BUG: when queue has a node in it, then only insert "\n" else, this is the last level
+      if (Q.length())
+        Q.add(new node *("\n"));
+      }
+
+    cout << t->data << " ";
+  }
+}
+""'''
 ###########################################
 # how to read nos. in a faster way rather than one by one
 
 # 1 by 1 
 
       int i=0;
-           file.read(reinterpret_cast < char* >(&i), sizeof(unsigned int));
+      file.read(reinterpret_cast < char* >(&i), sizeof(unsigned int));
 
 # bunch read
       void read_file()
@@ -1831,35 +1867,43 @@ BinaryTree* sortedArrayToBST(int arr[], int n) {
 // This is a modified in-order traversal adapted to this problem.
 // prev (init to NULL) is used to keep track of previously traversed node.
 // head pointer is updated with the list's head as recursion ends.'
-void treeToDoublyList(Node *p, Node *& prev, Node *& head) {
-  if (!p) return;
-  treeToDoublyList(p->left, prev, head);
-  // current node's left points to previous node
-  p->left = prev;
-  if (prev)
-    prev->right = p;  // previous node's right points to current node
-  else
-    head = p; // current node (smallest element) is head of
-              // the list if previous node is not available
-  // as soon as the recursion ends, the head's left pointer
-  // points to the last node, and the last node's right pointer
-  // points to the head pointer.
-  Node *right = p->right;
-  head->left = p;
-  p->right = head;
-  // updates previous node
-  prev = p;
-  treeToDoublyList(right, prev, head);
-}
+
+    void treeToDoublyList(Node *p, Node *& prev, Node *& head) {
+      if (!p) return;
+
+      treeToDoublyList(p->left, prev, head);
+
+      // current node's left points to previous node
+      p->left = prev;
+
+      if (prev)
+        prev->right = p;  // previous node's right points to current node
+      else
+        head = p; // current node (smallest element) is head of
+                  // the list if previous node is not available
+
+      // as soon as the recursion ends, the head's left pointer
+      // points to the last node, and the last node's right pointer
+      // points to the head pointer.
+
+      Node *right = p->right;
+      head->left = p;
+      p->right = head;
+      // updates previous node
+      prev = p;
+
+      treeToDoublyList(right, prev, head);
+    }
 
 // Given an ordered binary tree, returns a sorted circular
 // doubly-linked list. The conversion is done in-place.
-Node* treeToDoublyList(Node *root) {
-  Node *prev = NULL;
-  Node *head = NULL;
-  treeToDoublyList(root, prev, head);
-  return head;
-}
+
+    Node* treeToDoublyList(Node *root) {
+      Node *prev = NULL;
+      Node *head = NULL;
+      treeToDoublyList(root, prev, head);
+      return head;
+    }
 
 # mtd 2:
 
@@ -1968,7 +2012,8 @@ static Node treeToList(Node root) {
     return(aList);
 }
 
-
+# mtd: 3:
+  or you can do Inorder to make a one directional list and the reverse connect it.
 
 ###########################################'
 # k-way merge

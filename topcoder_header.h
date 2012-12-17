@@ -11,6 +11,7 @@
 #include <map>
 #include <algorithm>
 #include <stdlib.h>
+#include <iterator>
 /*#include <math.h>*/
 //#include <boost/algorithm/string.hpp>
 
@@ -31,6 +32,13 @@ typedef map<char,int> mci;
 #define present(c,x) ((c).find(x) != (c).end()) 
 #define cpresent(c,x) (find(all(c),x) != (c).end()) 
 //Here, 'present()' returns whether the element presents in the container with member function 'find()' (i.e. set/map, etc.) while 'cpresent' is for vector. 
+
+
+template <typename T>
+void printVector (vector <T> lis) {
+  ostream_iterator<int> oit(cout, " ");
+  copy(lis.begin(), lis.end(), oit);
+}
 
 template <typename T, size_t N>
 inline

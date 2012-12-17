@@ -8,6 +8,43 @@ http://basicalgos.blogspot.com/2012/03/10-regular-expression-matching.html
 
 
 ###########################################
+# semaphores , spinlock gud read: http://www.cis.temple.edu/~giorgio/cis307/readings/spinsem.html
+
+The most important of these atomic operations is CompareAndSwap, denoted CAS:
+             boolean CAS(int *a, int old, int new) {
+          int temp = *a;
+                if (temp == old) {
+                   *a = new;
+                   return true;
+                } else 
+                   return false;
+             }
+which is used in lock-free and wait-free algorithms. Here is an example: consider the operation x++. In most systems this is the result of three operations
+            int temp = x;
+            temp++;
+            x = temp;
+          Thus it is non safe under concurrency. Here is a lock-free implementation of the increment
+            int temp = x;
+            while (!CAS(&x, temp, temp+1)) {
+              temp = x;
+            }
+
+###########################################
+# c++ inheritance
+
+  Type of Inheritancee
+  When deriving a class from a base class, the base class may be inherited through public, protected or private inheritance. The type of inheritance is specified by the access-specifier as explained above.
+
+  We hardly use protected or private inheritance but public inheritance is commonly used. While using different type of inheritance, following rules are applied:
+
+  Public Inheritance: When deriving a class from a public base class, public members of the base class become public members of the derived class and protected members of the base class become protected members of the derived class. A base class's private members are never accessible directly from a derived class, but can be accessed through calls to the public and protected members of the base class.
+
+  Protected Inheritance: When deriving from a protected base class, public and protected members of the base class become protected members of the derived class.
+
+  Private Inheritance: When deriving from a private base class, public and protected members of the base class become private members of the derived class.
+
+"'
+###########################################
 # this is how u print a vector
 
   vector<int> lis = find_lis(A);
@@ -3591,9 +3628,9 @@ for (i=0; i<len; i++)
     break;
   }
   if(St.empty())
-  t = -1;
+    t = -1;
   else
-  t = St.top();
+    t = St.top();
   //Calculating Li
   area[i] = i - t - 1;
   St.push(i);
@@ -3835,7 +3872,7 @@ Solution: This is a relatively simple DP problem. Here we only give the main ide
 2:
 http://sumitpal.wordpress.com/2012/08/17/histogram-based-water-volume-calculation-algorithm/#comment-223
   based on divide and conquer
-  Calculate strip of water over each bar.
+  apply simple area of rec.
 
 ################################################
 

@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <stdlib.h>
 #include <iterator>
+#include <stack>
 /*#include <math.h>*/
 //#include <boost/algorithm/string.hpp>
 

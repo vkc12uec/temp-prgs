@@ -2,6 +2,9 @@ intitle:"index.of" linkin (mp3|mp4|flv|avi|mpg|wmv) -html-htm-php-jsp-asp
 http://www.ihas1337code.com/2010/04/hacking-google-interview-from-mit.html
 
 ###########################################
+# epoll simple explanation: http://kovyrin.net/2006/04/13/epoll-asynchronous-network-programming/
+
+###########################################
 # Circular buffer impl. using circular pointers.
 Note that a circular buffer with n elements is usually used to implement a queue with n-1 elements--there is always one empty element in the buffer. Otherwise, it becomes difficult to distinguish between a full and empty queue--the read and write pointers would be identical in both cases.
 

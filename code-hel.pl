@@ -11,7 +11,7 @@ http://basicalgos.blogspot.com/2012/03/10-regular-expression-matching.html
 # semaphores , spinlock gud read: http://www.cis.temple.edu/~giorgio/cis307/readings/spinsem.html
 
 The most important of these atomic operations is CompareAndSwap, denoted CAS:
-             boolean CAS(int *a, int old, int new) {
+          boolean CAS(int *a, int old, int new) {
           int temp = *a;
                 if (temp == old) {
                    *a = new;
@@ -185,6 +185,7 @@ which is used in lock-free and wait-free algorithms. Here is an example: conside
       The path need not be a top-bottom, can start and end nodes need not be root or leaf, path can start in left/right subtree and end in right/left subtree wrt any node
 
       # Sol: There can be 2 types of sum. (1) passing thru LCA (2) on a linear path
+
       private static TreeSum findMaxSum(TreeNode root)
           {
               if (root == null)
@@ -369,7 +370,7 @@ void pre(node *n, node *pn) {
   if (n) {
     n->next = (pn == 0) ? 0 : pn->right;
     if (n->next == pn->right) {
-      n->next = pn->next->left;
+      n->next = pn->next->left;     // this line is not correct
     }
     pre (n->left, n);   // it has to be 'preorder'
     pre (n->right, n);
@@ -625,21 +626,21 @@ return abs(cross/2.0);
 
 # Seive of Erasthones
 
-public boolean[] sieve(int n)
-{
-   boolean[] prime=new boolean[n+1];
-   Arrays.fill(prime,true);
-   prime[0]=false;
-   prime[1]=false;
-   int m=Math.sqrt(n);
+    public boolean[] sieve(int n)
+    {
+       boolean[] prime=new boolean[n+1];
+       Arrays.fill(prime,true);
+       prime[0]=false;
+       prime[1]=false;
+       int m=Math.sqrt(n);
 
-   for (int i=2; i<=m; i++)
-      if (prime[i])
-         for (int k=i*i; k<=n; k+=i)
-            prime[k]=false;
+       for (int i=2; i<=m; i++)
+          if (prime[i])
+             for (int k=i*i; k<=n; k+=i)
+                prime[k]=false;
 
-   return prime;
-} 
+       return prime;
+    } 
 
 ###########################################
 # AMzN:

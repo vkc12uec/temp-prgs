@@ -3379,6 +3379,7 @@ wz
 void DoCombine (char in[], char out [] , int length, int fillptr, int start)
 {
   int i ;
+
   for (i = start; i < length; i++) {
     out[fillptr] = in[i]; /* select current letter */
     out[fillptr + 1] = '\o' ; /* tack on NUL for printf */
@@ -3386,7 +3387,9 @@ void DoCombine (char in[], char out [] , int length, int fillptr, int start)
 
     if (i < length - 1) /* recurse if more letters in input */
         DoCombine(in, out, length, fillptr +1 , i + 1);
-  }
+
+  } //for()
+
 }
 
 [vchauras@sac07:~/tmp/temp-cpps/temp-prgs]$ ./a.out

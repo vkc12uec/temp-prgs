@@ -8,17 +8,15 @@ int myatoi (char c) {
 
 int getLen (string s) {
 
-  // n^3 solution
   int len = s.length();
-  ii st_end;
   int i=0, j=1;
   int st , end, rangesum, rangelen, lsum, rsum, ranges, rangee, maxrange = INT_MIN;
 
-  for (; i<=len-2; i++) {
-    cout << "\ti = "<<i;
+  for (i=0; i<=len-2; i++) {
+    //cout << "\ti = "<<i;
     //for (j=i+1; j<=len-1; j++) {
     j = i+1;
-    cout << "\t\tj = "<<j;
+    cout << "\ni | j = "<<i << " | " << j;
       st = i;
       end = j;
       rangesum=0;
@@ -32,7 +30,7 @@ int getLen (string s) {
         rsum += myatoi( s[end] );
 
         if (lsum == rsum) {
-          rangesum = 2*lsum;
+          rangesum = lsum+rsum;
           ranges=st;
           rangee=end;
         }
@@ -40,8 +38,8 @@ int getLen (string s) {
         end++;
       } // while
 
-      if (rangesum) 
-        cout << "\n rangesum = " << rangesum << " and range = " << ranges << " " << rangee;
+      if (rangesum)
+        cout << "\n rangesum = " << rangesum << " and range = " << ranges << " | " << rangee << " length = " << rangee-ranges+1;
       //}
   }
 
@@ -49,21 +47,9 @@ int getLen (string s) {
 }
 
 int main () {
-  unsigned int i=50;
-  unsigned int j = ~(i);
 
-  unsigned int mask=1;
-
-  while (i) {
-    bit = j & mask;
-  }
-
-  cout << "\n j = " << j;
-  
-  #if 0
   string s1="123231", s2="986561517416921217551395112859219257312";
-  cout << "\nl1 = " << getLen(s1);  // << "\nl2 = "<< getLen(s2);
-  #endif
+  cout << "\nl1 = " << getLen(s2);  // << "\nl2 = "<< getLen(s2);
 
   return 0;
 }

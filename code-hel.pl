@@ -8,6 +8,38 @@ http://basicalgos.blogspot.com/2012/03/10-regular-expression-matching.html
 
 
 ###########################################
+# binary stream divisble by 3:
+
+    we have to just count the number of 1's (set bits) at even position and number of 1's (set bits) at odd position .
+
+    if((number of 1's at even position - number of 1's at odd position)%3==0)
+    then number is divisible by 3.
+
+    3x moves to 3x+1 if 1 comes and stays in 3x if 0 comes in the stream
+    3x+1 moves to 3x if 1 comes and moves to 3x+2 if 0 comes in the stream
+    3x+2 moves to 3x+1 if 0 comes and stays in 3x+2 if 1 comes
+
+###########################################
+# use binary search to find where to insert. Return 'begin'
+The gist is the invariant of the binary search. 
+
+int searchInsert(int A[], int n, int target) {
+  int begin, end, mid;
+
+  begin = 0; end = n-1;
+  while (begin <= end){
+    mid= begin + (end - begin >> 1);
+
+    if (A[mid] == target) return mid;
+
+    if (A[mid] < target)  begin= mid+ 1;
+    else end = mid -1;        
+  }        
+
+  return begin ;        
+}
+
+###########################################
 # semaphores , spinlock gud read: http://www.cis.temple.edu/~giorgio/cis307/readings/spinsem.html
 
 The most important of these atomic operations is CompareAndSwap, denoted CAS:
@@ -2090,11 +2122,11 @@ else {
             {
                 heap.insert(
 			new MergesortHeapNode(
-				tempArray[subarrayIndex[a.getWhichSubarray()]]++, a.getWhichSubarray()
+				tempArray[subarrayIndex[a.getWhichSubarray()]++], a.getWhichSubarray()
 			));
 
                 // Increment the subarray index where the lowest element resides
-                subarrayIndex[a.getWhichSubarray()]++;
+                //#subarrayIndex[a.getWhichSubarray()]++;
             }
         } catch (EmptyHeapException e)
         {
@@ -3354,15 +3386,18 @@ public static void printPar(int l, int r, char[] str, int count) {
   else {
     if (l > 0) { // try a left paren, if there are some available
       str[count] = '(';
-          printPar(l - 1, r, str, count + 1);
-          }
+      printPar(l - 1, r, str, count + 1);
+    }
     if (r > l) { // try a right paren, if there’s a matching left
-          str[count] = ')';
+      str[count] = ')';
       printPar(l, r - 1, str, count + 1);
-          }
+    }
   }
 }
 
+# verify the corectly parenthesized ?
+Given a string with only ')' and '(' find if the string is complete or not. If the string is complete means that each open paranthesis should have a corresponding closed one. Eg: String s= "((()))()"- Complete String String s1=")()()()())))(()()()((" - Incomplete String 
+    # use a simple counter. +1 for ( -1 for ) . Anytime, if counter < 0 ; return false;
 
 ###########################################
 Combinations:	wxyz		Call like: 	docombine (in, out, len , 0 , 0);

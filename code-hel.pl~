@@ -4,17 +4,284 @@ vids:
 
 http://www.cs.pitt.edu/~kirk/algorithmcourses/index.html
 
+http://basicalgos.blogspot.com/2012/03/10-regular-expression-matching.html
+
 
 ###########################################
-# largest subarray with 0's = 1's
+tr1::shared_ptr (problem of reference cycle), tr1::weak_ptr 2 smart pointers in tr1
+
+std::auto_ptr and std::tr:ptr are used for storing ptrs so that desctructor are called when var is out of scope item13:
+  they are not gud with arrays
+
+    e.g. std:tr1:shared_ptr<Widget> pw (new Widget());
+
+    e.g auto_ptr:
+    void f() {
+      Investment *pInv = createInvestment();    // factory
+      ...
+      ...   // some exception or return might happen here
+      ....
+      delete p*Inv;
+    }
+
+    so, use auto_ptr like:
+    void f() {
+      std::auto_ptr<Investment> pInv(createInvestment());     // RAII
+      OR
+      std::tr1::shared_ptr <Investment> pInv(createInvestment());     // RAII
+      ...
+      ...
+      return;
+    }
+
+    # using auto_ptr , their copy ctor and assignment operator make either one of them null. So, one pointer points always to resource
+    # using shared_ptr, when u copy, then 2 pointers point to same resouce. ..... Containters can have <shared_ptr> NOT <auto_ptr>
+
+###########################################
+# binary stream divisble by 3:
+
+    we have to just count the number of 1's (set bits) at even position and number of 1's (set bits) at odd position .
+
+    if((number of 1's at even position - number of 1's at odd position)%3==0)
+    then number is divisible by 3.
+
+    3x moves to 3x+1 if 1 comes and stays in 3x if 0 comes in the stream
+    3x+1 moves to 3x if 1 comes and moves to 3x+2 if 0 comes in the stream
+    3x+2 moves to 3x+1 if 0 comes and stays in 3x+2 if 1 comes
+
+###########################################
+# use binary search to find where to insert. Return 'begin'
+The gist is the invariant of the binary search. 
+
+int searchInsert(int A[], int n, int target) {
+  int begin, end, mid;
+
+  begin = 0; end = n-1;
+  while (begin <= end){
+    mid= begin + (end - begin >> 1);
+
+    if (A[mid] == target) return mid;
+
+    if (A[mid] < target)  begin= mid+ 1;
+    else end = mid -1;        
+  }        
+
+  return begin ;        
+}
+
+###########################################
+# semaphores , spinlock gud read: http://www.cis.temple.edu/~giorgio/cis307/readings/spinsem.html
+
+The most important of these atomic operations is CompareAndSwap, denoted CAS:
+          boolean CAS(int *a, int old, int new) {
+          int temp = *a;
+                if (temp == old) {
+                   *a = new;
+                   return true;
+                } else 
+                   return false;
+             }
+which is used in lock-free and wait-free algorithms. Here is an example: consider the operation x++. In most systems this is the result of three operations
+            int temp = x;
+            temp++;
+            x = temp;
+          Thus it is non safe under concurrency. Here is a lock-free implementation of the increment
+            int temp = x;
+            while (!CAS(&x, temp, temp+1)) {
+              temp = x;
+            }
+
+###########################################
+# c++ inheritance
+
+  Type of Inheritancee
+  When deriving a class from a base class, the base class may be inherited through public, protected or private inheritance. The type of inheritance is specified by the access-specifier as explained above.
+
+  We hardly use protected or private inheritance but public inheritance is commonly used. While using different type of inheritance, following rules are applied:
+
+  Public Inheritance: When deriving a class from a public base class, public members of the base class become public members of the derived class and protected members of the base class become protected members of the derived class. A base class's private members are never accessible directly from a derived class, but can be accessed through calls to the public and protected members of the base class.
+
+  Protected Inheritance: When deriving from a protected base class, public and protected members of the base class become protected members of the derived class.
+
+  Private Inheritance: When deriving from a private base class, public and protected members of the base class become private members of the derived class.
+
+"'
+###########################################
+# this is how u print a vector
+
+  vector<int> lis = find_lis(A);
+ 
+  ostream_iterator<int> oit(cout, " ");
+  copy(lis.begin(), lis.end(), oit);
+
+# longest common subsequence
+  http://basicalgos.blogspot.com/2012/03/36-longest-common-sequence.html    important is how to construct the characters back ?
+
+###########################################
+# metd 1:
+  level order printing can be done using 2 counters which count the nodes in curr_level and next_level
+
+# mtd 2:
+  void printlevel (node *n) {
+  if (!n)
+    return;
+  Q.add(n);
+  Q.add(new node *("\n"));
+
+  while (1) {
+    node *t = Q.delete();
+
+    if (t->data != "\n" ) {
+      if (lc) Q.add(lc);
+      if (rc) Q.add(rc);
+    }
+    else {
+      //BUG: when queue has a node in it, then only insert "\n" else, this is the last level
+      if (Q.length())
+        Q.add(new node *("\n"));
+      }
+
+    cout << t->data << " ";
+  }
+}
+""'''
+###########################################
+# how to read nos. in a faster way rather than one by one
+
+# 1 by 1 
+
+      int i=0;
+      file.read(reinterpret_cast < char* >(&i), sizeof(unsigned int));
+
+# bunch read
+      void read_file()
+      {
+         int buffer[4096];
+         int i=0;
+         long sum=0;
+       
+         ifstream file("binary.dat", ios::in|ios::binary);
+         if(file.is_open())
+         {
+            while(!file.eof()) {
+               int num_bytes = file.read(reinterpret_cast < char* >(buffer), sizeof(buffer));
+       
+               for (i = 0; i < num_bytes / sizeof(unsigned int); i++){
+                   sum += buffer[i];
+               }
+            } 
+         }
+         file.close();
+      }
+
+###########################################
+# fb interview: find all words in dict which can appear in a 2D matrix. Boogle game
+  http://basicalgos.blogspot.com/2012/04/42-find-all-possible-words-from-2d.html
+
+
+# serialze any N tree or binary-tree
+
+      string serialize_tree(Node * root)
+      {
+        queue<Node*> q;
+        stringstream ss;
+        Node * nd;
+       
+        q.push(root);
+         
+        while (! q.empty() ){
+          nd = q.front();
+          q.pop();
+           
+          ss << nd->data << "  " << nd->children.size() <<" ";
+       
+          for (int i = 0; i < nd->children.size(); i++){
+            q.push(nd->children[i]);
+          }
+        }
+       
+        return ss.str();
+      }
+       
+       
+      Node * deserialize_tree(string str)
+      {
+        if (str.length() == 0) return NULL;
+       
+        queue<Node*> q;
+        int data = 0, num_children;  
+        stringstream ss(str, ios_base::in);
+       
+        Node * root = NULL;
+        ss >> data >> num_children;
+        root = new Node(data, num_children);
+         
+        q.push(root);
+       
+        while (!q.empty()){
+          Node * parent = q.front();
+          q.pop();
+           
+          for (int i = 0; i < parent->children.size(); i++){
+            ss >>  data >>  num_children;      
+            parent->children[i]= new Node(data, num_children);
+            if (num_children > 0)  q.push(parent->children[i]);
+          }
+        }
+       
+        return root;
+      }
+
+'""''' ->> <<- > <
+
+###########################################
+# code to print partitions of N=8  amz_N_as_sumElements.cpp
+
+8->{[8], [6, 2], [5, 3], [4, 4], [4, 2, 2], [3, 3, 2], [2, 2, 2, 2]}
+
+# code to get subarray whose sum is = K . Given = {15, 2, 4, 8, 9, 5, 10, 23}
+  either O(n) or O(n^2)   : subarray_sum_K.cpp
+
+# amz. Q. 
+      How to find maximum path sum in a binary tree.
+      The path need not be a top-bottom, can start and end nodes need not be root or leaf, path can start in left/right subtree and end in right/left subtree wrt any node
+
+      # Sol: There can be 2 types of sum. (1) passing thru LCA (2) on a linear path
+
+      private static TreeSum findMaxSum(TreeNode root)
+          {
+              if (root == null)
+              {
+                  return new TreeSum(0, 0);
+              }
+              TreeSum leftTreeSum = findMaxSum(root.getLeft());
+              TreeSum rightTreeSum = findMaxSum(root.getRight());
+              int maxSumBetweenTwoNodesOfChildren =
+                      Math.max(leftTreeSum.maxSumBetweenTwoNodes, rightTreeSum.maxSumBetweenTwoNodes);
+              maxSumBetweenTwoNodesOfChildren =
+                      Math.max(maxSumBetweenTwoNodesOfChildren, leftTreeSum.maxSumFromRootToLeaf
+                              + rightTreeSum.maxSumFromRootToLeaf + root.getData());
+              int maxSumFromRootToLeaf =
+                      leftTreeSum.maxSumFromRootToLeaf > rightTreeSum.maxSumFromRootToLeaf
+                              ? leftTreeSum.maxSumFromRootToLeaf + root.getData()
+                              : rightTreeSum.maxSumFromRootToLeaf + root.data;
+              return new TreeSum(maxSumBetweenTwoNodesOfChildren, maxSumFromRootToLeaf);
+          }
+
+###########################################
+# largest subarray with 0's = 1's       (use cumulative sums)
 # http://www.geeksforgeeks.org/archives/20586
 #
 # http://tech-queries.blogspot.com/2011/09/find-largest-sub-matrix-with-all-1s-not.html
     Use largest area in histogram as helper
  
-# largest square sub matrix with all 1's = Dynamic prog. HW
+# largest square sub matrix with all 1's = Dynamic prog. HW - cs580
 
 # largest rectangular submatrix with 0's = 1's    ? TODO
+
+# largest k*k submatrix with max sum (done by DP youtube vid)
+
+# insert spaces or split a sentences into as many words as possible ( @ ggl2.cpp )
 
 ###########################################
 My rule of thumb is:  POINTERS vs REFERENCES
@@ -39,23 +306,21 @@ typedef pair<int,int> ii;
 ###########################################
 # for passing c++ vector<> to functions
 
-Instead, use the following construction:
-     void some_function(const vector<int>& v) { // OK 
-          // ... 
-     } 
-If you are going to change the contents of vector in the function, just omit the .const. modifier.
-     int modify_vector(vector<int>& v) { // Correct 
-          V[0]++; 
-     } 
+    Instead, use the following construction:
+         void some_function(const vector<int>& v) { // OK 
+              // ... 
+         } 
+    If you are going to change the contents of vector in the function, just omit the .const. modifier.
+         int modify_vector(vector<int>& v) { // Correct 
+              V[0]++; 
+         } 
 
 # pairs < int , int >
-The great advantage of pairs is that they have built-in operations to compare themselves. Pairs are compared first-to-second element. If the first elements are not equal, the result will be based on the comparison of the first elements only; the second elements will be compared only if the first ones are equal. The array (or vector) of pairs can easily be sorted by STL internal functions. 
+    The great advantage of pairs is that they have built-in operations to compare themselves. Pairs are compared first-to-second element. If the first elements are not equal, the result will be based on the comparison of the first elements only; the second elements will be compared only if the first ones are equal. The array (or vector) of pairs can easily be sorted by STL internal functions. 
 
 # The end iterator is pointing not to the last object, however, but to the first invalid object, or the object directly following the last one. It.s often very convenient. 
 
-
 # To get the index of element found, one should subtract the beginning iterator from the result of find():
-
      int i = (find(v.begin(), v.end(), 49) - v.begin(); 
      if(i < v.size()) { 
           // ... 
@@ -167,7 +432,7 @@ void pre(node *n, node *pn) {
   if (n) {
     n->next = (pn == 0) ? 0 : pn->right;
     if (n->next == pn->right) {
-      n->next = pn->next->left;
+      n->next = pn->next->left;     // this line is not correct
     }
     pre (n->left, n);   // it has to be 'preorder'
     pre (n->right, n);
@@ -368,6 +633,15 @@ http://community.topcoder.com/tc?module=Static&d1=tutorials&d2=geometry1
   }
 
 ###########################################
+# code to insert a # in a string
+
+  for (int p = 0; p<=st.length(); p++ ) {
+    mod = st.substr(0, p) + "#" + st.substr(p);
+    cout << "\n mod = " << mod;
+    }
+    '"
+
+###########################################
 #include <iostream>
 using namespace std;
 
@@ -414,21 +688,21 @@ return abs(cross/2.0);
 
 # Seive of Erasthones
 
-public boolean[] sieve(int n)
-{
-   boolean[] prime=new boolean[n+1];
-   Arrays.fill(prime,true);
-   prime[0]=false;
-   prime[1]=false;
-   int m=Math.sqrt(n);
+    public boolean[] sieve(int n)
+    {
+       boolean[] prime=new boolean[n+1];
+       Arrays.fill(prime,true);
+       prime[0]=false;
+       prime[1]=false;
+       int m=Math.sqrt(n);
 
-   for (int i=2; i<=m; i++)
-      if (prime[i])
-         for (int k=i*i; k<=n; k+=i)
-            prime[k]=false;
+       for (int i=2; i<=m; i++)
+          if (prime[i])
+             for (int k=i*i; k<=n; k+=i)
+                prime[k]=false;
 
-   return prime;
-} 
+       return prime;
+    } 
 
 ###########################################
 # AMzN:
@@ -492,6 +766,32 @@ Therefore,  our target is to enumerate all possible sequences. There are several
 For a n node tree, the length of the sequence will be 2n+1 with n "1" and n+1 "0".
 For any position i in the sequence s and i != 2n,  the number of "1" should always be no smaller than the number of "0" in the sub-sequence s[0, i].
 
+      //print all possible trees
+      void output_all_possible_trees(int *seq, int n, int num1, int num0)
+      {
+           
+           if((num1 + num0) == 2*n)
+           {
+              seq[2*n] = 0;
+              TreeNode *root = rebuild_tree(seq, 2*n+1);
+              print_tree(root);
+              return;
+           }
+              
+          if(num1 >= num0 && num1 < n)
+          {
+              seq[num1+num0] = 1;
+              output_all_possible_trees(seq, n, num1+1, num0); 
+          }       
+          
+          if(num0 < num1 && num1 <=n)
+          {
+              seq[num1+num0] = 0;
+              output_all_possible_trees(seq, n, num1, num0+1);  
+          
+          }
+         
+      }
 
 
 # 
@@ -1667,35 +1967,43 @@ BinaryTree* sortedArrayToBST(int arr[], int n) {
 // This is a modified in-order traversal adapted to this problem.
 // prev (init to NULL) is used to keep track of previously traversed node.
 // head pointer is updated with the list's head as recursion ends.'
-void treeToDoublyList(Node *p, Node *& prev, Node *& head) {
-  if (!p) return;
-  treeToDoublyList(p->left, prev, head);
-  // current node's left points to previous node
-  p->left = prev;
-  if (prev)
-    prev->right = p;  // previous node's right points to current node
-  else
-    head = p; // current node (smallest element) is head of
-              // the list if previous node is not available
-  // as soon as the recursion ends, the head's left pointer
-  // points to the last node, and the last node's right pointer
-  // points to the head pointer.
-  Node *right = p->right;
-  head->left = p;
-  p->right = head;
-  // updates previous node
-  prev = p;
-  treeToDoublyList(right, prev, head);
-}
+
+    void treeToDoublyList(Node *p, Node *& prev, Node *& head) {
+      if (!p) return;
+
+      treeToDoublyList(p->left, prev, head);
+
+      // current node's left points to previous node
+      p->left = prev;
+
+      if (prev)
+        prev->right = p;  // previous node's right points to current node
+      else
+        head = p; // current node (smallest element) is head of
+                  // the list if previous node is not available
+
+      // as soon as the recursion ends, the head's left pointer
+      // points to the last node, and the last node's right pointer
+      // points to the head pointer.
+
+      Node *right = p->right;
+      head->left = p;
+      p->right = head;
+      // updates previous node
+      prev = p;
+
+      treeToDoublyList(right, prev, head);
+    }
 
 // Given an ordered binary tree, returns a sorted circular
 // doubly-linked list. The conversion is done in-place.
-Node* treeToDoublyList(Node *root) {
-  Node *prev = NULL;
-  Node *head = NULL;
-  treeToDoublyList(root, prev, head);
-  return head;
-}
+
+    Node* treeToDoublyList(Node *root) {
+      Node *prev = NULL;
+      Node *head = NULL;
+      treeToDoublyList(root, prev, head);
+      return head;
+    }
 
 # mtd 2:
 
@@ -1804,7 +2112,8 @@ static Node treeToList(Node root) {
     return(aList);
 }
 
-
+# mtd: 3:
+  or you can do Inorder to make a one directional list and the reverse connect it.
 
 ###########################################'
 # k-way merge
@@ -1843,11 +2152,11 @@ else {
             {
                 heap.insert(
 			new MergesortHeapNode(
-				tempArray[subarrayIndex[a.getWhichSubarray()]]++, a.getWhichSubarray()
+				tempArray[subarrayIndex[a.getWhichSubarray()]++], a.getWhichSubarray()
 			));
 
                 // Increment the subarray index where the lowest element resides
-                subarrayIndex[a.getWhichSubarray()]++;
+                //#subarrayIndex[a.getWhichSubarray()]++;
             }
         } catch (EmptyHeapException e)
         {
@@ -2763,21 +3072,50 @@ look at some dynamic programming code	<todo>
 # W is the width or max. amt. of weight a knapsack can have
 	# infinite supply of coins
 #####
-int coins( int[] coins, int amount ) {
-	int[] table = new int[amount+1];
+      int coins( int[] coins, int amount ) {
+        int[] table = new int[amount+1];
 
-Arrays.fill( table, Integer.MAX_VALUE - 100 );
-	table[0] = 0;
+      Arrays.fill( table, Integer.MAX_VALUE - 100 );
+        table[0] = 0;
 
-for ( int i = 1; i < table.length; i++ ) {
-		for ( int j = 0; j < coins.length; j++ ) {
-			if ( coins[j] <= i && table[i - coins[j]] + 1 < table[i] ) {
-                            table[i] = table[i - coins[j]] + 1;
-                        }
-                }
-        }
-return table[amount];
-}
+      for ( int i = 1; i < table.length; i++ ) {
+          for ( int j = 0; j < coins.length; j++ ) {
+            if ( coins[j] <= i && table[i - coins[j]] + 1 < table[i] ) {
+                                  table[i] = table[i - coins[j]] + 1;
+                              }
+                      }
+              }
+      return table[amount];
+      }
+
+https://docs.google.com/file/d/18Ls8SnBofO3daV0VNn7-OHCQWEw_1nDmvvwy27qsGME0TO5SbkF9Auz6kowf/edit
+Change(d, k, n)
+  1 C[0] . 0
+  2 for p . 1 to n
+  3
+  min . .
+  4
+  for i . 1 to k
+  5
+  if d[i] . p then
+  6
+  if 1 + C[p . d[i]] < min then
+  7
+  min . 1 + C[p . d[i]]
+  8
+  coin . i
+  9
+  C[p] . min
+  10
+  S[p] . coin
+  11 return C and S
+
+# what coin denomination are used ?
+Make-Change(S, d, n)
+ while n > 0
+  Print S[n]
+  n = n - d[S[n]]
+
 
 Towards a recurrence relation for making change
 
@@ -2799,6 +3137,24 @@ Towards a recurrence relation for making change
 http://www.ccs.neu.edu/home/jaa/CSG713.04F/Information/Handouts/dyn_prog.pdf
 
 ###########################################
+
+0-1 Knapsack Algorithm
+
+    for w = 0 to W
+      B[0,w] = 0
+    for i = 1 to n
+      B[i,0] = 0
+
+    for i = 1 to n
+      for w = 0 to W
+        if wi <= w // item i can be part of the solution
+          if bi + B[i-1,w-wi] > B[i-1,w]
+            B[i,w] = bi + B[i-1,w- wi]
+          else
+            B[i,w] = B[i-1,w]
+        else B[i,w] = B[i-1,w] // wi > w
+
+-------------------------
 0-1 KNAPSACK SOLN.
 
 Here is a dynamic programming algorithm to solve the 0-1
@@ -2814,19 +3170,19 @@ B[k, w] = B[k - 1,w], if w[k] > w
 
 Output: The maximal value of items in a valid knapsack.
 
-int w, k;
-for (w=0; w <= W; w++)
-B[w] = 0
+      int w, k;
+      for (w=0; w <= W; w++)
+      B[w] = 0
 
-for (k=0; k<n; k++) {   // items
-  for (w = W; w>= w[k]; w--) {    // weigth
+      for (k=0; k<n; k++) {   // items
+        for (w = W; w>= w[k]; w--) {    // weigth
 
-    if (B[w - w[k]] + v[k] > B[w])
-      B[w] = B[w - w[k]] + v[k]
+          if (B[w - w[k]] + v[k] > B[w])
+            B[w] = B[w - w[k]] + v[k]
 
-  }
+        }
 
-}
+      }
 ###########################################
 
 http://www.ics.uci.edu/~eppstein/161/960109.html
@@ -3060,15 +3416,18 @@ public static void printPar(int l, int r, char[] str, int count) {
   else {
     if (l > 0) { // try a left paren, if there are some available
       str[count] = '(';
-          printPar(l - 1, r, str, count + 1);
-          }
+      printPar(l - 1, r, str, count + 1);
+    }
     if (r > l) { // try a right paren, if there’s a matching left
-          str[count] = ')';
+      str[count] = ')';
       printPar(l, r - 1, str, count + 1);
-          }
+    }
   }
 }
 
+# verify the corectly parenthesized ?
+Given a string with only ')' and '(' find if the string is complete or not. If the string is complete means that each open paranthesis should have a corresponding closed one. Eg: String s= "((()))()"- Complete String String s1=")()()()())))(()()()((" - Incomplete String 
+    # use a simple counter. +1 for ( -1 for ) . Anytime, if counter < 0 ; return false;
 
 ###########################################
 Combinations:	wxyz		Call like: 	docombine (in, out, len , 0 , 0);
@@ -3085,6 +3444,7 @@ wz
 void DoCombine (char in[], char out [] , int length, int fillptr, int start)
 {
   int i ;
+
   for (i = start; i < length; i++) {
     out[fillptr] = in[i]; /* select current letter */
     out[fillptr + 1] = '\o' ; /* tack on NUL for printf */
@@ -3092,7 +3452,9 @@ void DoCombine (char in[], char out [] , int length, int fillptr, int start)
 
     if (i < length - 1) /* recurse if more letters in input */
         DoCombine(in, out, length, fillptr +1 , i + 1);
-  }
+
+  } //for()
+
 }
 
 [vchauras@sac07:~/tmp/temp-cpps/temp-prgs]$ ./a.out
@@ -3335,9 +3697,9 @@ for (i=0; i<len; i++)
     break;
   }
   if(St.empty())
-  t = -1;
+    t = -1;
   else
-  t = St.top();
+    t = St.top();
   //Calculating Li
   area[i] = i - t - 1;
   St.push(i);
@@ -3525,11 +3887,7 @@ return 0;
 '''"//
 ################################################
 
-std::auto_ptr and std::tr:ptr are used for storing ptrs so that desctructor are called when var is out of scope item13:
-  they are not gud with arrays
 
-    e.g. std:tr1:shared_ptr<Widget> pw (new Widget());
-################################################
 
 Clone a graph (use BFS or DFS but with a global hashmap)
 ################################################
@@ -3579,7 +3937,7 @@ Solution: This is a relatively simple DP problem. Here we only give the main ide
 2:
 http://sumitpal.wordpress.com/2012/08/17/histogram-based-water-volume-calculation-algorithm/#comment-223
   based on divide and conquer
-  Calculate strip of water over each bar.
+  apply simple area of rec.
 
 ################################################
 

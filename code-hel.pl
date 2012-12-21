@@ -8,6 +8,36 @@ http://basicalgos.blogspot.com/2012/03/10-regular-expression-matching.html
 
 
 ###########################################
+tr1::shared_ptr (problem of reference cycle), tr1::weak_ptr 2 smart pointers in tr1
+
+std::auto_ptr and std::tr:ptr are used for storing ptrs so that desctructor are called when var is out of scope item13:
+  they are not gud with arrays
+
+    e.g. std:tr1:shared_ptr<Widget> pw (new Widget());
+
+    e.g auto_ptr:
+    void f() {
+      Investment *pInv = createInvestment();    // factory
+      ...
+      ...   // some exception or return might happen here
+      ....
+      delete p*Inv;
+    }
+
+    so, use auto_ptr like:
+    void f() {
+      std::auto_ptr<Investment> pInv(createInvestment());     // RAII
+      OR
+      std::tr1::shared_ptr <Investment> pInv(createInvestment());     // RAII
+      ...
+      ...
+      return;
+    }
+
+    # using auto_ptr , their copy ctor and assignment operator make either one of them null. So, one pointer points always to resource
+    # using shared_ptr, when u copy, then 2 pointers point to same resouce. ..... Containters can have <shared_ptr> NOT <auto_ptr>
+
+###########################################
 # binary stream divisble by 3:
 
     we have to just count the number of 1's (set bits) at even position and number of 1's (set bits) at odd position .
@@ -3857,11 +3887,7 @@ return 0;
 '''"//
 ################################################
 
-std::auto_ptr and std::tr:ptr are used for storing ptrs so that desctructor are called when var is out of scope item13:
-  they are not gud with arrays
 
-    e.g. std:tr1:shared_ptr<Widget> pw (new Widget());
-################################################
 
 Clone a graph (use BFS or DFS but with a global hashmap)
 ################################################

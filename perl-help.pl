@@ -2,6 +2,11 @@ intitle:"index.of" linkin (mp3|mp4|flv|avi|mpg|wmv) -html-htm-php-jsp-asp
 http://www.ihas1337code.com/2010/04/hacking-google-interview-from-mit.html
 
 ###########################################
+#compiler temp vars:
+the temprovary variables are created on the stack by the compiler and are used during reference initialization and during evaluation of expressions including standard type conversions, argument passing, function returns.
+
+
+###########################################
 # epoll simple explanation: http://kovyrin.net/2006/04/13/epoll-asynchronous-network-programming/
 
 ###########################################

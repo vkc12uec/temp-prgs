@@ -8,7 +8,7 @@ http://basicalgos.blogspot.com/2012/03/10-regular-expression-matching.html
 
 
 ###########################################
-tr1::shared_ptr (problem of reference cycle), tr1::weak_ptr 2 smart pointers in tr1
+tr1::shared_ptr (problem of reference cycle), tr1::weak_ptr (2 smart pointers in tr1)
 
 std::auto_ptr and std::tr:ptr are used for storing ptrs so that desctructor are called when var is out of scope item13:
   they are not gud with arrays
@@ -422,22 +422,56 @@ typedef pair<int,int> ii;
 # WAP to connect the level wise pointers in a full binary tree w/o using Queue
 # Idea is : Assume level i next pointers are connected, that will help in connecting i+1 level.
 
-class node {    // this code is for full binary tree
-  node *left;
-  node *right;
-  node *next;
-}
+        // Sets the nextRight of root and calls connectRecur() for other nodes
+        void connect (struct node *p)
+        {
+            // Set the nextRight for root
+            p->nextRight = NULL;
+         
+            // Set the next right for rest of the nodes (other than root)
+            connectRecur(p);
+        }
+         
+        /* Set next right of all descendents of p.
+           Assumption:  p is a compete binary tree */
+        void connectRecur(struct node* p)
+        {
+          // Base case
+          if (!p)
+            return;
+         
+          // Set the nextRight pointer for p's left child
+          if (p->left)
+            p->left->nextRight = p->right;
+         
+          // Set the nextRight pointer for p's right child
+          // p->nextRight will be NULL if p is the right most child at its level
+          if (p->right)
+            p->right->nextRight = (p->nextRight)? p->nextRight->left: NULL;
+         
+          // Set nextRight for other nodes in pre order fashion
+          connectRecur(p->left);
+          connectRecur(p->right);
+        }
 
-void pre(node *n, node *pn) {
-  if (n) {
-    n->next = (pn == 0) ? 0 : pn->right;
-    if (n->next == pn->right) {
-      n->next = pn->next->left;     // this line is not correct
-    }
-    pre (n->left, n);   // it has to be 'preorder'
-    pre (n->right, n);
-  }
-}
+
+        # WRONG #
+        class node {    // this code is for full binary tree
+          node *left;
+          node *right;
+          node *next;
+        }
+
+        void pre(node *n, node *pn) {
+          if (n) {
+            n->next = (pn == 0) ? 0 : pn->right;
+            if (n->next == pn->right) {
+              n->next = pn->next->left;     // this line is not correct
+            }
+            pre (n->left, n);   // it has to be 'preorder'
+            pre (n->right, n);
+          }
+        }
 
 # when this is not a full binary tree; for e.g. skewed tree
 
@@ -2005,112 +2039,67 @@ BinaryTree* sortedArrayToBST(int arr[], int n) {
       return head;
     }
 
-# mtd 2:
-
-- For each node in the bst the left is made to point to previous element in dll and right is made to point to next element in dll.
-- Flag is used to keep track if a node is left child or right child of parent.
-- function call on left subtree returns rightmost child and viceversa.
-- Finally the first function call returns the first element in dll.
-
-node * Tree :: convLnLst(node *T,int flag=-1){
-	node *l1,*l2;
-
-	if(T!=NULL){
-		l1=convLnLst(T->left,0);
-		l2=convLnLst(T->right,1);
-
-		T->left=l1;
-		T->right=l2;
-
-		if(l1!=NULL){
-			l1->right=T;
-		}
-
-		if(l2!=NULL){
-			l2->left=T;
-		}
-		#if(flag==0 && T->right)
-		#	return T->right;
-		if (flag == 0) {
-			while (T->right)
-				T = T->right;
-			return T;
-		}
-
-		#if(flag==1 && T->left)
-		#	return T->left;
-		if (flag == 1) {
-			while (T->left)
-				T = T->left;
-			return T;
-		}
-
-		if(flag==-1){
-			while(T->left)
-				T=T->left;
-		}
-
-	}
-	return T;
-}
 
 # 2nd method by stan:
 #	http://cslibrary.stanford.edu/109/TreeListRecursion.html
 #
+# C solution : 
 
-/*
- helper function -- given two list nodes, join them
- together so the second immediately follow the first.
- Sets the .next of the first and the .previous of the second.
-*/
-static void join(Node a, Node b) {
-    a->large = b;
-    b->small = a;
-}
+typedef struct node* Node;
 
-/*
- helper function -- given two circular doubly linked
- lists, append them and return the new list.
-*/
-static Node append(Node a, Node b) {
-    Node aLast, bLast;
+      /*
+       helper function -- given two list nodes, join them
+       together so the second immediately follow the first.
+       Sets the .next of the first and the .previous of the second.
+      */
+      static void join(Node a, Node b) {
+          a->large = b;
+          b->small = a;
+      }
 
-    if (a==NULL) return(b);
-    if (b==NULL) return(a);
+      /*
+       helper function -- given two circular doubly linked
+       lists, append them and return the new list.
+      */
+      static Node append(Node a, Node b) {
+          Node aLast, bLast;
 
-    aLast = a->small;
-    bLast = b->small;
+          if (a==NULL) return(b);
+          if (b==NULL) return(a);
 
-    join(aLast, b);
-    join(bLast, a);
+          aLast = a->small;
+          bLast = b->small;
 
-    return(a);
-}
+          join(aLast, b);
+          join(bLast, a);
 
-/*
- --Recursion--
- Given an ordered binary tree, recursively change it into
- a circular doubly linked list which is returned.
-*/
-static Node treeToList(Node root) {
-    Node aList, bList;
+          return(a);
+      }
 
-    if (root==NULL) return(NULL);
+      /*
+       --Recursion--
+       Given an ordered binary tree, recursively change it into
+       a circular doubly linked list which is returned.
+      */
+      static Node treeToList(Node root) {
+          Node aList, bList;
 
-    /* recursively solve subtrees -- leap of faith! */
-    aList = treeToList(root->small);
-    bList = treeToList(root->large);
+          if (root==NULL) return(NULL);
 
-    /* Make a length-1 list ouf of the root */
-    root->small = root;
-    root->large = root;
+          /* recursively solve subtrees -- leap of faith! */
+          aList = treeToList(root->small);
+          bList = treeToList(root->large);
 
-    /* Append everything together in sorted order */
-    aList = append(aList, root);
-    aList = append(aList, bList);
+          /* Make a length-1 list ouf of the root */
+          root->small = root;
+          root->large = root;
 
-    return(aList);
-}
+          /* Append everything together in sorted order */
+          aList = append(aList, root);
+          aList = append(aList, bList);
+
+          return(aList);
+      }
 
 # mtd: 3:
   or you can do Inorder to make a one directional list and the reverse connect it.
@@ -2142,7 +2131,6 @@ else {
     // For each element low to high, find the lowest in each k subarray
     for (int i = low; i < high + 1; i++)
     {
-
         // Take lowest element and add back in to original array
         try
         {
@@ -2150,10 +2138,7 @@ else {
             data[i] = a.getKey();
             if (subarrayIndex[a.getWhichSubarray()] < (a.getWhichSubarray()+1)*(subarrSize)/k)
             {
-                heap.insert(
-			new MergesortHeapNode(
-				tempArray[subarrayIndex[a.getWhichSubarray()]++], a.getWhichSubarray()
-			));
+                heap.insert( new MergesortHeapNode(tempArray[subarrayIndex[a.getWhichSubarray()]++], a.getWhichSubarray() ));
 
                 // Increment the subarray index where the lowest element resides
                 //#subarrayIndex[a.getWhichSubarray()]++;
@@ -2438,7 +2423,7 @@ void preIter (node *n) {
 		}
 		if (!s.isempty () ) {
 			curr = S.pop();
-      cout << curr->data;
+      //cout << curr->data;
     }
 		else
 			break;
@@ -2551,7 +2536,6 @@ E:\My eBooks\Algo\Sahni Codes\all\network.h
 # list of the nodes in descending order of finish nos. gives the topological order.
 #
 ###########################################
-
 # cicular sorted array search:
 
 # mtd 1
@@ -2745,7 +2729,8 @@ bool Network::findPath(int v, int w, int &length, int path[], int reach[])
          // no path from u to w
          length--; // remove u
          }
-      u = NextVertex(v);}
+      u = NextVertex(v);
+      }
    return false;
 }
 
@@ -3970,5 +3955,6 @@ do f  remove first leaf from L
 ##############################################
 fibbonaci faster:
 
- A^n = {[fibo(n+1), fibo(n)], [fibo(n), fibo(n-1)]}.
+ A^n = {[fibo(n+1), fibo(n)], 
+        [fibo(n), fibo(n-1)]}.
 

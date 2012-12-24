@@ -128,6 +128,7 @@ void print_splitted2 (string w, vs &allComb) {
 
   //if (w.length() <= 1)  // redundant
 
+  // foreach prefix of the string, get their suffixes vector, and then club
   for (int i=1; i<w.length() ; i++) {
     vs temp;
     string st = w.substr(0,i);

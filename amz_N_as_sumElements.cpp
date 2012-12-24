@@ -1,21 +1,21 @@
 /*
-  http://www.careercup.com/question?id=14947116
+http://www.careercup.com/question?id=14947116
 
-   17 Answers
-   amazon
+17 Answers
+amazon
 
-   Given an integer (assume it's smaller than 50), write an algorithm that will generate all possible combinations of integers greater than 1 and they produce a sum equals to this number. The same number can appear more than once in a combination. What's the time complexity of your algorithm?
+Given an integer (assume it's smaller than 50), write an algorithm that will generate all possible combinations of integers greater than 1 and they produce a sum equals to this number. The same number can appear more than once in a combination. What's the time complexity of your algorithm?
 
-   For example: 
-   <=1 -> {}
-   2 -> {2}, 
-   3->{3}, 
-   4->{[4], [2, 2]}, 
-   5->{[5], [3, 2]}, 
-   6->{[6], [4, 2], [3, 3], [2, 2, 2]} 
-   7->{[7], [5, 2], [4, 3], [3, 2, 2]}
-   8->{[8], [6, 2], [5, 3], [4, 4], [4, 2, 2], [3, 3, 2], [2, 2, 2, 2]}
-   */
+For example: 
+<=1 -> {}
+2 -> {2}, 
+3->{3}, 
+4->{[4], [2, 2]}, 
+5->{[5], [3, 2]}, 
+6->{[6], [4, 2], [3, 3], [2, 2, 2]} 
+7->{[7], [5, 2], [4, 3], [3, 2, 2]}
+8->{[8], [6, 2], [5, 3], [4, 4], [4, 2, 2], [3, 3, 2], [2, 2, 2, 2]}
+*/
 
 /*
 

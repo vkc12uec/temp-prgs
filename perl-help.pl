@@ -2,6 +2,29 @@ intitle:"index.of" linkin (mp3|mp4|flv|avi|mpg|wmv) -html-htm-php-jsp-asp
 http://www.ihas1337code.com/2010/04/hacking-google-interview-from-mit.html
 
 ###########################################
+
+http://www.cplusplus.com/forum/general/7474/
+
+I'm not sure what other methods you tried, but you might have been misled by temporaries that were being created and destroyed by the compiler.
+
+Consider the following code:
+
+string foo() {
+    string result( "Hello World" );
+    return result;
+}
+
+// ...
+string hw = foo();
+
+
+In the above code, with no optimizations, the compiler creates result on the stack inside foo() and then the value is "returned". Returning it in this case means that hw is assigned the returned value, possibly through operator= or the copy constructor; likely the latter) and then "result" is destroyed.
+
+You haven't lost data; it was just transferred from one location to another.
+
+With optimizations turned on, assuming my foo() did something more than it does, the same thing will occur. However, with optimizations turned on, your x() function is so trivial that the compiler is using an optimization technique called Return Value Optimzation (RVO) wherein the local variable (also named x) is actually constructed in the same memory location (stack location) occupied by main()'s local variable a. Which means that when x() returns, no copying is needed since there isn't really a second (temporary) instance, and therefore no destructor needs to run.
+'
+###########################################
 #compiler temp vars:
 the temprovary variables are created on the stack by the compiler and are used during reference initialization and during evaluation of expressions including standard type conversions, argument passing, function returns.
 
@@ -17,6 +40,7 @@ How many items are in the queue ?
 Some people use a integer to remember exactly how many items are in the queue.
 With this "extra" data, a buffer of n elements can hold the full n data items, rather than n-1 data items. When both pointers point to the same location (buffer.insert == buffer.remove), then buffer.size distinguishes between the empty buffer (0 == buffer.size) or a full buffer ( n == buffer.size ).
 Other people don't like this "extra" data -- it's too much hassle to keep it synchronized with the pointers. (It violates OnceAndOnlyOnce). Easier just to make the buffer 1 element larger. If we ever want to know the size, use
+
    size = (n + buffer.insert - buffer.remove) mod n;
 .
 
@@ -149,7 +173,7 @@ int main()
         int local;
         int *ptr;
         ptr = (int *) malloc(sizeof(int));
-        printf("An address from BSS: %p\n", &uig);
+        printf("An address from BSS: %p\n", &uig);            // uninit globals or static
         printf("An address from Data segment: %p\n", &ig);
         printf("An address from Code segment: %p\n", &func);
         printf("An address from Stack segment: %p\n", &local);

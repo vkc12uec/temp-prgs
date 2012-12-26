@@ -8,10 +8,10 @@ http://basicalgos.blogspot.com/2012/03/10-regular-expression-matching.html
 
 
 ###########################################
-tr1::shared_ptr (problem of reference cycle), tr1::weak_ptr (2 smart pointers in tr1)
+#tr1::shared_ptr (problem of reference cycle), tr1::weak_ptr (2 smart pointers in tr1)
 
-std::auto_ptr and std::tr:ptr are used for storing ptrs so that desctructor are called when var is out of scope item13:
-  they are not gud with arrays
+#std::auto_ptr and std::tr:ptr are used for storing ptrs so that desctructor are called when var is out of scope item13:
+    they are not gud with arrays
 
     e.g. std:tr1:shared_ptr<Widget> pw (new Widget());
 
@@ -53,21 +53,23 @@ std::auto_ptr and std::tr:ptr are used for storing ptrs so that desctructor are 
 # use binary search to find where to insert. Return 'begin'
 The gist is the invariant of the binary search. 
 
-int searchInsert(int A[], int n, int target) {
-  int begin, end, mid;
+    int searchInsert(int A[], int n, int target) {
+      int begin, end, mid;
 
-  begin = 0; end = n-1;
-  while (begin <= end){
-    mid= begin + (end - begin >> 1);
+      begin = 0; end = n-1;
+      while (begin <= end){
+        mid= begin + (end - begin >> 1);
 
-    if (A[mid] == target) return mid;
+        if (A[mid] == target) return mid;
 
-    if (A[mid] < target)  begin= mid+ 1;
-    else end = mid -1;        
-  }        
+        if (A[mid] < target)  begin= mid+ 1;
+        else end = mid -1;        
+      }
 
-  return begin ;        
-}
+      return begin ;        
+    }
+
+    # another variant of this is AMZ ques. = amz_bin_search.cpp
 
 ###########################################
 # semaphores , spinlock gud read: http://www.cis.temple.edu/~giorgio/cis307/readings/spinsem.html
@@ -114,6 +116,10 @@ which is used in lock-free and wait-free algorithms. Here is an example: conside
   ostream_iterator<int> oit(cout, " ");
   copy(lis.begin(), lis.end(), oit);
 
+# how to init 2d <vector>
+  vector<vector<int> > m(len1+1, vector<int>(len2+1, 0));
+
+###########################################
 # longest common subsequence
   http://basicalgos.blogspot.com/2012/03/36-longest-common-sequence.html    important is how to construct the characters back ?
 
@@ -3955,5 +3961,6 @@ do f  remove first leaf from L
 ##############################################
 fibbonaci faster:
 
- A^n = {[fibo(n+1), fibo(n)], [fibo(n), fibo(n-1)]}.
+ A^n = {[fibo(n+1), fibo(n)], 
+        [fibo(n), fibo(n-1)]}.
 

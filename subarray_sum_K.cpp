@@ -1,6 +1,21 @@
 
 #include "topcoder_header.h"
 
+/*
+ 
+   2nd method O(n2)
+   a[], len
+
+   for (base = 0; base < len; base++)
+    add=0;
+    for (i=base; i<len; i++) {
+      add += a[i]
+
+      if (add == reqd)
+          YAHOO
+    }
+ 
+ */
 int main () {
   int a[] = {15, 2, 4, 8, 9, 5, 10, 23};
   int len = SizeOfArray (a);

@@ -275,7 +275,7 @@ which is used in lock-free and wait-free algorithms. Here is an example: conside
           }
 
 ###########################################
-# largest subarray with 0's = 1's       (use cumulative sums)
+# largest subarray with 0's = 1's       (use cumulative sums, by turning 0s to -1s)
 # http://www.geeksforgeeks.org/archives/20586
 #
 # http://tech-queries.blogspot.com/2011/09/find-largest-sub-matrix-with-all-1s-not.html

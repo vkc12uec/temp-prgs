@@ -350,3 +350,70 @@ void post (node *n) {
     }
   }
 }
+
+/*
+
+7) In a store there are a million distinct items. You have to list the k most sold items at the end of day. Give the data structure/algorithm you will use for the following cases
+                  a) You have to list the items in sorted order of number items sold,
+                  b) Sorted order is not necessary, so just print the items in any order
+// 
+*/
+
+vector<item> list;
+Heap h(k);        //min heap
+
+for (i=0; i<k; i++)
+h.insert (list[i]);
+
+for (i=k; i<1milllion; i++) {
+  if (list[i].sales > h[0]) {
+    h.ExtractMin();
+    h.Insert (list[i].sales);
+  }
+}
+
+/*
+1) Write code to multiply 2 matrices, check for corner cases, erroneous inputs etc.
+ */
+A[ij] B[jk] = C[ik]
+
+void mult (A, i, j, B, j, k, C) {
+
+  C = new int *[i];
+  for (p=0;p<i; p++)
+    C[p] = new int[k];
+
+  for (mi=0; mi<i; mi++)
+    for (nk=0; nk<k; nk++) {
+      tmp=0;
+      for (pj=0; pj<j; pj++)
+        tmp += A[mi,pj]*B[pj,nk];
+
+      C[mi,nk] = tmp;
+
+    }
+}
+
+/*
+ * goog
+ *
+2) Given a matrix M, check whether 2 rows are exactly equal in the matrix. Optimize time complexity.
+
+Eg. M  =        1 2 3, then rows 1 and 3 are same.
+                3 4 5
+                1 2 3
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+

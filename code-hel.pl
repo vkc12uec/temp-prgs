@@ -6,38 +6,43 @@ http://www.cs.pitt.edu/~kirk/algorithmcourses/index.html
 
 http://basicalgos.blogspot.com/2012/03/10-regular-expression-matching.html
 
-###########################################
-# If matrix has 2 rows which are equal, then Determinant(matrix) = 0
-#
-# if u swap and 2 rows of A (which has Det(A)) , then swapped matrix will have a Det(B) = -Det(A)
+http://stackoverflow.com/questions/500607/what-are-the-lesser-known-but-useful-data-structures
+
+# list of trading firms:  http:/tradertestorg/list.php
 
 ###########################################
-#include <utility>
+# longest path in DAG:   or Atalleh
 
-make_pair() -> returns a c++ pair
-###########################################
-# correct way 2d passing
-# 
-#
-        void test_2d_passing (int a[][10], int len) {       // correct way of passing 2d array
-        //void test_2d_passing (int **a, int len) {     // NOT
-        //void test_2d_passing (int a[][], int len) {     // NOT}
-}
-###########################################
-# you can make pair(ii) as key to map<ii, int>
-#
-        miii mymap;
-        mymap [make_pair(1,2)] = 3;
-        mymap [make_pair(2,3)] = 5;
-        mymap [make_pair(3,4)] = 7;
-        mymap [make_pair(4,5)] = 9;
+    Compute topological order of vertices: A B C D E F G H I.
 
-        tr (mymap, it) {
-          cout << "\n first " << it->first.first << " | " << it->first.second << " sec = " << it->second;
-        }
-# 
+    Initialize fin[v] = 0 for all vertices v.
+
+    Consider vertices v in topological order:
+      for each edge v-w, set fin[w] = max(fin[w], fin[v] + time[w])
+
+
+###########################################
+# impl. Queue using Stacks:
+
+http://stackoverflow.com/questions/69192/how-to-implement-a-queue-using-two-stacks
+  S1, S2: 
+    Q.push -> push in S1
+    Q.pop -> if S2 is empty, push all elements from S1 to S2 and pop top
+              else S2.pop(top)
+
 ###########################################
 
+# C++ scope-gaurd
+
+      void User::AddFriend(User& newFriend)
+      {
+          friends_.push_back(&newFriend);
+          ScopeGuard guard = MakeObjGuard(friends_, &UserCont::pop_back);
+          pDB_->AddFriend(GetName(), newFriend.GetName());
+          guard.Dismiss();
+      }
+
+###########################################
 #tr1::shared_ptr (problem of reference cycle), tr1::weak_ptr (2 smart pointers in tr1)
 
 #std::auto_ptr and std::tr:ptr are used for storing ptrs so that desctructor are called when var is out of scope item13:
@@ -305,7 +310,7 @@ which is used in lock-free and wait-free algorithms. Here is an example: conside
           }
 
 ###########################################
-# largest subarray with 0's = 1's       (use cumulative sums, by turning 0s to -1s)
+# largest subarray with 0's = 1's       (use cumulative sums)
 # http://www.geeksforgeeks.org/archives/20586
 #
 # http://tech-queries.blogspot.com/2011/09/find-largest-sub-matrix-with-all-1s-not.html
@@ -3221,12 +3226,6 @@ Now, we have a useful way of describing the fibonacci function:
 -      -           -                                -
 
 That is, the matrice on the left (with the ones and zero) when multiplied by itself n times will yield a matrice which contains various fibonacci numbers, including fibonacci(n).
-
-# wiki:
-
-1 1 ^ n = F(n+1)  F(n)
-1 0       F(n)    F(n-1)
-
 
 ------------------------
 

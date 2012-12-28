@@ -22,6 +22,7 @@ typedef vector<vi> vvi;
 typedef pair<int,int> ii; 
 typedef map<int,char> mic; 
 typedef map<char,int> mci; 
+typedef map< ii, int > miii; 
 #define sz(a) int((a).size()) 
 #define pb push_back 
 #define all(c) (c).begin(),(c).end() 

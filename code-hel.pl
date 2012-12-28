@@ -6,8 +6,38 @@ http://www.cs.pitt.edu/~kirk/algorithmcourses/index.html
 
 http://basicalgos.blogspot.com/2012/03/10-regular-expression-matching.html
 
+###########################################
+# If matrix has 2 rows which are equal, then Determinant(matrix) = 0
+#
+# if u swap and 2 rows of A (which has Det(A)) , then swapped matrix will have a Det(B) = -Det(A)
 
 ###########################################
+#include <utility>
+
+make_pair() -> returns a c++ pair
+###########################################
+# correct way 2d passing
+# 
+#
+        void test_2d_passing (int a[][10], int len) {       // correct way of passing 2d array
+        //void test_2d_passing (int **a, int len) {     // NOT
+        //void test_2d_passing (int a[][], int len) {     // NOT}
+}
+###########################################
+# you can make pair(ii) as key to map<ii, int>
+#
+        miii mymap;
+        mymap [make_pair(1,2)] = 3;
+        mymap [make_pair(2,3)] = 5;
+        mymap [make_pair(3,4)] = 7;
+        mymap [make_pair(4,5)] = 9;
+
+        tr (mymap, it) {
+          cout << "\n first " << it->first.first << " | " << it->first.second << " sec = " << it->second;
+        }
+# 
+###########################################
+
 #tr1::shared_ptr (problem of reference cycle), tr1::weak_ptr (2 smart pointers in tr1)
 
 #std::auto_ptr and std::tr:ptr are used for storing ptrs so that desctructor are called when var is out of scope item13:
@@ -3191,6 +3221,12 @@ Now, we have a useful way of describing the fibonacci function:
 -      -           -                                -
 
 That is, the matrice on the left (with the ones and zero) when multiplied by itself n times will yield a matrice which contains various fibonacci numbers, including fibonacci(n).
+
+# wiki:
+
+1 1 ^ n = F(n+1)  F(n)
+1 0       F(n)    F(n-1)
+
 
 ------------------------
 

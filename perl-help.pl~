@@ -2,6 +2,50 @@ intitle:"index.of" linkin (mp3|mp4|flv|avi|mpg|wmv) -html-htm-php-jsp-asp
 http://www.ihas1337code.com/2010/04/hacking-google-interview-from-mit.html
 
 ###########################################
+# JVM | garbage collection
+
+# class loader is not garbage collected, it means there is a memleak:
+          http://javarevisited.blogspot.sg/2012/01/tomcat-javalangoutofmemoryerror-permgen.html
+
+http://javarevisited.blogspot.com/2011/05/java-heap-space-memory-size-jvm.html
+
+
+Read more: http://javarevisited.blogspot.com/2011/04/garbage-collection-in-java.html#ixzz2GV4OBffw
+
+5) Before removing an object from memory Garbage collection thread invokes finalize () method of that object and gives an opportunity to perform any sort of cleanup required.
+
+
+
+  
+###########################################
+/*
+DiamMOND PROBLEM :
+*/
+								
+class Animal { /* ... */ }; // base class
+
+class Tiger : public Animal { /* ... */ };
+
+class Lion : public Animal { /* ... */ }	
+						
+class Liger : public Tiger, public Lion { /* ... */ };	
+
+# Solution:
+class Tiger : virtual public Animal { /* ... */ };
+
+class Lion : virtual public Animal { /* ... */ }
+
+
+# Java soln.
+#
+Languages that allow only single inheritance, where a class can only derive from one base class, do not have the diamond problem. The reason for this is that such languages have at most one implementation of any method at any level in the inheritance chain regardless of the repetition or placement of methods. Typically these languages allow classes to implement multiple protocols, called interfaces in Java. These protocols define methods but do not provide concrete implementations. This strategy has been used by ActionScript, C#, D, Java, Nemerle, Object Pascal (Delphi), Objective-C, Ruby and Smalltalk. All but Smalltalk allow classes to implement multiple protocols.
+
+Moreover, languages such as Ada, Objective-C, C#, Delphi/Free Pascal and Java allow multiple-inheritance of interfaces (called protocols in Objective-C). Interfaces are like abstract base classes that specify method signatures without implementing any behavior. ("Pure" interfaces such as Java's do not permit any implementation or instance data in the interface.) Nevertheless, even when several interfaces declare the same method signature, as soon as that method is implemented (defined) anywhere in the inheritance chain, it overrides any implementation of that method in the chain above it (in its superclasses). Hence, at any given level in the inheritance chain, there can be at most one implementation of any method. Thus, single-inheritance method implementation does not exhibit the Diamond Problem even with multiple-inheritance of interfaces.
+
+
+# 
+
+###########################################
 
 http://www.cplusplus.com/forum/general/7474/
 

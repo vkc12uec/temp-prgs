@@ -6,37 +6,56 @@ http://www.cs.pitt.edu/~kirk/algorithmcourses/index.html
 
 http://basicalgos.blogspot.com/2012/03/10-regular-expression-matching.html
 
-###########################################
-# If matrix has 2 rows which are equal, then Determinant(matrix) = 0
-#
-# if u swap and 2 rows of A (which has Det(A)) , then swapped matrix will have a Det(B) = -Det(A)
-###########################################
-#include <utility>
+http://stackoverflow.com/questions/500607/what-are-the-lesser-known-but-useful-data-structures
 
-make_pair() -> returns a c++ pair
-###########################################
-# correct way 2d passing
-# 
-#
-        void test_2d_passing (int a[][10], int len) {       // correct way of passing 2d array
-        //void test_2d_passing (int **a, int len) {     // NOT
-        //void test_2d_passing (int a[][], int len) {     // NOT}
-}
-###########################################
-# you can make pair(ii) as key to map<ii, int>
-#
-        miii mymap;
-        mymap [make_pair(1,2)] = 3;
-        mymap [make_pair(2,3)] = 5;
-        mymap [make_pair(3,4)] = 7;
-        mymap [make_pair(4,5)] = 9;
+# list of trading firms:  http:/tradertestorg/list.php
 
-        tr (mymap, it) {
-          cout << "\n first " << it->first.first << " | " << it->first.second << " sec = " << it->second;
-        }
-# 
+###########################################
+# Amazon q. TRICKY:
+#
+        Array on integer is given
+        find out next bigger number 
+        Ex {2,5,3,4,61}
+        Out: 2->5
+        5->6
+        3->4
+        4->6
+        6->-1 //not possible
+        1-> -1 //not possible
+
+###########################################
+# longest path in DAG:   or Atalleh
+
+    Compute topological order of vertices: A B C D E F G H I.
+
+    Initialize fin[v] = 0 for all vertices v.
+
+    Consider vertices v in topological order:
+      for each edge v-w, set fin[w] = max(fin[w], fin[v] + time[w])
+
+
+###########################################
+# impl. Queue using Stacks:
+
+http://stackoverflow.com/questions/69192/how-to-implement-a-queue-using-two-stacks
+  S1, S2: 
+    Q.push -> push in S1
+    Q.pop -> if S2 is empty, push all elements from S1 to S2 and pop top
+              else S2.pop(top)
+
 ###########################################
 
+# C++ scope-gaurd
+
+      void User::AddFriend(User& newFriend)
+      {
+          friends_.push_back(&newFriend);
+          ScopeGuard guard = MakeObjGuard(friends_, &UserCont::pop_back);
+          pDB_->AddFriend(GetName(), newFriend.GetName());
+          guard.Dismiss();
+      }
+
+###########################################
 #tr1::shared_ptr (problem of reference cycle), tr1::weak_ptr (2 smart pointers in tr1)
 
 #std::auto_ptr and std::tr:ptr are used for storing ptrs so that desctructor are called when var is out of scope item13:
@@ -304,7 +323,7 @@ which is used in lock-free and wait-free algorithms. Here is an example: conside
           }
 
 ###########################################
-# largest subarray with 0's = 1's       (use cumulative sums, by turning 0s to -1s)
+# largest subarray with 0's = 1's       (use cumulative sums)
 # http://www.geeksforgeeks.org/archives/20586
 #
 # http://tech-queries.blogspot.com/2011/09/find-largest-sub-matrix-with-all-1s-not.html
@@ -1381,7 +1400,7 @@ void readBST(BinaryTree *&root, ifstream &fin) {
 # LCA of bt
 # RMQ and LCA = http://community.topcoder.com/tc?module=Static&d1=tutorials&d2=lowestCommonAncestor
 #
-node *LowestCommonAncestor( node *root , node *p , node *q)
+node *LowestCommonAncestor( node *root , node *p , node *q)     // Complexity O(n)
 {
 	node *l , *r , *temp;
 	if(root==NULL)
@@ -2894,22 +2913,23 @@ bool dfs (int v, L[]) {
 ###########################################
 void Network::BFS(int v, int reach[], int label)
 {// Breadth first search.
-   LinkedQueue<int> Q;
-   InitializePos(); // init graph iterator array
-   reach[v] = label;
-   Q.Add(v);
-   while (!Q.IsEmpty()) {
-      int w;
-      Q.Delete(w);  // get a labeled vertex
-      int u = Begin(w);
-      while (u) {// visit adj vertices of w
-         if (!reach[u]) {// an unreached vertex
-            Q.Add(u);
-            reach[u] = label;} // mark reached
-         u = NextVertex(w); // next adj vertex of w
-         }
-      }
-   DeactivatePos(); // free iterator array
+  LinkedQueue<int> Q;
+  InitializePos(); // init graph iterator array
+  reach[v] = label;
+  Q.Add(v);
+  while (!Q.IsEmpty()) {
+    int w;
+    Q.Delete(w);  // get a labeled vertex
+    int u = Begin(w);
+    while (u) {// visit adj vertices of w
+      if (!reach[u]) {// an unreached vertex
+        Q.Add(u);
+        reach[u] = label;
+      } // mark reached
+      u = NextVertex(w); // next adj vertex of w
+    }
+  }
+  DeactivatePos(); // free iterator array
 }
 
 ###########################################
@@ -3221,13 +3241,24 @@ Now, we have a useful way of describing the fibonacci function:
 
 That is, the matrice on the left (with the ones and zero) when multiplied by itself n times will yield a matrice which contains various fibonacci numbers, including fibonacci(n).
 
-# wiki:
-
-1 1 ^ n = F(n+1)  F(n)
-1 0       F(n)    F(n-1)
-
-
 ------------------------
+
+    [ 1 1 ] n      [ F(n+1) F(n)   ]
+    [ 1 0 ]    =   [ F(n)   F(n-1) ]
+
+
+
+Algorithm 4:
+
+    int fib(int n)
+    {
+    int M[2][2] = {{1,0},{0,1}}
+    for (int i = 1; i < n; i++)
+        M = M * {{1,1},{1,0}}
+    return M[0][0];
+    }
+
+Algorithm 5:
 
     int M[2][2] = {{1,0}{0,1}}		// identity matrix
 

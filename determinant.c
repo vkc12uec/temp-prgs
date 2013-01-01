@@ -8,11 +8,13 @@ void main()
 {
   int chckdgnl();
   float deter();
-  float a[LIMIT][LIMIT],value;
+  float a[LIMIT][LIMIT] = { {1,2,3}, {4,5,6}, {7,8,9} },value;
   int i,j,order;
   //clrscr();
   printf("Enter order of determent :");
   scanf("%d",&order);
+
+  /*
   for(i=0;i<order;i++)
   {
     for(j=0;j<order;j++)
@@ -21,6 +23,7 @@ void main()
       scanf("%f",&a[i][j]);
     }
   }
+  */
 
   if(chckdgnl(a,order)==0)
     value=0;
@@ -41,6 +44,7 @@ float deter(float a[][LIMIT],int forder)
     for(j=0;j<forder;j++)
     {
       mult=a[j][i]/a[i][i];
+      //printf ("\n a[j][i] = %s a[i][i] = %s " , a[j][i] ,a[i][i]);
       for(k=0;k<forder;k++)
       {
         if(i==j) break;

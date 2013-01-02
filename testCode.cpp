@@ -483,16 +483,239 @@ bool f() {
  1 2 3
  */
 
+Algo: determinanat wouldl be zero
 
 
+/*
+   Minimum/Maximum Sum path in A Binary Tree
+
+   Find and Print the Root to leaf path with minimum sum.
+   Finding such a path is easy bt how to print only that path..
+   u can not modify structure of tree node..it has a data with left and right child pointers.
+   Use as minimum space as possible
+
+*/
+
+int path[MAX];
+static int maxLen = INT_MIN;
+
+void PrintPaths (node *n, int level, char *path) {
+  if (!n)
+    return;
+
+  path[level] = n->data;
+
+  if (n->left == 0 and n->right == 0) {
+    //leaf
+    // calc sum of arrry and if max than saved array, then replace saved array
+  }
+
+  PrintPaths (n->left, level+1, path);
+  PrintPaths (n->right, level+1, path);
+}
 
 
+// topcoder:
+#define tr(c,i) for ( typeof((c).begin()) i = (c).begin(); i != (c).end(); i++)
+
+/*
+ WAP to connect the level wise pointers in a full binary tree w/o using Queue
+ Idea is : Assume level i next pointers are connected, that will help in connecting i+1 level.
+*/
+
+struct node {
+  node *left, *right, *next;
+};
+
+void connect (node *r) {
+  if (!r)
+    r->next = 0;
+  node *parent=0;
+  helper (r, parent);
+}
+
+void helper (node *r, node *pr) {
+  if (!r)
+    return;
+
+  if (pr==0)
+    r->next = 0;
+
+  //if im the left child
+  if (pr->left == r)
+    r->next = pr->right;
+  else {
+    r->next = (pr->next) ? pr->next->left : NULL;
+  }
+
+  helper (r->left, r);
+  helper (r->right, r);
+}
+
+/*
+# Print all the combination from a candidate set that sum to a target value
+achieved thru recursion   "subset_sum_equal_n.cpp"
+ */
+
+void printComb (int sample[], int slen, int N, int fill[], int fillptr) {
+  if (N==0) {
+      // print fill[] till fillptr
+  }
+
+  fill[fillptr] = 0;
+  printComb (sample, slen, N, fill, fillptr+1);
+
+  fill[fillptr] = 1;
+  printComb (sample, slen, N-sample[fillptr], fill, fillptr+1);
+}
+
+/*
+ * sevive of erasthoness
+ */
+
+bool * allprimes (int n) {
+  bool isPrime[n+1] = {true};
+  bool[1]=false;
+
+  for (int i=2; i<=n; i++)      // this can run till sqrt(n) only
+    if (isPrime[i] == true) {
+      for (int j=i; j<=n; j=j+j)      // wrong      for (int j=i*i; j<=n; j+= i)    // all multiples of i are cancelled
+        isPrime[j] = false;
+    }
+  
+  return isPrime;
+}
+
+/*
+# Tree with internal nodes, and leaves ... Given preorder, form the tree .... 
+ */
+
+node *maketree (string pre, int &i) {
+  if (pre[i] == '\0')
+    return;
+  else if (pre[i] == 'L') {
+    node *t = new node ("L");
+    i += 1;                       // WRong, no incrment neded
+    return t;
+  }
+
+  node *r = new node (pre[i]);
+
+  i += 1;
+  r->left = maketree (pre, i);
+
+  i += 1;
+  r->right = maketree (pre, i);
+
+  return r;
+}
 
 
+/*
+For a n node tree, the length of the sequence will be 2n+1 with n "1" and n+1 "0".
+For any position i in the sequence s and i != 2n,  the number of "1" should always be no smaller than the number of "0" in the sub-sequence s[0, i].
+ */
+
+void nTree (int fill[], int fillptr, int n1, int n0 ) {
+  if (n0 > n1)
+    return;     // bad state
+  if (n1 + n0 == 2*n) {
+    fill[fillptr] = 0;
+    makeTree (fill, fillptr);
+    return;
+  }
+
+  if (n1 < n and n1 > n0) {
+    fill[fillptr] = 1;
+    nTree (fill, fillptr+1, n1+1, n0);
+  }
+
+  if (n0 < n1 and n0 < n) {     /// WRONG, 2nd condition ... n0 <= n1
+    fill[fillptr] = 0;
+    nTree (fill, fillptr+1, n1, n0+1);
+  }
+}
+
+// Sort a stack
+
+void sortS (stack s) {
+  if (!s)
+    return;
+
+  int t = s.pop();
+  sortS (s);
+  insert_in_sorted (s, t);
+}
+
+void insert_in_sorted (stack s, int t) {
+  if (s.IsEmpty()) {
+    s.push(t);
+    return;
+  }
+  
+  if (t > s.top())
+    s.push (t);
+  else {
+    int tt = s.pop();
+    insert_in_sorted (s, t);
+    s.push (tt);
+  }
+}
+
+// LCA
+node *lca (node *r, node *p, node *q) {
+  if (!r)
+    return 0;
+
+  // if either p or q is == 0, return other one
+
+  if ( r->left == p || r->right == p || r->left == q || r->right == q)
+    return r;
+
+  node *left = lca (r->left, p, q);
+  node *right = lca (r->right, p, q);
+
+  if (left && right)
+    return root;
+  else {
+    // return the non null of left or right
+  }
+}
+
+// k-way merge , sorted array is divided in k subarrays and connected to heap leaves.
+
+void kway (int a[], int len) {
+  int temp[k] = {0};
+  int indices[k] = {0};
+  int mult=len/k;
+  Heap h;
+  pairs tmp[k];
+
+  for (int i=0; i<k; i++) {
+    indices[i] = (i*mult);
+    temp[i] = a[indices[i]];
+    tmp[i] = make_pair(temp[i], i);   //indices[i]);
+  }
+
+  h.init(tmp);
+
+  for (int i=0; i<len; i++) {
+
+    ii min = h.ExtractMin();
+    int whicharr = min.second;
+    a[i] = min.first;
+
+    //insert next ele from that sub array to heap
+    if (indices[whicharr] < indices[whicharr+1]) {
+      indices[whicharr]++;
+      ii newpair = make_pair (a[indices[whicharr]], whicharr);
+      h.insert(newpair);
+    }
+  }
+
+  
+  
 
 
-
-
-
-
+}
 

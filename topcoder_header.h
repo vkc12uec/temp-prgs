@@ -48,5 +48,11 @@ inline void printArr( T a[], int N ) {
     cout << "\n\t"<<a[i];
 }
 
+void getTokens (string input, vs &tokens) {
+  istringstream iss(input);
+  //vector<string> tokens;
+  copy(istream_iterator<string>(iss), istream_iterator<string>(), back_inserter<vector<string> >(tokens));
+}
+
 
 #endif

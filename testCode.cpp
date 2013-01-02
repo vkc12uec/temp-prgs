@@ -50,7 +50,7 @@ bool isMatch (char *t, char *g) {
     c
  */
 
-bool isMatch (const char *t, const char *p) {
+bool isMatch (const char *t, const char *p) {     // this is not ok
   if (*t == 0 && *p == 0)
     return true;
   else if (*t == 0 || *p == 0)
@@ -111,7 +111,7 @@ int whereInsert (int a[], int len, int target) {
 
 
 // if arr like  112223334555567778
-// find # times 5 appears
+// find # times 5 appears   (end-beg+1)
 {
   static beg=0, end = n-1;
   while (beg <= end) {
@@ -286,7 +286,7 @@ Node *desrial (string s) {
       ss >> data >> cnc;
       Node *t = new Node (data, cnc);
       r->list.pb(t);
-      Q.push (t);           // vs if (cnc>0) Q.push(t)
+      Q.push (t);           // CORRECT:  if (cnc>0) Q.push(t)
     }
   }
 

@@ -38,6 +38,13 @@ void printVector (vector <T> lis) {
   copy(lis.begin(), lis.end(), oit);
 }
 
+template <typename T>
+void printarr (T a[], int len) {
+  cout << "\n";
+  for (int i=0; i<len; i++)
+    cout << " -- " << a[i];
+}
+
 template <typename T, size_t N>
 inline size_t SizeOfArray( const T(&)[ N ] )
 { return N; }

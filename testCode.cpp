@@ -712,10 +712,5 @@ void kway (int a[], int len) {
       h.insert(newpair);
     }
   }
-
-  
-  
-
-
 }
 

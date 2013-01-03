@@ -1,49 +1,49 @@
-// bst.h
-// unbalanced binary search trees
-#ifndef BSTree_
-#define BSTree_
 
-#include "bbinary.h"
+// dbst.h
+// binary search tree with duplicate values
+#ifndef DBSTree_
+#define DBSTree_
+
+#include "dbinary.h"
 #include "xcept.h"
 
 template<class E, class K>
-class BSTree : public BinaryTree<E> {
+class DBSTree : public BinaryTree<E> {
    public:
       bool Search(const K& k, E& e) const;
-      BSTree<E,K>& Insert(const E& e);
-      BSTree<E,K>& InsertVisit
-                   (const E& e, void(*visit)(E& u));
-      BSTree<E,K>& Delete(const K& k, E& e);
+      bool FindGE(const K& k, K& Kout) const;
+      DBSTree<E,K>& Insert(const E& e);
+      DBSTree<E,K>& Delete(const K& k, E& e);
       void Ascend() {InOutput();}
 };
 
 template<class E, class K>
-bool BSTree<E,K>::Search(const K& k, E &e) const
+bool DBSTree<E,K>::
+           Search(const K& k, E& e) const
 {// Search for element that matches k.
    // pointer p starts at the root and moves through
    // the tree looking for an element with key k
    BinaryTreeNode<E> *p = root;
-   while (p) // examine p->data
+   while (p) {// examine p->data
       if (k < p->data) p = p->LeftChild;
       else if (k > p->data) p = p->RightChild;
            else {// found element
                  e = p->data;
-                 return true;}
+                 return true;}}
    return false;
 }
 
 template<class E, class K>
-BSTree<E,K>& BSTree<E,K>::Insert(const E& e)
-{// Insert e if not duplicate.
+DBSTree<E,K>& DBSTree<E,K>::Insert(const E& e)
+{// Insert e.
    BinaryTreeNode<E> *p = root,  // search pointer
                      *pp = 0;    // parent of p
    // find place to insert
    while (p) {// examine p->data
       pp = p;
       // move p to a child
-      if (e < p->data) p = p->LeftChild;
-      else if (e > p->data) p = p->RightChild;
-           else throw BadInput(); // duplicate
+      if (e <= p->data) p = p->LeftChild;
+      else p = p->RightChild;
       }
 
    // get a node for e and attach to pp
@@ -58,37 +58,8 @@ BSTree<E,K>& BSTree<E,K>::Insert(const E& e)
 }
 
 template<class E, class K>
-BSTree<E,K>& BSTree<E,K>::InsertVisit
-               (const E& e, void(*visit)(E& u))
-{// Insert e if not duplicate.
- // Visit e if duplicate.
-
-   // search for a matching element
-   BinaryTreeNode<E> *p = root, // search pointer
-                     *pp = 0;   // parent of p
-   while (p) {// examine p->data
-      pp = p;
-      if (e < p->data) p = p->LeftChild;
-      else if (e > p->data) p = p->RightChild;
-           else {// duplicate
-                 visit(p->data);
-                 return *this;};
-      }
-
-   // not a duplicate
-   // get a node for e and attach to pp
-   BinaryTreeNode<E> *r = new BinaryTreeNode<E> (e);
-   if (root) {// tree not empty
-      if (e < pp->data) pp->LeftChild = r;
-      else pp->RightChild = r;}
-   else // insertion into empty tree
-        root = r;
-
-   return *this;
-}
-
-template<class E, class K>
-BSTree<E,K>& BSTree<E,K>::Delete(const K& k, E& e)
+DBSTree<E,K>& DBSTree<E,K>::
+           Delete(const K& k, E& e)
 {// Delete element with key k and put it in e.
 
    // set p to point to node with key k
@@ -117,8 +88,7 @@ BSTree<E,K>& BSTree<E,K>::Delete(const K& k, E& e)
       // move largest from s to p
       p->data = s->data;
       p = s;
-      pp = ps;
-      }
+      pp = ps;}
 
    // p has at most one child
    // save child pointer in c
@@ -135,6 +105,28 @@ BSTree<E,K>& BSTree<E,K>::Delete(const K& k, E& e)
    delete p;
 
    return *this;
+}
+
+template<class E, class K>
+bool DBSTree<E,K>::FindGE(const K& k, K& Kout) const
+{// Find smallest element with value >= k.
+   BinaryTreeNode<E> *p = root,  // search pointer
+                     *s = 0;     // pointer to smallest
+                                 // >= k found so far
+   // search the tree
+   while (p) {
+      // is p a candidate?
+      if (k <= p->data) {// yes
+          s = p;  // p is a better candidate than s
+          // smaller elements in left subtree only
+          p = p->LeftChild;}
+      else  // no, p->data too small, try right subtree
+          p = p->RightChild;
+      }
+
+   if (!s) return false; // not found
+   Kout = s->data;
+   return true;
 }
 
 #endif

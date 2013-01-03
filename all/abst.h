@@ -1,9 +1,10 @@
+
 // bst.h
 // unbalanced binary search trees
 #ifndef BSTree_
 #define BSTree_
 
-#include "bbinary.h"
+#include "cbinary.h"
 #include "xcept.h"
 
 template<class E, class K>
@@ -117,8 +118,7 @@ BSTree<E,K>& BSTree<E,K>::Delete(const K& k, E& e)
       // move largest from s to p
       p->data = s->data;
       p = s;
-      pp = ps;
-      }
+      pp = ps;}
 
    // p has at most one child
    // save child pointer in c

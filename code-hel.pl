@@ -18,6 +18,18 @@ projecteuler.net
 
 
 ###########################################
+# DP:
+
+Longest Bitonic seq. : Find 
+                          LIS(i) -> longest incr seq ending at index i
+                          LDS(i) -> longest decr seq starting at index i
+
+                            foreach (i) {
+                              Max of (LIS[i] + LDS[i] - 1);
+                            }
+
+
+###########################################
 # Amazon q. TRICKY:
 #
         Array on integer is given

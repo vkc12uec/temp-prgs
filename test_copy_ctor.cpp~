@@ -1,0 +1,55 @@
+
+#include "topcoder_header.h"
+#include "climits"
+
+class Obj {
+  private:
+    int a;
+
+  public:
+    Obj(int x) : a(x) { }
+    Obj(Obj &p) : a(p.a) { cout << "\n copy invoked"; }
+    void Disp() const {
+      cout << "\n a= " <<a;
+    }
+};
+
+void f(Obj a) {
+  a.Disp();
+}
+
+void ff(const Obj &a) {
+  a.Disp();
+}
+
+Obj retObj(Obj a) {
+  Obj o(a);
+  o.Disp();
+  return o;
+}
+
+int main () {
+  cout << "\n intmax = " << INT_MAX;
+  int a[1000000];
+  return -1;
+
+  cout << "\ntest 1";
+  Obj o(10);
+  f(o);
+  cout << "\n---- test 1";
+
+  cout << "\ntest 2";
+  Obj oo(100);
+  ff(oo);
+  cout << "\n---- test 2";
+
+  /*
+  cout << "\ntest 3";
+  Obj o3(99);
+  Obj temp = retObj(o3);
+  cout << "\n---- test 3";
+  */
+
+  return 0;
+
+}

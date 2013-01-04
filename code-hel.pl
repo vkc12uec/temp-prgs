@@ -28,7 +28,55 @@ Longest Bitonic seq. : Find
                               Max of (LIS[i] + LDS[i] - 1);
                             }
 
+# partition problem: divide arrray into a subset so that their P1 and P2 has sum = total/2
+        #Recursive:
+        Let isSubsetSum(arr, n, sum/2) be the function that returns true if 
+        there is a subset of arr[0..n-1] with sum equal to sum/2
 
+        The isSubsetSum problem can be divided into two subproblems
+         a) isSubsetSum() without considering last element (reducing n to n-1)
+         b) isSubsetSum considering the last element (reducing sum/2 by arr[n-1] and n to n-1)
+
+        If any of the above the above subproblems return true, then return true. 
+        isSubsetSum (arr, n, sum/2) = isSubsetSum (arr, n-1, sum/2) || isSubsetSum (arr, n-1, sum/2 - arr[n-1])
+
+        # Dynamic Programming Solution
+          The problem can be solved using dynamic programming when the sum of the elements is not too big. We can create a 2D array part[][] of size (sum/2)*(n+1). And we can construct the solution in bottom up manner such that every filled entry has following property
+
+          part[i][j] = true if a subset of {arr[0], arr[1], ..arr[j-1]} has sum 
+                       equal to i, otherwise false
+
+
+# min no. of bars to partition string into palindromes
+#
+        // i is the starting index and j is the ending index. i must be passed as 0 and j as n-1
+        minPalPartion(str, i, j) = 0 if i == j. // When string is of length 1.
+        minPalPartion(str, i, j) = 0 if str[i..j] is palindrome.
+
+        // If none of the above conditions is true, then minPalPartion(str, i, j) can be 
+        // calculated recursively using the following formula.
+        minPalPartion(str, i, j) = Min { minPalPartion(str, i, k) + 1 + minPalPartion(str, k+1, j) }  where k varies from i to j-1
+         /* Create two arrays to build the solution in bottom up manner
+             C[i][j] = Minimum number of cuts needed for palindrome partitioning
+                       of substring str[i..j]
+             P[i][j] = true if substring str[i..j] is palindrome, else false
+             Note that C[i][j] is 0 if P[i][j] is true 
+          int C[n][n];
+          bool P[n][n]; */
+
+
+
+
+# DP - k floors , n eggs
+
+  k ==> Number of floors
+  n ==> Number of Eggs
+  eggDrop(n, k) ==> Minimum number of trails needed to find the critical
+                    floor in worst case.
+  eggDrop(n, k) = 1 + min{max(eggDrop(n - 1, x - 1), eggDrop(n, k - x)): 
+                 x in {1, 2, ..., k}}
+
+# 
 ###########################################
 # Amazon q. TRICKY:
 #

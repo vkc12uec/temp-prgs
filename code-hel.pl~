@@ -18,6 +18,17 @@ projecteuler.net
 
 
 ###########################################
+# DP - k floors , n eggs
+
+  k ==> Number of floors
+  n ==> Number of Eggs
+  eggDrop(n, k) ==> Minimum number of trails needed to find the critical
+                    floor in worst case.
+  eggDrop(n, k) = 1 + min{max(eggDrop(n - 1, x - 1), eggDrop(n, k - x)): 
+                 x in {1, 2, ..., k}}
+
+# 
+###########################################
 # Amazon q. TRICKY:
 #
         Array on integer is given
@@ -2651,8 +2662,7 @@ int rotated_binary_search(int A[], int N, int key) {
 
 
 
-public int rotatedSearch(int[] values, int start, int end,
-                          int x){
+public int rotatedSearch(int[] values, int start, int end, int x){
     if(values[start] == x){
         return start;
     } else if(values[end] == x){

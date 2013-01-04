@@ -18,17 +18,16 @@ projecteuler.net
 
 
 ###########################################
-# DP:
+# DP - k floors , n eggs
 
-Longest Bitonic seq. : Find 
-                          LIS(i) -> longest incr seq ending at index i
-                          LDS(i) -> longest decr seq starting at index i
+  k ==> Number of floors
+  n ==> Number of Eggs
+  eggDrop(n, k) ==> Minimum number of trails needed to find the critical
+                    floor in worst case.
+  eggDrop(n, k) = 1 + min{max(eggDrop(n - 1, x - 1), eggDrop(n, k - x)): 
+                 x in {1, 2, ..., k}}
 
-                            foreach (i) {
-                              Max of (LIS[i] + LDS[i] - 1);
-                            }
-
-
+# 
 ###########################################
 # Amazon q. TRICKY:
 #
@@ -51,9 +50,6 @@ Longest Bitonic seq. : Find
 
     Consider vertices v in topological order:
       for each edge v-w, set fin[w] = max(fin[w], fin[v] + time[w])
-      # https://docs.google.com/viewer?a=v&q=cache:-rOBI5bAIMwJ:www.cs.princeton.edu/courses/archive/spr04/cos226/demo/demo-pert.ppt+&hl=en&gl=us&pid=bl&srcid=ADGEESjN3gpAsSK0W0prLG1FsRmWsLvU9y6V4qsjcgAc9Lpj8ATYIegZJe4UvErIvMOC4Rf5qaaa6XZE97TLWrOp7ossjwGADKSyidpKSQvFsbGvCNzDavAIVkp5TMYa6d_8HQJ1BLEl&sig=AHIEtbSfaaUpPsMNt69HXymF60frphH7QQ
-
-      # For each vertex v of the DAG, in the topological ordering, compute the length of the longest path ending at v by looking at its incoming neighbors and adding one to the maximum length recorded for those neighbors. If v has no incoming neighbors, set the length of the longest path ending at v to zero. In either case, record this number so that later steps of the algorithm can access it.
 
 
 ###########################################
@@ -2647,7 +2643,7 @@ int rotated_binary_search(int A[], int N, int key) {
     int M = L + ((R - L) / 2);
     if (A[M] == key) return M;
 
-    // the bottom half is sorted, AND key is in that region
+    // the bottom half is sorted
     if (A[L] <= A[M]) {
       if (A[L] <= key && key < A[M])
         R = M - 1;
@@ -2874,8 +2870,7 @@ bool Network::Topological(int v[])
       int u = Begin(i);
       while (u) {
          InDegree[u]++;
-         u = NextVertex(i);
-         }
+         u = NextVertex(i);}
       }
 
    // Stack vertices with zero in-degree
@@ -2893,8 +2888,7 @@ bool Network::Topological(int v[])
       int u = Begin(w);
       while (u) {// update in-degrees
          InDegree[u]--;
-         if (!InDegree[u]) 
-          S.Add(u);
+         if (!InDegree[u]) S.Add(u);
          u = NextVertex(w);}
       }
 
@@ -3152,32 +3146,6 @@ Greedy-fractional-knapsack (w, v, W)
 
 look at some dynamic programming code	<todo>
 	look in copy
-
-# Ques 1:
-N=4, Coins = {1,2,3}; with infinite supply | table can be 1D or 2D    | http://www.geeksforgeeks.org/dynamic-programming-set-7-coin-change/
-
-        int count( int S[], int m, int n )
-        {
-          // table[i] will be storing the number of solutions for
-          // value i. We need n+1 rows as the table is consturcted
-          // in bottom up manner using the base case (n = 0)
-          int table[n+1];
-
-          // Initialize all table values as 0
-          memset(table, 0, sizeof(table));
-
-          // Base case (If given value is 0)
-          table[0] = 1;
-
-          // Pick all coins one by one and update the table[] values
-          // after the index greater than or equal to the value of the
-          // picked coin
-          for(int i=0; i<m; i++)
-            for(int j=S[i]; j<=n; j++)
-              table[j] += table[j-S[i]];
-
-          return table[n];
-        }
 
 # coin denonimation problem: Return min. no. of coins which can give u 'amount' Rs. with infinite repetion
 # complexity = nW
@@ -3807,68 +3775,68 @@ void findpath (int s, int tillnow0) {
 # Largest area under histtogram:
 # http://tech-queries.blogspot.com/2011/03/maximum-area-rectangle-in-histogram.html
 #
-          int largestArea(int arr[], int len)
-          {
-          int area[len]; //initialize it to 0
-          int n, i, t;
-          stack<int> St;  //include stack for using this #include<stack>
-          bool done;
+int largestArea(int arr[], int len)
+{
+int area[len]; //initialize it to 0
+int n, i, t;
+stack<int> St;  //include stack for using this #include<stack>
+bool done;
 
-          for (i=0; i<len; i++)
-          {
-            while (!St.empty())
-            {
-              if(arr[i] <= arr[St.top()])
-              {
-                St.pop();
-              }
-              else
-              break;
-            }
-            if(St.empty())
-              t = -1;
-            else
-              t = St.top();
-            //Calculating Li
-            area[i] = i - t - 1;
-            St.push(i);
-          }
+for (i=0; i<len; i++)
+{
+  while (!St.empty())
+  {
+    if(arr[i] <= arr[St.top()])
+    {
+      St.pop();
+    }
+    else
+    break;
+  }
+  if(St.empty())
+    t = -1;
+  else
+    t = St.top();
+  //Calculating Li
+  area[i] = i - t - 1;
+  St.push(i);
+}
 
-          //clearing stack for finding Ri
-          while (!St.empty())
-          St.pop();
+//clearing stack for finding Ri
+while (!St.empty())
+St.pop();
 
-          for (i=len-1; i>=0; i--)
-          {
-            while (!St.empty())
-            {
-              if(arr[i] <= arr[St.top()])
-              {
-                St.pop();
-              }
-              else
-              break;
-            }
-            if(St.empty())
-              t = len;
-            else
-              t = St.top();
-            //calculating Ri, after this step area[i] = Li + Ri
-            area[i] += t - i -1;
-            St.push(i);
-          }
+for (i=len-1; i>=0; i--)
+{
+  while (!St.empty())
+  {
+    if(arr[i] <= arr[St.top()])
+    {
+      St.pop();
+    }
+    else
+    break;
+  }
+  if(St.empty())
+  t = len;
+  else
+  t = St.top();
+  //calculating Ri, after this step area[i] = Li + Ri
+  area[i] += t - i -1;
+  St.push(i);
+}
 
-          int max = 0;
-          //Calculating Area[i] and find max Area
-          for (i=0; i<len; i++)
-          {
-            area[i] = arr[i] * (area[i] + 1);
-            if (area[i] > max)
-            max = area[i];
-          }
+int max = 0;
+//Calculating Area[i] and find max Area
+for (i=0; i<len; i++)
+{
+  area[i] = arr[i] * (area[i] + 1);
+  if (area[i] > max)
+  max = area[i];
+}
 
-          return max;
-          }
+return max;
+}
 
 
 # Question: Print a binary tree in zig-zag level order. Zig-zag means print 1st level from left to right, then 2nd level right to left and alternate thereafter
@@ -4079,20 +4047,21 @@ After all the DFS finishes (we traverse the tree), those selected nodes form the
 
 Solution 2:
 
+
 Preprocessing: First, use a slight variation on BFS or DFS to build a list L of leaves of T.  In the process of building L, initialize mark bits to FALSE for each node. 
 
 while L is not empty
-  do f  remove first leaf from L
-    if f is in T 
-      then if mark[f] is FALSE and parent[f] is null
-        then mark[f]  TRUE
-    else if mark[f] is FALSE and parent[f] is not null
-then mark[parent[f]]  TRUE                     
-  remove f from T
-(this implicitly removes leaf-parent edge if it exists) 
-  if parent[f] is not null and parent[f] is not root[T]
-  then if children[parent[f]] is null 
-  then append parent[f] to L
+do f  remove first leaf from L
+      if f is in T 
+           then if mark[f] is FALSE and parent[f] is null
+              then mark[f]  TRUE
+              else if mark[f] is FALSE and parent[f] is not null
+                                then mark[parent[f]]  TRUE                     
+                                                remove f from T
+                                                (this implicitly removes leaf-parent edge if it exists) 
+                                                                if parent[f] is not null and parent[f] is not root[T]
+                                                                           then if children[parent[f]] is null 
+                                                                                                   then append parent[f] to L
 
 
 ##############################################

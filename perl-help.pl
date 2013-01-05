@@ -2,6 +2,17 @@ intitle:"index.of" linkin (mp3|mp4|flv|avi|mpg|wmv) -html-htm-php-jsp-asp
 http://www.ihas1337code.com/2010/04/hacking-google-interview-from-mit.html
 
 ###########################################
+# Dijkstra algo with -ve edge (how to modify existing algo. to take care of -ve edge)
+
+A slight variant to Dijkstra algorithm will work on a graph with negative weight, without negative cycle (Competitive Programming 2, Steven Halim). For a general graph (which may contain negative cycle), use Bellman-Ford algorithm, which has fixed time complexity of O(VE), but guarantees termination, and allow detection of negative cycle (we detects the negative cycle, since the shortest path is ill-defined in this case).
+
+We can categorize nodes in Dijkstra's algorithm into 3 types of nodes: processed (whose value will never change), unprocessed (has non-infinity value, but may change), and unreached (whose value is infinity, since we haven't reached the node). In the pseudocode for Dijkstra algorithm on Wikipedia (original?), relax operation is never called on processed node.
+
+A variant to Dijkstra's algorithm will only store the unprocessed nodes in a data structure for "get-min" and "update" operation, and pop out node to process it. It will relax all neighbors of the node alike, and push/modify whichever node whose distance is improved back to the data structure. In this way, the processed node can be reverted to an unprocessed node, and its neighbors will be updated again when it is popped out. The method is correct, since changes to the current best value of a node is always propagated.
+
+""'
+
+###########################################
 # JVM | garbage collection
 
 # class loader is not garbage collected, it means there is a memleak:

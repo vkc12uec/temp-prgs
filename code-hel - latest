@@ -18,55 +18,9 @@ projecteuler.net
 
 
 ###########################################
-# bellman-ford : Bellman.Ford runs in O(|V|·|E|) time, where |V| and |E| are the number of vertices and edges respectively.
-  Main loop runs for V-1 times. 
-  In LAST:     if u.distance + uv.weight < v.distance:
-                 error "Graph contains a negative-weight cycle"
-
-  # -ve weight cycle means that it has a cycle with -ve cost. Hence it keeps on rotating
-
-# Dijkstra (directed/undirected)
-  
-
-###########################################
-# Select Algo: kth largest unsorted array
-
-        The algorithm in words:
-        1.    Divide n elements into groups of 5
-        2.    Find median of each group (How?  How long?)
-        3.    Use Select() recursively to find median x of the .n/5.  medians
-        4.    Partition the n elements around x.  Let k = rank(x)
-        5.    if (i == k) then return x
-            if (i < k) then use Select() recursively to find ith smallest     element in first partition
-            else (i > k) use Select() recursively to find (i-k)th smallest    element in last partition
-
-
-###########################################
 # DP:
 
-# 0-1 Knapsack problem algo:
-    B[i, K] -> max. benefit  using i items and K size knapsack
-    B[i, K] = max { B[i-1, K] if w[i] > K
-                  { max (B[i-1, K] , B[i-1, K-w[i]+v[i])
-
-
-# Knapsack problem (multiple items allowed) algo:
-    M(j) -> maximum posssible value one can pack in size=j knapsack
-    M(j) = max { M(j-1)                                 ,           forall (items i) max { M(j-w[i]) + v[i] }
-                if jth slot is empty in optimal soln.               if some item [i] occupies jth slot
-
-#LIS (nlogn): http://www.geeksforgeeks.org/longest-monotonically-increasing-subsequence-size-n-log-n/
-
-              1. Design an algorithm to construct the longest increasing list. Also, model your solution using DAGs.
-              2. Design an algorithm to construct all monotonically increasing lists of equal longest size.
-              3. Is the above algorithm an online algorithm?
-              4. Design an algorithm to construct the longest decreasing list..
-
-# Box stacking based on LIS (start with sorting input in order of decreasing base area)
-      H(j) = tallest stack of boxes with box[j] at top
-
-
-#Longest Bitonic seq. : Find 
+Longest Bitonic seq. : Find 
                           LIS(i) -> longest incr seq ending at index i
                           LDS(i) -> longest decr seq starting at index i
 
@@ -3391,6 +3345,59 @@ Output: The maximal value of items in a valid knapsack.
       }
 ###########################################
 
+http://www.ics.uci.edu/~eppstein/161/960109.html
+
+a fast algo. for fibbonaci using matrix multiplication.
+
+Algorithm 5:
+
+------------------------
+Now, we have a useful way of describing the fibonacci function:
+
+-      - ^n        -                                -
+| 0  1 |      =    | fibonacci(n-1)   fibonacci(n)  |
+| 1  1 |           |  fibonacci(n)   fibonacci(n+1) |
+-      -           -                                -
+
+That is, the matrice on the left (with the ones and zero) when multiplied by itself n times will yield a matrice which contains various fibonacci numbers, including fibonacci(n).
+
+------------------------
+
+    [ 1 1 ] n      [ F(n+1) F(n)   ]
+    [ 1 0 ]    =   [ F(n)   F(n-1) ]
+
+
+
+Algorithm 4:
+
+    int fib(int n)
+    {
+    int M[2][2] = {{1,0},{0,1}}
+    for (int i = 1; i < n; i++)
+        M = M * {{1,1},{1,0}}
+    return M[0][0];
+    }
+
+Algorithm 5:
+
+    int M[2][2] = {{1,0}{0,1}}		// identity matrix
+
+    int fib(int n)
+    {
+    matpow(n-1);
+    return M[0][0];
+    }
+
+    void matpow(int n)
+    {
+    if (n > 1) {
+        matpow(n/2);
+        M = M*M;
+    }
+    if (n is odd) M = M*{{1,1}{1,0}}
+    }
+
+
 ###########################################
 Maximum sub-sequence problem: in an interger arrray containing +ve and -ve nos..
 
@@ -4137,61 +4144,8 @@ then mark[parent[f]]  TRUE
 
 
 ##############################################
+fibbonaci faster:
 
-# Method 5 ( Optimized Method 4 )   @geeksforgeeks
-# The method 4 can be optimized to work in O(Logn) time complexity. We can do recursive multiplication to get power(M, n) in the prevous method (Similar to the optimization done in this post)
+ A^n = {[fibo(n+1), fibo(n)], 
+        [fibo(n), fibo(n-1)]}.
 
-1 1 ^ n = f(n+1) f(n)
-1 0       f(n)   f(n-1)
-
-        void multiply(int F[2][2], int M[2][2]);
-        void power(int F[2][2], int n);
-         
-        /* function that returns nth Fibonacci number */
-        int fib(int n)
-        {
-          int F[2][2] = {{1,1},{1,0}};
-          if(n == 0)
-            return 0;
-          power(F, n-1);
-          return F[0][0];
-        }
-         
-        /* Optimized version of power() in method 4 */
-        void power(int F[2][2], int n)
-        {
-          if( n == 0 || n == 1)
-              return;
-          int M[2][2] = {{1,1},{1,0}};
-         
-          power(F, n/2);
-          multiply(F, F);
-         
-          if( n%2 != 0 )
-             multiply(F, M);
-        }
-         
-        void multiply(int F[2][2], int M[2][2])
-        {
-          int x =  F[0][0]*M[0][0] + F[0][1]*M[1][0];
-          int y =  F[0][0]*M[0][1] + F[0][1]*M[1][1];
-          int z =  F[1][0]*M[0][0] + F[1][1]*M[1][0];
-          int w =  F[1][0]*M[0][1] + F[1][1]*M[1][1];
-         
-          F[0][0] = x;
-          F[0][1] = y;
-          F[1][0] = z;
-          F[1][1] = w;
-        }
-         
-        /* Driver program to test above function */
-        int main()
-        {
-          int n = 9;
-          printf("%d", fib(9));
-          getchar();
-          return 0;
-        }
-
-#http://www.ics.uci.edu/~eppstein/161/960109.html
-############################################################

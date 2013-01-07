@@ -20,13 +20,63 @@ projecteuler.net
 ###########################################
 # bellman-ford : Bellman.Ford runs in O(|V|·|E|) time, where |V| and |E| are the number of vertices and edges respectively.
   Main loop runs for V-1 times. 
-  In LAST:     if u.distance + uv.weight < v.distance:
+  In LAST:     if (for every edge u-v)  
+                  u.distance + uv.weight < v.distance:
                  error "Graph contains a negative-weight cycle"
 
-  # -ve weight cycle means that it has a cycle with -ve cost. Hence it keeps on rotating
+    for (int i = 1; i <= V-1; i++)
+        {
+            for (int j = 0; j < E; j++)
+            {
+                int u = graph->edge[j].src;
+                int v = graph->edge[j].dest;
+                int weight = graph->edge[j].weight;
+                if (dist[u] + weight < dist[v])
+                    dist[v] = dist[u] + weight;
+            }
+        }
+                 
+    # http://www.geeksforgeeks.org/dynamic-programming-set-23-bellman-ford-algorithm/
+
+# -ve weight cycle means that it has a cycle with -ve cost. Hence it keeps on rotating
 
 # Dijkstra (directed/undirected)
-  
+      Time Complexity of the implementation is O(V^2). If the input graph is represented using adjacency list, it can be reduced to O(E log V) with the help of binary heap. We will soon be discussing O(E Log V) algorithm as a separate post.
+      # Matrix impl @ http://www.geeksforgeeks.org/greedy-algorithms-set-6-dijkstras-shortest-path-algorithm/
+
+
+# Floyd-Warshall algorithm O(V^3) | weighted, directed graph | NO negative cycle
+      let dist be a |V| × |V| array of minimum distances initialized to 8 (infinity)
+      let next be a |V| × |V| array of vertex indices initialized to null
+
+      procedure FloydWarshallWithPathReconstruction ()
+         for each vertex v
+            dist[v][v] ? 0
+         for each edge (u,v)
+            dist[u][v] ? w(u,v)  // the weight of the edge (u,v)
+         for k from 1 to |V|
+            for i from 1 to |V|
+               for j from 1 to |V|
+                  if dist[i][k] + dist[k][j] < dist[i][j] then
+                     dist[i][j] ? dist[i][k] + dist[k][j]
+                     next[i][j] ? k
+
+      function Path (i, j)
+         if dist[i][j] = 8 then
+           return "no path"
+         var intermediate ? next[i][j]
+         if intermediate = null then
+           return " "   // the direct edge from i to j gives the shortest path
+         else
+           return Path(i, intermediate) + intermediate + Path(intermediate, j)
+
+
+          >> Hence, to detect negative cycles using the Floyd–Warshall algorithm, one can inspect the diagonal of the path matrix, and the presence of a negative number indicates that the graph contains at least one negative cycle.[2] Obviously, in an undirected graph a negative edge creates a negative cycle (i.e., a closed walk) involving its incident vertices.
+          >> The idea is to one by one pick all vertices and update all shortest paths which include the picked vertex as an intermediate vertex in the shortest path. When we pick vertex number k as an intermediate vertex, we already have considered vertices {0, 1, 2, .. k-1} as intermediate vertices. 
+
+
+# DFS application (path finding, cycle finding (nodes forming cycle))
+        # http://ww3.algorithmdesign.net/handouts/DFS.pdf
 
 ###########################################
 # Select Algo: kth largest unsorted array
@@ -44,6 +94,10 @@ projecteuler.net
 ###########################################
 # DP:
 
+
+# Optimal BST "keys[0.. n-1] of search keys and an array freq[0.. n-1] of frequency counts"
+     >> it fills like Matrix multiplication
+
 # 0-1 Knapsack problem algo:
     B[i, K] -> max. benefit  using i items and K size knapsack
     B[i, K] = max { B[i-1, K] if w[i] > K
@@ -52,8 +106,11 @@ projecteuler.net
 
 # Knapsack problem (multiple items allowed) algo:
     M(j) -> maximum posssible value one can pack in size=j knapsack
-    M(j) = max { M(j-1)                                 ,           forall (items i) max { M(j-w[i]) + v[i] }
-                if jth slot is empty in optimal soln.               if some item [i] occupies jth slot
+    M(j) = max { 
+                M(j-1) ,      if jth slot is empty in optimal soln.
+                forall (items i) max { M(j-w[i]) + v[i] }     if some item [i] occupies jth slot
+              }
+                
 
 #LIS (nlogn): http://www.geeksforgeeks.org/longest-monotonically-increasing-subsequence-size-n-log-n/
 
@@ -86,12 +143,35 @@ projecteuler.net
         If any of the above the above subproblems return true, then return true. 
         isSubsetSum (arr, n, sum/2) = isSubsetSum (arr, n-1, sum/2) || isSubsetSum (arr, n-1, sum/2 - arr[n-1])
 
-        # Dynamic Programming Solution
+        # Dynamic Programming Solution 2D table
           The problem can be solved using dynamic programming when the sum of the elements is not too big. We can create a 2D array part[][] of size (sum/2)*(n+1). And we can construct the solution in bottom up manner such that every filled entry has following property
 
           part[i][j] = true if a subset of {arr[0], arr[1], ..arr[j-1]} has sum 
                        equal to i, otherwise false
 
+        # 1 D table:
+          int isSubsetSum(int set[], int n, int sum)
+          {
+              int isSum[sum+1];
+              int i, j;
+              isSum[0] = 1;
+              for(i=0;i<n;i++)
+              {
+                isSum[set[i]] = 1;
+              }
+              for (i = 0; i < n; i++) {
+                  for (j = sum - set[i]; j >= 0; j--) {
+                      if (isSum[j] == 1)
+                          isSum[j+set[i]] = 1;
+                  }
+                  if (isSum[sum] == 1)
+                      return 1;
+              }
+                
+              return 0;
+          }
+
+ 
 
 # min no. of bars to partition string into palindromes
 #
@@ -1325,6 +1405,32 @@ void pushhelper (s, int value, int level) {
 
 ###########################################
 # merge 2 sorted linked list
+      struct node* SortedMerge(struct node* a, struct node* b) 
+      {
+        struct node* result = NULL;
+       
+        /* Base cases */
+        if (a == NULL) 
+           return(b);
+        else if (b==NULL) 
+           return(a);
+       
+        /* Pick either a or b, and recur */
+        if (a->data <= b->data) 
+        {
+           result = a;
+           result->next = SortedMerge(a->next, b);
+        }
+        else
+        {
+           result = b;
+           result->next = SortedMerge(a, b->next);
+        }
+        return(result);
+      }
+'"/\  
+###########################################
+# merge 2 sorted linked list
 
 node * merge (node *a, node *b) {
 	if (!a)
@@ -1480,6 +1586,7 @@ void rIno (node *n, node *&su) {
 
 YOU CALL ABOVE FUNCTION LIKE : rIno (root, 0);
 
+###########################################
 ###########################################
 # read a BST preorder string from a file and convert it to tree:
 #
@@ -2478,35 +2585,77 @@ static TreeNode* createTreeFromLevelOrder(int inorder[],int levelorder[], int st
 
 ###########################################
 
+# construct from PRE and POST a complete/full BT
+
+      // preIndex is used to keep track of index in pre[].
+      // l is low index and h is high index for the current subarray in post[]
+      struct node* constructTreeUtil (int pre[], int post[], int* preIndex, int l, int h, int size)
+      {
+        // Base case
+        if (*preIndex >= size || l > h)
+          return NULL;
+
+        // The first node in preorder traversal is root. So take the node at
+        // preIndex from preorder and make it root, and increment preIndex
+        struct node* root = newNode ( pre[*preIndex] );
+        ++*preIndex;
+
+        // If the current subarry has only one element, no need to recur
+        if (l == h)
+          return root;
+
+        // Search the next element of pre[] in post[]
+        int i;
+        for (i = l; i <= h; ++i)
+          if (pre[*preIndex] == post[i])
+            break;
+
+        // Use the index of element found in postorder to divide postorder array in
+        // two parts. Left subtree and right subtree
+        if (i <= h)
+        {
+          root->left = constructTreeUtil (pre, post, preIndex, l, i, size);
+          root->right = constructTreeUtil (pre, post, preIndex, i + 1, h, size);
+        }
+
+        return root;
+      }
+
+      struct node *constructTree (int pre[], int post[], int size)
+      {
+        int preIndex = 0;
+        return constructTreeUtil (pre, post, &preIndex, 0, size - 1, size);
+      }
+
 
 # construct binary tree from inorder and preorder
 #
-struct node* buildTree(char in[], char pre[], int inStrt, int inEnd)
-{
-  static int preIndex = 0;
-  # static int preIndex = end;		// if u want to do for postOrder
- 
-  if(inStrt > inEnd)
-     return NULL;
- 
-  /* Pick current node from Preorder traversal using preIndex
-    and increment preIndex */
-  struct node *tNode = newNode(pre[preIndex++]);
- 
-  /* If this node has no children then return */
-  if(inStrt == inEnd)
-    return tNode;
- 
-  /* Else find the index of this node in Inorder traversal */
-  int inIndex = search(in, inStrt, inEnd, tNode->data);
- 
-  /* Using index in Inorder traversal, construct left and
-     right subtress */
-  tNode->left = buildTree(in, pre, inStrt, inIndex-1);
-  tNode->right = buildTree(in, pre, inIndex+1, inEnd);
- 
-  return tNode;
-}
+      struct node* buildTree(char in[], char pre[], int inStrt, int inEnd)
+      {
+        static int preIndex = 0;
+        # static int preIndex = end;		// if u want to do for postOrder
+       
+        if(inStrt > inEnd)
+           return NULL;
+       
+        /* Pick current node from Preorder traversal using preIndex
+          and increment preIndex */
+        struct node *tNode = newNode(pre[preIndex++]);
+       
+        /* If this node has no children then return */
+        if(inStrt == inEnd)
+          return tNode;
+       
+        /* Else find the index of this node in Inorder traversal */
+        int inIndex = search(in, inStrt, inEnd, tNode->data);
+       
+        /* Using index in Inorder traversal, construct left and
+           right subtress */
+        tNode->left = buildTree(in, pre, inStrt, inIndex-1);
+        tNode->right = buildTree(in, pre, inIndex+1, inEnd);
+       
+        return tNode;
+      }
  
 /* UTILITY FUNCTIONS */
 /* Function to find index of value in arr[start...end]
@@ -2727,6 +2876,7 @@ E:\My eBooks\Algo\Sahni Codes\all\network.h
 
 # another trick is to start dfs(v) from a random node v , and the end of dfs(v) insert v into a list L
 # list of the nodes in descending order of finish nos. gives the topological order.
+# Idea of Topological Sorting: Run the DFS on the DAG and output the vertices in reverse order of finishing time.
 #
 ###########################################
 # cicular sorted array search:
@@ -3015,7 +3165,8 @@ void Network::dfs(int v, int reach[], int label)
 
 DFS(G,v)   ( v is the vertex where the search starts )
          Stack S := {};   ( start with an empty stack )
-         for each vertex u, set visited[u] := false;
+         for each vertex u, 
+          set visited[u] := false;
          push S, v;
          while (S is not empty) do
             u := pop S;
@@ -3030,25 +3181,25 @@ END DFS()
 # mtd 2:  http://www.cs.mcgill.ca/~pnguyen/251F09/DFS.pdf
           important thing is that they use 2 functions to achieve that ...
 
+          # Finding a cycle#
+          # TODO: modify this to get the nodes in the cycle
+          bool dfs (int v, L[]) {
+            L[v] = GREY;
 
-bool dfs (int v, L[]) {
-  L[v] = GREY;
+            int u = begin(v);
+            while (u) {
+              if (L[u] == GREY) 
+                return TRUE;
 
-  int u = begin(v);
-  while (u) {
-    if (L[u] == GREY) 
-      return TRUE;
-
-    else if (L[u] == WHITE) {
-        if (dfs (u, L[]))
-          TRUE;
-    }
-  }   // end while
-  
-  L[u] = BLACK;
-
-  return FALSE;
-}
+              else if (L[u] == WHITE) {
+                  if (dfs (u, L[]))
+                    return TRUE;
+              }
+            }   // end while
+            
+            L[u] = BLACK;
+            return FALSE;
+          }
 
 ###########################################
 void Network::BFS(int v, int reach[], int label)
@@ -3250,6 +3401,9 @@ look at some dynamic programming code	<todo>
 # Ques 1:
 N=4, Coins = {1,2,3}; with infinite supply | table can be 1D or 2D    | http://www.geeksforgeeks.org/dynamic-programming-set-7-coin-change/
 
+        Given a value N, if we want to make change for N cents, and we have infinite supply of each of S = { S1, S2, .. , Sm} valued coins, how many ways can we make the change? The order of coins doesn’t matter.
+        For example, for N = 4 and S = {1,2,3}, there are four solutions: {1,1,1,1},{1,1,2},{2,2},{1,3}. So output should be 4. For N = 10 and S = {2, 5, 3, 6}, there are five solutions: {2,2,2,2,2}, {2,2,3,3}, {2,2,6}, {2,3,5} and {5,5}. So the output should be 5.
+
         int count( int S[], int m, int n )
         {
           // table[i] will be storing the number of solutions for
@@ -3389,7 +3543,6 @@ Output: The maximal value of items in a valid knapsack.
         }
 
       }
-###########################################
 
 ###########################################
 Maximum sub-sequence problem: in an interger arrray containing +ve and -ve nos..

@@ -17,46 +17,6 @@ udacity.com
 projecteuler.net
 
 
-# sort C++ string 
-  string word = "dbac";
-  std::sort(word.begin(), word.end());
-  see amz_sort_char_array.cpp where u can impl. class which overloads operator() (int i, int j)
-  For C++ string, u can use macroo like tr(), all()
-
-# TSP dynamic programing : O(n^2 2^n) algorithm for TSP
-
-# http://www.quora.com/Algorithms/Given-an-integer-array-such-that-every-element-occurs-3-times-except-one-element-which-occurs-only-once-how-to-find-that-single-element-in-O-1-space-and-O-n-time-complexity
-
-# Median of medians:
-    T(n) = T(n/5) + O(n) + T(7n/10)
-          = (finding good pivot) + iterate of the max. size bag
-
-###########################################
-# Range type Trees:
-
-# Interval Tree : (Cormen) Intervals given in form (low, high). Make AVL BST using low as keys. Each node also tells max. 'high' its subtree has). Pg. 369 - cormen
-  You can search in log(n) time, any given interval 'i' if it even slipghtly overlaps with any interval in BST
-  Insert/Delete takes log(n) time.
-  -> Time to build : nlogn (building AVL tree)
-  -> Space         : n
-  -> Query time    : O(log n)
-  -> Can do        : Can search for an overlapping 'i'
-
-# Segment Tree: In computer science, a segment tree is a tree data structure for storing intervals, or segments. It allows querying which of the stored segments contain a given point. It is, in principle, a static structure; that is, its content cannot be modified once the structure is built. A similar data structure is the interval tree. 
-A segment tree for a set I of n intervals uses O(n log n) storage and can be built in O(n log n) time. Segment trees support searching for all the intervals that contain a query point in O(log n + k), k being the number of retrieved intervals or segments.[1]
-  -> Time to build : nlogn
-  -> Space         : nlogn
-  -> Query time    : O(log n + k)
-  -> Can do        : search all intervals which contain a point
-
-# Range Tree : link = ucsb-RangeSearching.pdf (@prep)
-A set of n points in the plane can be preprocessed in O(nlogn) time into a data structure of O(nlogn) 'SPACE'  so that any 2D range query can be answered in O(logn^2 +k) time, where k is the number of answers reported
-  -> Time to built :  can be build in n2logn time (naive) or pre-sort y list O(nlogn)
-  -> Query time    :  O(logn^2+k)
-  -> Space         :  O(nlogn)
-  -> Can do        :  #of point lying b/w (x1,y1) (x2,y2)
-  
-
 ###########################################
 # bellman-ford : Bellman.Ford runs in O(|V|·|E|) time, where |V| and |E| are the number of vertices and edges respectively.
   Main loop runs for V-1 times. 
@@ -2315,32 +2275,6 @@ BinaryTree* sortedListToBST(ListNode *head, int n) {
   return sortedListToBST(head, 0, n-1);
 }
 
-# 2nd method to code:
-
-        struct Node* sortedListToBST(struct Node *head)
-        {
-            int n = countNodes(head);
-            return sortedListToBSTRecur(&head, n);
-        }
-         
-        struct Node* sortedListToBSTRecur(struct Node **head_ref, int n)
-        {
-            if (n <= 0)
-                return NULL;
-         
-            struct Node *left = sortedListToBSTRecur(head_ref, n/2);
-            struct Node *root = *head_ref;
-         
-            root->prev = left;
-         
-            *head_ref = (*head_ref)->next;
-            root->next = sortedListToBSTRecur(head_ref, n-n/2-1);
-         
-            return root;
-        }
-
-
-
 # covert a sorted array to bst, divide conquer:
 
 BinaryTree* sortedArrayToBST(int arr[], int start, int end) {
@@ -3442,6 +3376,8 @@ bool isMatch (const char *t, const char *g) {
 }
 
 ###########################################
+
+###########################################
 Greedy-fractional-knapsack (w, v, W)
 
     FOR i =1 to n
@@ -3605,6 +3541,7 @@ Output: The maximal value of items in a valid knapsack.
             B[w] = B[w - w[k]] + v[k]
 
         }
+
       }
 
 ###########################################
@@ -4418,7 +4355,7 @@ then mark[parent[f]]  TRUE
         writer()
         {
             wait(wrt);
-              //writing is done
+            //writing is done
             signal(wrt);
         }
          
@@ -4429,10 +4366,8 @@ then mark[parent[f]]  TRUE
             if(readcount==1)
                 wait(wrt);
             signal(mutex);
-
             ///Do the Reading
             ///(Critical Section Area)
-
             wait(mutex);
             readcount--;
             if(readcount==0)

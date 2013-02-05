@@ -9,6 +9,37 @@ http://basicalgos.blogspot.com/2012/03/10-regular-expression-matching.html
 http://stackoverflow.com/questions/500607/what-are-the-lesser-known-but-useful-data-structures
 
 # list of trading firms:  http:/tradertestorg/list.php
+codechef.com
+codeeval.com
+codeforces.com
+spoj.com
+udacity.com
+projecteuler.net
+
+
+###########################################
+# DP - k floors , n eggs
+
+  k ==> Number of floors
+  n ==> Number of Eggs
+  eggDrop(n, k) ==> Minimum number of trails needed to find the critical
+                    floor in worst case.
+  eggDrop(n, k) = 1 + min{max(eggDrop(n - 1, x - 1), eggDrop(n, k - x)): 
+                 x in {1, 2, ..., k}}
+
+# 
+###########################################
+# Amazon q. TRICKY:
+#
+        Array on integer is given
+        find out next bigger number 
+        Ex {2,5,3,4,61}
+        Out: 2->5
+        5->6
+        3->4
+        4->6
+        6->-1 //not possible
+        1-> -1 //not possible
 
 ###########################################
 # longest path in DAG:   or Atalleh
@@ -297,17 +328,43 @@ which is used in lock-free and wait-free algorithms. Here is an example: conside
               }
               TreeSum leftTreeSum = findMaxSum(root.getLeft());
               TreeSum rightTreeSum = findMaxSum(root.getRight());
-              int maxSumBetweenTwoNodesOfChildren =
-                      Math.max(leftTreeSum.maxSumBetweenTwoNodes, rightTreeSum.maxSumBetweenTwoNodes);
-              maxSumBetweenTwoNodesOfChildren =
-                      Math.max(maxSumBetweenTwoNodesOfChildren, leftTreeSum.maxSumFromRootToLeaf
-                              + rightTreeSum.maxSumFromRootToLeaf + root.getData());
-              int maxSumFromRootToLeaf =
-                      leftTreeSum.maxSumFromRootToLeaf > rightTreeSum.maxSumFromRootToLeaf
-                              ? leftTreeSum.maxSumFromRootToLeaf + root.getData()
-                              : rightTreeSum.maxSumFromRootToLeaf + root.data;
+              int maxSumBetweenTwoNodesOfChildren = Math.max(leftTreeSum.maxSumBetweenTwoNodes, rightTreeSum.maxSumBetweenTwoNodes);
+              maxSumBetweenTwoNodesOfChildren = Math.max(maxSumBetweenTwoNodesOfChildren, leftTreeSum.maxSumFromRootToLeaf
+                                                                                        + rightTreeSum.maxSumFromRootToLeaf + root.getData());
+              int maxSumFromRootToLeaf = leftTreeSum.maxSumFromRootToLeaf > rightTreeSum.maxSumFromRootToLeaf
+                                                                                        ? leftTreeSum.maxSumFromRootToLeaf + root.getData()
+                                                                                        : rightTreeSum.maxSumFromRootToLeaf + root.data;
               return new TreeSum(maxSumBetweenTwoNodesOfChildren, maxSumFromRootToLeaf);
           }
+
+          int maxPathSum(TreeNode *root) {
+                  int csum;
+                  int maxsum;
+                  bool flag = true;
+                  maxPathSumHelper(root, csum, maxsum, flag);
+                  return maxsum;
+
+              }
+              void maxPathSumHelper(TreeNode *node, int &csum, int &maxsum, bool &flag) {
+                  if (!node) {
+                      csum = 0;
+                      return;
+                  }
+                  int lsum = 0, rsum = 0;
+                  maxPathSumHelper(node->left, lsum, maxsum, flag);
+                  maxPathSumHelper(node->right, rsum, maxsum, flag);
+                  csum = max(node->val, max(node->val + lsum, node->val + rsum));
+                  if (flag) {
+                      maxsum = max(csum, node->val + lsum + rsum);
+                      flag = false;
+                  }
+                  else {
+                      maxsum = max(maxsum, max(csum, node->val + lsum + rsum));
+                  }
+              }
+          };
+
+
 
 ###########################################
 # largest subarray with 0's = 1's       (use cumulative sums)
@@ -536,9 +593,7 @@ Consistent hashing (used in web cacheing etc.).
   In consistent hashing this amt. ~ 1/(n+1) 
 
 http://www.linux-mag.com/id/7561/
-The basic idea is to avoid re-hashing most keys to a new server when a server is removed or added. We do this by trying to make hash keys consistently map to the same 
-servers in most (but obviously not all) cases. The code required to accomplish this is a bit longer than is worth pasting here, but the theory behind it is fairly easy to describe. Instead of having a one-to-one relationship between hash “slots” and servers, in consistent hashing, each server is given a larger number of slots-
-say 1,000 of them. So if you want to add “serverA” to the list, behind the scenes, you end up with “serverA-0001? … “serverA-1000? on the list. Each of those names can be mapped to a 64bit number (using a hash function, of course) and stored in a sorted list (or similar data structure). The values will be semi-randomly and semi-evenly spread out in the 64bit number space.
+The basic idea is to avoid re-hashing most keys to a new server when a server is removed or added. We do this by trying to make hash keys consistently map to the same  servers in most (but obviously not all) cases. The code required to accomplish this is a bit longer than is worth pasting here, but the theory behind it is fairly easy to describe. Instead of having a one-to-one relationship between hash “slots” and servers, in consistent hashing, each server is given a larger number of slots- say 1,000 of them. So if you want to add “serverA” to the list, behind the scenes, you end up with “serverA-0001? … “serverA-1000? on the list. Each of those names can be mapped to a 64bit number (using a hash function, of course) and stored in a sorted list (or similar data structure). The values will be semi-randomly and semi-evenly spread out in the 64bit number space.
 
 That means instead of 10 servers and 10 slots in a hash, we actually have 10 servers mapping to total of 10,000 slots. To map a key to a server, you run that key 
 through the hash function, just as before, but this time you don’t simply “mod $num_servers” to find the server. Instead, you take the resulting 64bit value and consult the sorted list. The server immediately after that number in the list is the one that is responsible for the data. So if your 64bit value was closest to the hashed value for “serverD-0532?, the server-D is your answer.
@@ -569,24 +624,6 @@ procedure ExitCritical() {
 
 The entry protocol uses normal memory reads to spin, waiting for the lock to become free. Test-and-set is only used to try to get the lock when normal memory read says it's free. Thus the expensive atomic memory operations happens less often than in simple spin around test-and-set.
 '
-###########################################
-Area of polygon by triangulation:
-
-          int area = 0;
-          int N = lengthof(p);
-          //We will triangulate the polygon
-          //into triangles with points p[0],p[i],p[i+1]
-
-          for(int i = 1; i+1<N; i++){
-              int x1 = p[i][0] - p[0][0];
-              int y1 = p[i][1] - p[0][1];
-              int x2 = p[i+1][0] - p[0][0];
-              int y2 = p[i+1][1] - p[0][1];
-              int cross = x1*y2 - x2*y1;
-              area += cross;
-          }
-          return abs(cross/2.0);
-
 
 ######################
 * convex hull simple:   http://community.topcoder.com/tc?module=Static&d1=tutorials&d2=geometry2#convexhull
@@ -683,28 +720,16 @@ http://community.topcoder.com/tc?module=Static&d1=tutorials&d2=geometry1
   // Assigns a String object to this object.  Self-assignment works.
 
   const String& operator=(const String& rhs) {
-
     if (this != &rhs) {
-
       delete[] c_str_;
-
       if (rhs.c_str() == NULL) {
-
         c_str_ = NULL;
-
         length_ = 0;
-
       } else {
-
         ConstructNonNull(rhs.c_str(), rhs.length());
-
       }
-
     }
-
-
     return *this;
-
   }
 
 ###########################################
@@ -1387,7 +1412,7 @@ void readBST(BinaryTree *&root, ifstream &fin) {
 # LCA of bt
 # RMQ and LCA = http://community.topcoder.com/tc?module=Static&d1=tutorials&d2=lowestCommonAncestor
 #
-node *LowestCommonAncestor( node *root , node *p , node *q)
+node *LowestCommonAncestor( node *root , node *p , node *q)     // Complexity O(n)
 {
 	node *l , *r , *temp;
 	if(root==NULL)
@@ -1542,6 +1567,34 @@ int height(struct node* node)
    return 1 + max(height(node->left), height(node->right));
 }
 
+\\ better O(N) for diameter of TREE:
+
+                  int height = 0;
+                     struct node *root = SomeFunctionToMakeTree();
+                     int diameter = diameterOpt(root, &height); */
+                  int diameterOpt(struct node *root, int* height)
+                  {
+                    int lh = 0, rh = 0;
+
+                    int ldiameter = 0, rdiameter = 0;
+
+                    if(root == NULL)
+                    {
+                      *height = 0;
+                       return 0; /* diameter is also 0 */
+                    }
+
+                    /* Get the heights of left and right subtrees in lh and rh
+                      And store the returned values in ldiameter and ldiameter */
+                    ldiameter = diameterOpt(root->left, &lh);
+                    rdiameter = diameterOpt(root->right, &rh);
+
+                    /* Height of current node is max of heights of left and
+                       right subtrees plus 1*/
+                    *height = max(lh, rh) + 1;
+
+                    return max(lh + rh + 1, max(ldiameter, rdiameter));
+                  }
 
 
 ###########################################
@@ -2255,6 +2308,7 @@ If the counter is 0, we set the current candidate to e and we set the counter to
 If the counter is not 0, we increment or decrement the counter according to whether e is the current candidate.
 When we are done, the current candidate is the majority element, if there is a majority.
 
+// if any 2 nos. appear > n/3 times : GOOGLE interview
 
 ###########################################
 # make a stack with min/max/push/pop in O(1) time
@@ -2608,8 +2662,7 @@ int rotated_binary_search(int A[], int N, int key) {
 
 
 
-public int rotatedSearch(int[] values, int start, int end,
-                          int x){
+public int rotatedSearch(int[] values, int start, int end, int x){
     if(values[start] == x){
         return start;
     } else if(values[end] == x){
@@ -2900,22 +2953,23 @@ bool dfs (int v, L[]) {
 ###########################################
 void Network::BFS(int v, int reach[], int label)
 {// Breadth first search.
-   LinkedQueue<int> Q;
-   InitializePos(); // init graph iterator array
-   reach[v] = label;
-   Q.Add(v);
-   while (!Q.IsEmpty()) {
-      int w;
-      Q.Delete(w);  // get a labeled vertex
-      int u = Begin(w);
-      while (u) {// visit adj vertices of w
-         if (!reach[u]) {// an unreached vertex
-            Q.Add(u);
-            reach[u] = label;} // mark reached
-         u = NextVertex(w); // next adj vertex of w
-         }
-      }
-   DeactivatePos(); // free iterator array
+  LinkedQueue<int> Q;
+  InitializePos(); // init graph iterator array
+  reach[v] = label;
+  Q.Add(v);
+  while (!Q.IsEmpty()) {
+    int w;
+    Q.Delete(w);  // get a labeled vertex
+    int u = Begin(w);
+    while (u) {// visit adj vertices of w
+      if (!reach[u]) {// an unreached vertex
+        Q.Add(u);
+        reach[u] = label;
+      } // mark reached
+      u = NextVertex(w); // next adj vertex of w
+    }
+  }
+  DeactivatePos(); // free iterator array
 }
 
 ###########################################
@@ -3228,6 +3282,23 @@ Now, we have a useful way of describing the fibonacci function:
 That is, the matrice on the left (with the ones and zero) when multiplied by itself n times will yield a matrice which contains various fibonacci numbers, including fibonacci(n).
 
 ------------------------
+
+    [ 1 1 ] n      [ F(n+1) F(n)   ]
+    [ 1 0 ]    =   [ F(n)   F(n-1) ]
+
+
+
+Algorithm 4:
+
+    int fib(int n)
+    {
+    int M[2][2] = {{1,0},{0,1}}
+    for (int i = 1; i < n; i++)
+        M = M * {{1,1},{1,0}}
+    return M[0][0];
+    }
+
+Algorithm 5:
 
     int M[2][2] = {{1,0}{0,1}}		// identity matrix
 

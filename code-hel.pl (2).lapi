@@ -18,6 +18,181 @@ projecteuler.net
 
 
 ###########################################
+# bellman-ford : Bellman.Ford runs in O(|V|·|E|) time, where |V| and |E| are the number of vertices and edges respectively.
+  Main loop runs for V-1 times. 
+  In LAST:     if (for every edge u-v)  
+                  u.distance + uv.weight < v.distance:
+                 error "Graph contains a negative-weight cycle"
+
+    for (int i = 1; i <= V-1; i++)
+        {
+            for (int j = 0; j < E; j++)
+            {
+                int u = graph->edge[j].src;
+                int v = graph->edge[j].dest;
+                int weight = graph->edge[j].weight;
+                if (dist[u] + weight < dist[v])
+                    dist[v] = dist[u] + weight;
+            }
+        }
+                 
+    # http://www.geeksforgeeks.org/dynamic-programming-set-23-bellman-ford-algorithm/
+
+# -ve weight cycle means that it has a cycle with -ve cost. Hence it keeps on rotating
+
+# Dijkstra (directed/undirected)
+      Time Complexity of the implementation is O(V^2). If the input graph is represented using adjacency list, it can be reduced to O(E log V) with the help of binary heap. We will soon be discussing O(E Log V) algorithm as a separate post.
+      # Matrix impl @ http://www.geeksforgeeks.org/greedy-algorithms-set-6-dijkstras-shortest-path-algorithm/
+
+
+# Floyd-Warshall algorithm O(V^3) | weighted, directed graph | NO negative cycle
+      let dist be a |V| × |V| array of minimum distances initialized to 8 (infinity)
+      let next be a |V| × |V| array of vertex indices initialized to null
+
+      procedure FloydWarshallWithPathReconstruction ()
+         for each vertex v
+            dist[v][v] ? 0
+         for each edge (u,v)
+            dist[u][v] ? w(u,v)  // the weight of the edge (u,v)
+         for k from 1 to |V|
+            for i from 1 to |V|
+               for j from 1 to |V|
+                  if dist[i][k] + dist[k][j] < dist[i][j] then
+                     dist[i][j] ? dist[i][k] + dist[k][j]
+                     next[i][j] ? k
+
+      function Path (i, j)
+         if dist[i][j] = 8 then
+           return "no path"
+         var intermediate ? next[i][j]
+         if intermediate = null then
+           return " "   // the direct edge from i to j gives the shortest path
+         else
+           return Path(i, intermediate) + intermediate + Path(intermediate, j)
+
+
+          >> Hence, to detect negative cycles using the Floyd–Warshall algorithm, one can inspect the diagonal of the path matrix, and the presence of a negative number indicates that the graph contains at least one negative cycle.[2] Obviously, in an undirected graph a negative edge creates a negative cycle (i.e., a closed walk) involving its incident vertices.
+          >> The idea is to one by one pick all vertices and update all shortest paths which include the picked vertex as an intermediate vertex in the shortest path. When we pick vertex number k as an intermediate vertex, we already have considered vertices {0, 1, 2, .. k-1} as intermediate vertices. 
+
+
+# DFS application (path finding, cycle finding (nodes forming cycle))
+        # http://ww3.algorithmdesign.net/handouts/DFS.pdf
+
+###########################################
+# Select Algo: kth largest unsorted array
+
+        The algorithm in words:
+        1.    Divide n elements into groups of 5
+        2.    Find median of each group (How?  How long?)
+        3.    Use Select() recursively to find median x of the .n/5.  medians
+        4.    Partition the n elements around x.  Let k = rank(x)
+        5.    if (i == k) then return x
+            if (i < k) then use Select() recursively to find ith smallest     element in first partition
+            else (i > k) use Select() recursively to find (i-k)th smallest    element in last partition
+
+
+###########################################
+# DP:
+
+
+# Optimal BST "keys[0.. n-1] of search keys and an array freq[0.. n-1] of frequency counts"
+     >> it fills like Matrix multiplication
+
+# 0-1 Knapsack problem algo:
+    B[i, K] -> max. benefit  using i items and K size knapsack
+    B[i, K] = max { B[i-1, K] if w[i] > K
+                  { max (B[i-1, K] , B[i-1, K-w[i]+v[i])
+
+
+# Knapsack problem (multiple items allowed) algo:
+    M(j) -> maximum posssible value one can pack in size=j knapsack
+    M(j) = max { 
+                M(j-1) ,      if jth slot is empty in optimal soln.
+                forall (items i) max { M(j-w[i]) + v[i] }     if some item [i] occupies jth slot
+              }
+                
+
+#LIS (nlogn): http://www.geeksforgeeks.org/longest-monotonically-increasing-subsequence-size-n-log-n/
+
+              1. Design an algorithm to construct the longest increasing list. Also, model your solution using DAGs.
+              2. Design an algorithm to construct all monotonically increasing lists of equal longest size.
+              3. Is the above algorithm an online algorithm?
+              4. Design an algorithm to construct the longest decreasing list..
+
+# Box stacking based on LIS (start with sorting input in order of decreasing base area)
+      H(j) = tallest stack of boxes with box[j] at top
+
+
+#Longest Bitonic seq. : Find 
+                          LIS(i) -> longest incr seq ending at index i
+                          LDS(i) -> longest decr seq starting at index i
+
+                            foreach (i) {
+                              Max of (LIS[i] + LDS[i] - 1);
+                            }
+
+# partition problem: divide arrray into a subset so that their P1 and P2 has sum = total/2
+        #Recursive:
+        Let isSubsetSum(arr, n, sum/2) be the function that returns true if 
+        there is a subset of arr[0..n-1] with sum equal to sum/2
+
+        The isSubsetSum problem can be divided into two subproblems
+         a) isSubsetSum() without considering last element (reducing n to n-1)
+         b) isSubsetSum considering the last element (reducing sum/2 by arr[n-1] and n to n-1)
+
+        If any of the above the above subproblems return true, then return true. 
+        isSubsetSum (arr, n, sum/2) = isSubsetSum (arr, n-1, sum/2) || isSubsetSum (arr, n-1, sum/2 - arr[n-1])
+
+        # Dynamic Programming Solution 2D table
+          The problem can be solved using dynamic programming when the sum of the elements is not too big. We can create a 2D array part[][] of size (sum/2)*(n+1). And we can construct the solution in bottom up manner such that every filled entry has following property
+
+          part[i][j] = true if a subset of {arr[0], arr[1], ..arr[j-1]} has sum 
+                       equal to i, otherwise false
+
+        # 1 D table:
+          int isSubsetSum(int set[], int n, int sum)
+          {
+              int isSum[sum+1];
+              int i, j;
+              isSum[0] = 1;
+              for(i=0;i<n;i++)
+              {
+                isSum[set[i]] = 1;
+              }
+              for (i = 0; i < n; i++) {
+                  for (j = sum - set[i]; j >= 0; j--) {
+                      if (isSum[j] == 1)
+                          isSum[j+set[i]] = 1;
+                  }
+                  if (isSum[sum] == 1)
+                      return 1;
+              }
+                
+              return 0;
+          }
+
+ 
+
+# min no. of bars to partition string into palindromes
+#
+        // i is the starting index and j is the ending index. i must be passed as 0 and j as n-1
+        minPalPartion(str, i, j) = 0 if i == j. // When string is of length 1.
+        minPalPartion(str, i, j) = 0 if str[i..j] is palindrome.
+
+        // If none of the above conditions is true, then minPalPartion(str, i, j) can be 
+        // calculated recursively using the following formula.
+        minPalPartion(str, i, j) = Min { minPalPartion(str, i, k) + 1 + minPalPartion(str, k+1, j) }  where k varies from i to j-1
+         /* Create two arrays to build the solution in bottom up manner
+             C[i][j] = Minimum number of cuts needed for palindrome partitioning
+                       of substring str[i..j]
+             P[i][j] = true if substring str[i..j] is palindrome, else false
+             Note that C[i][j] is 0 if P[i][j] is true 
+          int C[n][n];
+          bool P[n][n]; */
+
+
+
+
 # DP - k floors , n eggs
 
   k ==> Number of floors
@@ -50,6 +225,9 @@ projecteuler.net
 
     Consider vertices v in topological order:
       for each edge v-w, set fin[w] = max(fin[w], fin[v] + time[w])
+      # https://docs.google.com/viewer?a=v&q=cache:-rOBI5bAIMwJ:www.cs.princeton.edu/courses/archive/spr04/cos226/demo/demo-pert.ppt+&hl=en&gl=us&pid=bl&srcid=ADGEESjN3gpAsSK0W0prLG1FsRmWsLvU9y6V4qsjcgAc9Lpj8ATYIegZJe4UvErIvMOC4Rf5qaaa6XZE97TLWrOp7ossjwGADKSyidpKSQvFsbGvCNzDavAIVkp5TMYa6d_8HQJ1BLEl&sig=AHIEtbSfaaUpPsMNt69HXymF60frphH7QQ
+
+      # For each vertex v of the DAG, in the topological ordering, compute the length of the longest path ending at v by looking at its incoming neighbors and adding one to the maximum length recorded for those neighbors. If v has no incoming neighbors, set the length of the longest path ending at v to zero. In either case, record this number so that later steps of the algorithm can access it.
 
 
 ###########################################
@@ -1227,6 +1405,32 @@ void pushhelper (s, int value, int level) {
 
 ###########################################
 # merge 2 sorted linked list
+      struct node* SortedMerge(struct node* a, struct node* b) 
+      {
+        struct node* result = NULL;
+       
+        /* Base cases */
+        if (a == NULL) 
+           return(b);
+        else if (b==NULL) 
+           return(a);
+       
+        /* Pick either a or b, and recur */
+        if (a->data <= b->data) 
+        {
+           result = a;
+           result->next = SortedMerge(a->next, b);
+        }
+        else
+        {
+           result = b;
+           result->next = SortedMerge(a, b->next);
+        }
+        return(result);
+      }
+'"/\  
+###########################################
+# merge 2 sorted linked list
 
 node * merge (node *a, node *b) {
 	if (!a)
@@ -1382,6 +1586,7 @@ void rIno (node *n, node *&su) {
 
 YOU CALL ABOVE FUNCTION LIKE : rIno (root, 0);
 
+###########################################
 ###########################################
 # read a BST preorder string from a file and convert it to tree:
 #
@@ -2380,35 +2585,77 @@ static TreeNode* createTreeFromLevelOrder(int inorder[],int levelorder[], int st
 
 ###########################################
 
+# construct from PRE and POST a complete/full BT
+
+      // preIndex is used to keep track of index in pre[].
+      // l is low index and h is high index for the current subarray in post[]
+      struct node* constructTreeUtil (int pre[], int post[], int* preIndex, int l, int h, int size)
+      {
+        // Base case
+        if (*preIndex >= size || l > h)
+          return NULL;
+
+        // The first node in preorder traversal is root. So take the node at
+        // preIndex from preorder and make it root, and increment preIndex
+        struct node* root = newNode ( pre[*preIndex] );
+        ++*preIndex;
+
+        // If the current subarry has only one element, no need to recur
+        if (l == h)
+          return root;
+
+        // Search the next element of pre[] in post[]
+        int i;
+        for (i = l; i <= h; ++i)
+          if (pre[*preIndex] == post[i])
+            break;
+
+        // Use the index of element found in postorder to divide postorder array in
+        // two parts. Left subtree and right subtree
+        if (i <= h)
+        {
+          root->left = constructTreeUtil (pre, post, preIndex, l, i, size);
+          root->right = constructTreeUtil (pre, post, preIndex, i + 1, h, size);
+        }
+
+        return root;
+      }
+
+      struct node *constructTree (int pre[], int post[], int size)
+      {
+        int preIndex = 0;
+        return constructTreeUtil (pre, post, &preIndex, 0, size - 1, size);
+      }
+
 
 # construct binary tree from inorder and preorder
 #
-struct node* buildTree(char in[], char pre[], int inStrt, int inEnd)
-{
-  static int preIndex = 0;
-  # static int preIndex = end;		// if u want to do for postOrder
- 
-  if(inStrt > inEnd)
-     return NULL;
- 
-  /* Pick current node from Preorder traversal using preIndex
-    and increment preIndex */
-  struct node *tNode = newNode(pre[preIndex++]);
- 
-  /* If this node has no children then return */
-  if(inStrt == inEnd)
-    return tNode;
- 
-  /* Else find the index of this node in Inorder traversal */
-  int inIndex = search(in, inStrt, inEnd, tNode->data);
- 
-  /* Using index in Inorder traversal, construct left and
-     right subtress */
-  tNode->left = buildTree(in, pre, inStrt, inIndex-1);
-  tNode->right = buildTree(in, pre, inIndex+1, inEnd);
- 
-  return tNode;
-}
+      struct node* buildTree(char in[], char pre[], int inStrt, int inEnd)
+      {
+        static int preIndex = 0;
+        # static int preIndex = end;		// if u want to do for postOrder
+       
+        if(inStrt > inEnd)
+           return NULL;
+       
+        /* Pick current node from Preorder traversal using preIndex
+          and increment preIndex */
+        struct node *tNode = newNode(pre[preIndex++]);
+       
+        /* If this node has no children then return */
+        if(inStrt == inEnd)
+          return tNode;
+       
+        /* Else find the index of this node in Inorder traversal */
+        int inIndex = search(in, inStrt, inEnd, tNode->data);
+       
+        /* Using index in Inorder traversal, construct left and
+           right subtress */
+        tNode->left = buildTree(in, pre, inStrt, inIndex-1);
+        tNode->right = buildTree(in, pre, inIndex+1, inEnd);
+       
+        return tNode;
+      }
  
 /* UTILITY FUNCTIONS */
 /* Function to find index of value in arr[start...end]
@@ -2629,6 +2876,7 @@ E:\My eBooks\Algo\Sahni Codes\all\network.h
 
 # another trick is to start dfs(v) from a random node v , and the end of dfs(v) insert v into a list L
 # list of the nodes in descending order of finish nos. gives the topological order.
+# Idea of Topological Sorting: Run the DFS on the DAG and output the vertices in reverse order of finishing time.
 #
 ###########################################
 # cicular sorted array search:
@@ -2643,7 +2891,7 @@ int rotated_binary_search(int A[], int N, int key) {
     int M = L + ((R - L) / 2);
     if (A[M] == key) return M;
 
-    // the bottom half is sorted
+    // the bottom half is sorted, AND key is in that region
     if (A[L] <= A[M]) {
       if (A[L] <= key && key < A[M])
         R = M - 1;
@@ -2870,7 +3118,8 @@ bool Network::Topological(int v[])
       int u = Begin(i);
       while (u) {
          InDegree[u]++;
-         u = NextVertex(i);}
+         u = NextVertex(i);
+         }
       }
 
    // Stack vertices with zero in-degree
@@ -2888,7 +3137,8 @@ bool Network::Topological(int v[])
       int u = Begin(w);
       while (u) {// update in-degrees
          InDegree[u]--;
-         if (!InDegree[u]) S.Add(u);
+         if (!InDegree[u]) 
+          S.Add(u);
          u = NextVertex(w);}
       }
 
@@ -2915,7 +3165,8 @@ void Network::dfs(int v, int reach[], int label)
 
 DFS(G,v)   ( v is the vertex where the search starts )
          Stack S := {};   ( start with an empty stack )
-         for each vertex u, set visited[u] := false;
+         for each vertex u, 
+          set visited[u] := false;
          push S, v;
          while (S is not empty) do
             u := pop S;
@@ -2930,25 +3181,25 @@ END DFS()
 # mtd 2:  http://www.cs.mcgill.ca/~pnguyen/251F09/DFS.pdf
           important thing is that they use 2 functions to achieve that ...
 
+          # Finding a cycle#
+          # TODO: modify this to get the nodes in the cycle
+          bool dfs (int v, L[]) {
+            L[v] = GREY;
 
-bool dfs (int v, L[]) {
-  L[v] = GREY;
+            int u = begin(v);
+            while (u) {
+              if (L[u] == GREY) 
+                return TRUE;
 
-  int u = begin(v);
-  while (u) {
-    if (L[u] == GREY) 
-      return TRUE;
-
-    else if (L[u] == WHITE) {
-        if (dfs (u, L[]))
-          TRUE;
-    }
-  }   // end while
-  
-  L[u] = BLACK;
-
-  return FALSE;
-}
+              else if (L[u] == WHITE) {
+                  if (dfs (u, L[]))
+                    return TRUE;
+              }
+            }   // end while
+            
+            L[u] = BLACK;
+            return FALSE;
+          }
 
 ###########################################
 void Network::BFS(int v, int reach[], int label)
@@ -3147,6 +3398,35 @@ Greedy-fractional-knapsack (w, v, W)
 look at some dynamic programming code	<todo>
 	look in copy
 
+# Ques 1:
+N=4, Coins = {1,2,3}; with infinite supply | table can be 1D or 2D    | http://www.geeksforgeeks.org/dynamic-programming-set-7-coin-change/
+
+        Given a value N, if we want to make change for N cents, and we have infinite supply of each of S = { S1, S2, .. , Sm} valued coins, how many ways can we make the change? The order of coins doesn’t matter.
+        For example, for N = 4 and S = {1,2,3}, there are four solutions: {1,1,1,1},{1,1,2},{2,2},{1,3}. So output should be 4. For N = 10 and S = {2, 5, 3, 6}, there are five solutions: {2,2,2,2,2}, {2,2,3,3}, {2,2,6}, {2,3,5} and {5,5}. So the output should be 5.
+
+        int count( int S[], int m, int n )
+        {
+          // table[i] will be storing the number of solutions for
+          // value i. We need n+1 rows as the table is consturcted
+          // in bottom up manner using the base case (n = 0)
+          int table[n+1];
+
+          // Initialize all table values as 0
+          memset(table, 0, sizeof(table));
+
+          // Base case (If given value is 0)
+          table[0] = 1;
+
+          // Pick all coins one by one and update the table[] values
+          // after the index greater than or equal to the value of the
+          // picked coin
+          for(int i=0; i<m; i++)
+            for(int j=S[i]; j<=n; j++)
+              table[j] += table[j-S[i]];
+
+          return table[n];
+        }
+
 # coin denonimation problem: Return min. no. of coins which can give u 'amount' Rs. with infinite repetion
 # complexity = nW
 # W is the width or max. amt. of weight a knapsack can have
@@ -3263,60 +3543,6 @@ Output: The maximal value of items in a valid knapsack.
         }
 
       }
-###########################################
-
-http://www.ics.uci.edu/~eppstein/161/960109.html
-
-a fast algo. for fibbonaci using matrix multiplication.
-
-Algorithm 5:
-
-------------------------
-Now, we have a useful way of describing the fibonacci function:
-
--      - ^n        -                                -
-| 0  1 |      =    | fibonacci(n-1)   fibonacci(n)  |
-| 1  1 |           |  fibonacci(n)   fibonacci(n+1) |
--      -           -                                -
-
-That is, the matrice on the left (with the ones and zero) when multiplied by itself n times will yield a matrice which contains various fibonacci numbers, including fibonacci(n).
-
-------------------------
-
-    [ 1 1 ] n      [ F(n+1) F(n)   ]
-    [ 1 0 ]    =   [ F(n)   F(n-1) ]
-
-
-
-Algorithm 4:
-
-    int fib(int n)
-    {
-    int M[2][2] = {{1,0},{0,1}}
-    for (int i = 1; i < n; i++)
-        M = M * {{1,1},{1,0}}
-    return M[0][0];
-    }
-
-Algorithm 5:
-
-    int M[2][2] = {{1,0}{0,1}}		// identity matrix
-
-    int fib(int n)
-    {
-    matpow(n-1);
-    return M[0][0];
-    }
-
-    void matpow(int n)
-    {
-    if (n > 1) {
-        matpow(n/2);
-        M = M*M;
-    }
-    if (n is odd) M = M*{{1,1}{1,0}}
-    }
-
 
 ###########################################
 Maximum sub-sequence problem: in an interger arrray containing +ve and -ve nos..
@@ -3775,68 +4001,68 @@ void findpath (int s, int tillnow0) {
 # Largest area under histtogram:
 # http://tech-queries.blogspot.com/2011/03/maximum-area-rectangle-in-histogram.html
 #
-int largestArea(int arr[], int len)
-{
-int area[len]; //initialize it to 0
-int n, i, t;
-stack<int> St;  //include stack for using this #include<stack>
-bool done;
+          int largestArea(int arr[], int len)
+          {
+          int area[len]; //initialize it to 0
+          int n, i, t;
+          stack<int> St;  //include stack for using this #include<stack>
+          bool done;
 
-for (i=0; i<len; i++)
-{
-  while (!St.empty())
-  {
-    if(arr[i] <= arr[St.top()])
-    {
-      St.pop();
-    }
-    else
-    break;
-  }
-  if(St.empty())
-    t = -1;
-  else
-    t = St.top();
-  //Calculating Li
-  area[i] = i - t - 1;
-  St.push(i);
-}
+          for (i=0; i<len; i++)
+          {
+            while (!St.empty())
+            {
+              if(arr[i] <= arr[St.top()])
+              {
+                St.pop();
+              }
+              else
+              break;
+            }
+            if(St.empty())
+              t = -1;
+            else
+              t = St.top();
+            //Calculating Li
+            area[i] = i - t - 1;
+            St.push(i);
+          }
 
-//clearing stack for finding Ri
-while (!St.empty())
-St.pop();
+          //clearing stack for finding Ri
+          while (!St.empty())
+          St.pop();
 
-for (i=len-1; i>=0; i--)
-{
-  while (!St.empty())
-  {
-    if(arr[i] <= arr[St.top()])
-    {
-      St.pop();
-    }
-    else
-    break;
-  }
-  if(St.empty())
-  t = len;
-  else
-  t = St.top();
-  //calculating Ri, after this step area[i] = Li + Ri
-  area[i] += t - i -1;
-  St.push(i);
-}
+          for (i=len-1; i>=0; i--)
+          {
+            while (!St.empty())
+            {
+              if(arr[i] <= arr[St.top()])
+              {
+                St.pop();
+              }
+              else
+              break;
+            }
+            if(St.empty())
+              t = len;
+            else
+              t = St.top();
+            //calculating Ri, after this step area[i] = Li + Ri
+            area[i] += t - i -1;
+            St.push(i);
+          }
 
-int max = 0;
-//Calculating Area[i] and find max Area
-for (i=0; i<len; i++)
-{
-  area[i] = arr[i] * (area[i] + 1);
-  if (area[i] > max)
-  max = area[i];
-}
+          int max = 0;
+          //Calculating Area[i] and find max Area
+          for (i=0; i<len; i++)
+          {
+            area[i] = arr[i] * (area[i] + 1);
+            if (area[i] > max)
+            max = area[i];
+          }
 
-return max;
-}
+          return max;
+          }
 
 
 # Question: Print a binary tree in zig-zag level order. Zig-zag means print 1st level from left to right, then 2nd level right to left and alternate thereafter
@@ -4047,26 +4273,187 @@ After all the DFS finishes (we traverse the tree), those selected nodes form the
 
 Solution 2:
 
-
 Preprocessing: First, use a slight variation on BFS or DFS to build a list L of leaves of T.  In the process of building L, initialize mark bits to FALSE for each node. 
 
 while L is not empty
-do f  remove first leaf from L
-      if f is in T 
-           then if mark[f] is FALSE and parent[f] is null
-              then mark[f]  TRUE
-              else if mark[f] is FALSE and parent[f] is not null
-                                then mark[parent[f]]  TRUE                     
-                                                remove f from T
-                                                (this implicitly removes leaf-parent edge if it exists) 
-                                                                if parent[f] is not null and parent[f] is not root[T]
-                                                                           then if children[parent[f]] is null 
-                                                                                                   then append parent[f] to L
+  do f  remove first leaf from L
+    if f is in T 
+      then if mark[f] is FALSE and parent[f] is null
+        then mark[f]  TRUE
+    else if mark[f] is FALSE and parent[f] is not null
+then mark[parent[f]]  TRUE                     
+  remove f from T
+(this implicitly removes leaf-parent edge if it exists) 
+  if parent[f] is not null and parent[f] is not root[T]
+  then if children[parent[f]] is null 
+  then append parent[f] to L
 
 
 ##############################################
-fibbonaci faster:
 
- A^n = {[fibo(n+1), fibo(n)], 
-        [fibo(n), fibo(n-1)]}.
+# Method 5 ( Optimized Method 4 )   @geeksforgeeks
+# The method 4 can be optimized to work in O(Logn) time complexity. We can do recursive multiplication to get power(M, n) in the prevous method (Similar to the optimization done in this post)
+
+1 1 ^ n = f(n+1) f(n)
+1 0       f(n)   f(n-1)
+
+        void multiply(int F[2][2], int M[2][2]);
+        void power(int F[2][2], int n);
+         
+        /* function that returns nth Fibonacci number */
+        int fib(int n)
+        {
+          int F[2][2] = {{1,1},{1,0}};
+          if(n == 0)
+            return 0;
+          power(F, n-1);
+          return F[0][0];
+        }
+         
+        /* Optimized version of power() in method 4 */
+        void power(int F[2][2], int n)
+        {
+          if( n == 0 || n == 1)
+              return;
+          int M[2][2] = {{1,1},{1,0}};
+         
+          power(F, n/2);
+          multiply(F, F);
+         
+          if( n%2 != 0 )
+             multiply(F, M);
+        }
+         
+        void multiply(int F[2][2], int M[2][2])
+        {
+          int x =  F[0][0]*M[0][0] + F[0][1]*M[1][0];
+          int y =  F[0][0]*M[0][1] + F[0][1]*M[1][1];
+          int z =  F[1][0]*M[0][0] + F[1][1]*M[1][0];
+          int w =  F[1][0]*M[0][1] + F[1][1]*M[1][1];
+         
+          F[0][0] = x;
+          F[0][1] = y;
+          F[1][0] = z;
+          F[1][1] = w;
+        }
+         
+        /* Driver program to test above function */
+        int main()
+        {
+          int n = 9;
+          printf("%d", fib(9));
+          getchar();
+          return 0;
+        }
+
+#http://www.ics.uci.edu/~eppstein/161/960109.html
+############################################################
+
+# Readers-Writers problem (M : M) | preference to READERS
+        semaphore wrt=1,mutex=1;
+        readcount=0;
+        writer()
+        {
+            wait(wrt);
+            //writing is done
+            signal(wrt);
+        }
+         
+        reader()
+        {
+            wait(mutex);
+            readcount++;
+            if(readcount==1)
+                wait(wrt);
+            signal(mutex);
+            ///Do the Reading
+            ///(Critical Section Area)
+            wait(mutex);
+            readcount--;
+            if(readcount==0)
+               signal(wrt);
+            signal(mutex);
+        }
+
+# Giving preference to Writers:
+
+        int readcount, writecount; (initial value = 0)
+        semaphore mutex_1, mutex_2, mutex_3, w, r ; (initial value = 1)
+         
+        READER
+          wait(mutex_3);
+            wait(r);
+              wait(mutex_1);
+                readcount := readcount + 1;
+                if readcount = 1 then wait(w);
+              signal(mutex_1);
+            signal(r);
+          signal(mutex_3);
+         
+          reading is performed
+         
+          wait(mutex_1);
+            readcount := readcount - 1;
+            if readcount = 0 then signal(w);
+          signal(mutex_1);
+         
+         
+        WRITER
+          wait(mutex_2);
+            writecount := writecount + 1;
+            if writecount = 1 then wait(r);
+          signal(mutex_2);
+         
+          wait(w);
+            writing is performed
+          signal(w);
+         
+          wait(mutex_2);
+            writecount := writecount - 1;
+            if writecount = 0 then signal(r);
+          signal(mutex_2);
+
+# No starvation:
+#
+        semaphores: no_waiting, no_accessing, counter_mutex ( initial value is 1 ) 
+        shared variables: nreaders ( initial value is 0 ) 
+        local variables:  prev, current
+ 
+WRITER:
+        P( no_waiting );
+        P( no_accessing );
+        V( no_waiting );
+          ...  write ...
+        V( no_accessing );
+ 
+READER:
+        P( no_waiting );
+          P( counter_mutex );
+            prev := nreaders;
+            nreaders := nreaders + 1;
+          V( counter_mutex );
+          if prev = 0  then P( no_accessing );
+        V( no_waiting );
+        ... read ...
+        P( counter_mutex );
+          nreaders := nreaders - 1;
+          current := nreaders;
+        V( counter_mutex );
+        if current = 0 then V( no_accessing );
+
+# Bounded buffer producer/consumer
+        #
+        while(1) {    #prod
+          /* make item */
+          while(((in +1)%BUFFER_SIZE == out)  /* do nothing */;
+            buffer[in]=nextProduced;
+            in = (in+1)%BUFFER_SIZE;
+          }
+
+          while(1) {    #consumer
+            while(in == out) /* do nothing */;
+            nextConsumed = buffer[out];
+            out = (out+1)%BUFFER_SIZE; 
+            /* consume item */
+          }
 

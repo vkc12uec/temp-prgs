@@ -2,6 +2,17 @@ intitle:"index.of" linkin (mp3|mp4|flv|avi|mpg|wmv) -html-htm-php-jsp-asp
 http://www.ihas1337code.com/2010/04/hacking-google-interview-from-mit.html
 
 ###########################################
+# Dijkstra algo with -ve edge (how to modify existing algo. to take care of -ve edge)
+
+A slight variant to Dijkstra algorithm will work on a graph with negative weight, without negative cycle (Competitive Programming 2, Steven Halim). For a general graph (which may contain negative cycle), use Bellman-Ford algorithm, which has fixed time complexity of O(VE), but guarantees termination, and allow detection of negative cycle (we detects the negative cycle, since the shortest path is ill-defined in this case).
+
+We can categorize nodes in Dijkstra's algorithm into 3 types of nodes: processed (whose value will never change), unprocessed (has non-infinity value, but may change), and unreached (whose value is infinity, since we haven't reached the node). In the pseudocode for Dijkstra algorithm on Wikipedia (original?), relax operation is never called on processed node.
+
+A variant to Dijkstra's algorithm will only store the unprocessed nodes in a data structure for "get-min" and "update" operation, and pop out node to process it. It will relax all neighbors of the node alike, and push/modify whichever node whose distance is improved back to the data structure. In this way, the processed node can be reverted to an unprocessed node, and its neighbors will be updated again when it is popped out. The method is correct, since changes to the current best value of a node is always propagated.
+
+""'
+
+###########################################
 # JVM | garbage collection
 
 # class loader is not garbage collected, it means there is a memleak:
@@ -14,7 +25,7 @@ Read more: http://javarevisited.blogspot.com/2011/04/garbage-collection-in-java.
 
 5) Before removing an object from memory Garbage collection thread invokes finalize () method of that object and gives an opportunity to perform any sort of cleanup required.
 
-7) There are methods like System.gc () and Runtime.gc () which is used to send request of Garbage collection to JVM but it’s not guaranteed that garbage collection will happen.
+7) There are methods like System.gc () and Runtime.gc () which is used to send request of Garbage collection to JVM but its not guaranteed that garbage collection will happen.
 
 
 # Always try to avoid or minimize full garbage collection or Full GC because it affects performance of Java application. When you work in finance domain for electronic trading platform and with high volume low latency systems performance of java application becomes extremely critical an you definitely like to avoid full GC during trading period.
@@ -46,8 +57,6 @@ Languages that allow only single inheritance, where a class can only derive from
 
 Moreover, languages such as Ada, Objective-C, C#, Delphi/Free Pascal and Java allow multiple-inheritance of interfaces (called protocols in Objective-C). Interfaces are like abstract base classes that specify method signatures without implementing any behavior. ("Pure" interfaces such as Java's do not permit any implementation or instance data in the interface.) Nevertheless, even when several interfaces declare the same method signature, as soon as that method is implemented (defined) anywhere in the inheritance chain, it overrides any implementation of that method in the chain above it (in its superclasses). Hence, at any given level in the inheritance chain, there can be at most one implementation of any method. Thus, single-inheritance method implementation does not exhibit the Diamond Problem even with multiple-inheritance of interfaces.
 
-
-# 
 
 ###########################################
 
@@ -1072,7 +1081,7 @@ http://www.cplusplus.com/doc/tutorial/typecasting/
 http://code.google.com/p/memcached/wiki/NewUserInternals
 http://www.usenix.org/event/usenix99/full_papers/pai/pai_html/node8.html
 ###########################################
-infix to postfix:
+# infix to postfix:
 
 http://scriptasylum.com/tutorials/infix_postfix/algorithms/infix-postfix/index.htm
 http://www.coders2020.com/what-is-infix-prefix-postfix-how-can-you-convert-from-one-representation-to-another-how-do-you-evaluate-these-expressions

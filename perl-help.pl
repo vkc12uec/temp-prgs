@@ -2,6 +2,11 @@ intitle:"index.of" linkin (mp3|mp4|flv|avi|mpg|wmv) -html-htm-php-jsp-asp
 http://www.ihas1337code.com/2010/04/hacking-google-interview-from-mit.html
 
 ###########################################
+# Inner vs Outer Joins
+
+We can see that an inner join will only return rows in which there is a match based on the join predicate. In this case, what that means is anytime the Employee and Location table share an Employee ID, a row will be generated in the results to show the match. Looking at the original tables, one can see that those Employee ID’s that are shared by those tables are displayed in the results. But, with a left or right outer join, the result set will retain all of the rows from either the left or right table
+
+###########################################
 # Dijkstra algo with -ve edge (how to modify existing algo. to take care of -ve edge)
 
 A slight variant to Dijkstra algorithm will work on a graph with negative weight, without negative cycle (Competitive Programming 2, Steven Halim). For a general graph (which may contain negative cycle), use Bellman-Ford algorithm, which has fixed time complexity of O(VE), but guarantees termination, and allow detection of negative cycle (we detects the negative cycle, since the shortest path is ill-defined in this case).
@@ -23,9 +28,15 @@ http://javarevisited.blogspot.com/2011/05/java-heap-space-memory-size-jvm.html
 
 Read more: http://javarevisited.blogspot.com/2011/04/garbage-collection-in-java.html#ixzz2GV4OBffw
 
+Generally an object becomes eligible for garbage collection in Java on following cases:
+1) All references of that object explicitly set to null e.g. object = null
+2) Object is created inside a block and reference goes out scope once control exit that block.
+3) Parent object set to null, if an object holds reference of another object and when you set container object's reference null, child or contained object automatically becomes eligible for garbage collection.
+4) If an object has only live references via WeakHashMap it will be eligible for garbage collection. To learn more about HashMap see here How HashMap works in Java.
+
 5) Before removing an object from memory Garbage collection thread invokes finalize () method of that object and gives an opportunity to perform any sort of cleanup required.
 
-7) There are methods like System.gc () and Runtime.gc () which is used to send request of Garbage collection to JVM but its not guaranteed that garbage collection will happen.
+7) There are methods like System.gc () and Runtime.gc () which is used to send request of Garbage collection to JVM but it’s not guaranteed that garbage collection will happen.
 
 
 # Always try to avoid or minimize full garbage collection or Full GC because it affects performance of Java application. When you work in finance domain for electronic trading platform and with high volume low latency systems performance of java application becomes extremely critical an you definitely like to avoid full GC during trading period.
@@ -58,6 +69,8 @@ Languages that allow only single inheritance, where a class can only derive from
 Moreover, languages such as Ada, Objective-C, C#, Delphi/Free Pascal and Java allow multiple-inheritance of interfaces (called protocols in Objective-C). Interfaces are like abstract base classes that specify method signatures without implementing any behavior. ("Pure" interfaces such as Java's do not permit any implementation or instance data in the interface.) Nevertheless, even when several interfaces declare the same method signature, as soon as that method is implemented (defined) anywhere in the inheritance chain, it overrides any implementation of that method in the chain above it (in its superclasses). Hence, at any given level in the inheritance chain, there can be at most one implementation of any method. Thus, single-inheritance method implementation does not exhibit the Diamond Problem even with multiple-inheritance of interfaces.
 
 
+# 
+
 ###########################################
 
 http://www.cplusplus.com/forum/general/7474/
@@ -89,8 +102,10 @@ the temprovary variables are created on the stack by the compiler and are used d
 ###########################################
 # epoll simple explanation: http://kovyrin.net/2006/04/13/epoll-asynchronous-network-programming/
 
+'
 ###########################################
 # Circular buffer impl. using circular pointers.
+
 Note that a circular buffer with n elements is usually used to implement a queue with n-1 elements--there is always one empty element in the buffer. Otherwise, it becomes difficult to distinguish between a full and empty queue--the read and write pointers would be identical in both cases.
 
 How many items are in the queue ?
@@ -125,10 +140,10 @@ This independent flow of control is accomplished because a thread maintains its 
   Set of pending and blocked signals
   Thread specific data
 
-Because threads within the same process share resources:
-Changes made by one thread to shared system resources (such as closing a file) will be seen by all other threads.
-Two pointers having the same value point to the same data.
-Reading and writing to the same memory locations is possible, and therefore requires explicit synchronization by the programmer.
+# Because threads within the same process share resources:
+    Changes made by one thread to shared system resources (such as closing a file) will be seen by all other threads.
+    Two pointers having the same value point to the same data.
+    Reading and writing to the same memory locations is possible, and therefore requires explicit synchronization by the programmer.
 
 # Shared Memory Model:
 
@@ -478,7 +493,8 @@ multiprogramming.
 
 buff full condition :
 while (((in + 1) % BUFFER_SIZE) == out)
-- buff empty condi.:
+
+buff empty condi.:
 while (in == out)
 
 
@@ -610,12 +626,12 @@ signal(mutex):
 
 * Havenders four necessary conditions
 
-Havender identified four condtions which are necessary for a deadlock to occur:
-Mutual exclusion -- i.e., one-at-a-time sharing
-Hold and wait -- A process may hold one resource while holding another
-No preemption -- Resources are held until voluntarily released.
-Circular wait.
-These conditions can be used as the basis for deadlock prevention techniques.
+#Havender identified four condtions which are necessary for a deadlock to occur:
+    Mutual exclusion -- i.e., one-at-a-time sharing
+    Hold and wait -- A process may hold one resource while holding another
+    No preemption -- Resources are held until voluntarily released.
+    Circular wait.
+    These conditions can be used as the basis for deadlock prevention techniques.
 
 * In this scheme every data/instruction access requires two
 memory accesses. One for the page table and one for
@@ -1081,7 +1097,7 @@ http://www.cplusplus.com/doc/tutorial/typecasting/
 http://code.google.com/p/memcached/wiki/NewUserInternals
 http://www.usenix.org/event/usenix99/full_papers/pai/pai_html/node8.html
 ###########################################
-# infix to postfix:
+infix to postfix:
 
 http://scriptasylum.com/tutorials/infix_postfix/algorithms/infix-postfix/index.htm
 http://www.coders2020.com/what-is-infix-prefix-postfix-how-can-you-convert-from-one-representation-to-another-how-do-you-evaluate-these-expressions

@@ -14,6 +14,9 @@
 #include <iterator>
 #include <stack>
 #include <climits>
+#include <sys/dir.h>
+#include <errno.h>
+#include <sys/stat.h>
 
 using namespace std;
 
@@ -28,9 +31,8 @@ typedef map< ii, int > miii;
 #define pb push_back 
 #define all(c) (c).begin(),(c).end() 
 #define tr(c,i) for( typeof((c).begin()) i = (c).begin(); i != (c).end(); i++ )
-#define present(c,x) ((c).find(x) != (c).end()) 
-#define cpresent(c,x) (find(all(c),x) != (c).end()) 
-//Here, 'present()' returns whether the element presents in the container with member function 'find()' (i.e. set/map, etc.) while 'cpresent' is for vector. 
+#define present(c,x) ((c).find(x) != (c).end())  // map | set
+#define cpresent(c,x) (find(all(c),x) != (c).end())  // vector
 
 template <typename T>
 void printVector (vector <T> lis) {
@@ -53,6 +55,10 @@ template <typename T>
 inline void printArr( T a[], int N ) {
   for (int i=0; i<N; i++)
     cout << "\n\t"<<a[i];
+}
+
+void revStr (string &sub) {
+  sub = string ( sub.rbegin(), sub.rend() );
 }
 
 void getTokens (string input, vs &tokens) {

@@ -1,11 +1,8 @@
 ###########################################
 vids:
 #http://openclassroom.stanford.edu/MainFolder/CoursePage.php?course=IntroToAlgorithms
-
 http://www.cs.pitt.edu/~kirk/algorithmcourses/index.html
-
 http://basicalgos.blogspot.com/2012/03/10-regular-expression-matching.html
-
 http://stackoverflow.com/questions/500607/what-are-the-lesser-known-but-useful-data-structures
 
 # list of trading firms:  http:/tradertestorg/list.php
@@ -18,6 +15,8 @@ projecteuler.net
 http://letschat.info/list-of-all-google-interview-questions/
 http://letschat.info/list-of-facebook-questions/
 
+# OO design questions:
+  https://sites.google.com/site/steveyegge2/five-essential-phone-screen-questions
 
 # LRU implementation like Galvin:
   DLL as Queue, most recently used is at head, LRU at tail
@@ -1857,34 +1856,33 @@ int height(struct node* node)
    return 1 + max(height(node->left), height(node->right));
 }
 
-\\ better O(N) for diameter of TREE:
+# better O(N) for diameter of TREE:
 
-                  int height = 0;
-                     struct node *root = SomeFunctionToMakeTree();
-                     int diameter = diameterOpt(root, &height); */
-                  int diameterOpt(struct node *root, int* height)
+                int height = 0;
+                struct node *root = SomeFunctionToMakeTree();
+                int diameterOpt(struct node *root, int* height)
+                {
+                  int lh = 0, rh = 0;
+
+                  int ldiameter = 0, rdiameter = 0;
+
+                  if(root == NULL)
                   {
-                    int lh = 0, rh = 0;
-
-                    int ldiameter = 0, rdiameter = 0;
-
-                    if(root == NULL)
-                    {
-                      *height = 0;
-                       return 0; /* diameter is also 0 */
-                    }
-
-                    /* Get the heights of left and right subtrees in lh and rh
-                      And store the returned values in ldiameter and ldiameter */
-                    ldiameter = diameterOpt(root->left, &lh);
-                    rdiameter = diameterOpt(root->right, &rh);
-
-                    /* Height of current node is max of heights of left and
-                       right subtrees plus 1*/
-                    *height = max(lh, rh) + 1;
-
-                    return max(lh + rh + 1, max(ldiameter, rdiameter));
+                    *height = 0;
+                    return 0; /* diameter is also 0 */
                   }
+
+                  /* Get the heights of left and right subtrees in lh and rh
+                     And store the returned values in ldiameter and ldiameter */
+                  ldiameter = diameterOpt(root->left, &lh);
+                  rdiameter = diameterOpt(root->right, &rh);
+
+                  /* Height of current node is max of heights of left and
+                     right subtrees plus 1*/
+                  *height = max(lh, rh) + 1;
+
+                  return max(lh + rh + 1, max(ldiameter, rdiameter));
+                }
 
 
 ###########################################

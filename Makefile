@@ -1,4 +1,10 @@
-compile:
-	javac infixValue.java
+
+all:
+	g++ amz_sp_insert_inText.cpp -o amz_sp_insert_inText
+
 run:
-	java infixValue
+	./amz_sp_insert_inText.cpp
+
+clean:
+	rm ./amz_sp_insert_inText.cpp
+

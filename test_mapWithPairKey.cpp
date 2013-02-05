@@ -1,0 +1,17 @@
+
+// just testing if pair ii is allowed as key ?
+//
+#include "topcoder_header.h"
+
+int main () {
+  miii mymap;
+  mymap [make_pair(1,2)] = 3;
+  mymap [make_pair(2,3)] = 5;
+  mymap [make_pair(3,4)] = 7;
+  mymap [make_pair(4,5)] = 9;
+
+  tr (mymap, it) {
+    cout << "\n first " << it->first.first << " | " << it->first.second << " sec = " << it->second;
+  }
+  return 0;
+}

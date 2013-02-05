@@ -38,7 +38,8 @@ int perfectsquare(int num) {
 }
 
 int main () {
-	perfectsquare(196);
+	perfectsquare(10);
+  //perfectsquare(196);
 
 #if 0
 	struct foo ff;

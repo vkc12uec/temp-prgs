@@ -11,7 +11,8 @@ int searchincircularsorterlist(int* a,int len,int num) {
 		}
 
 		if(num<a[mid]) {
-			if(num<a[start] && a[start]<=a[start+1])
+			if(num<a[start] && a[start]<=a[mid])
+			//if(num<a[start] && a[start]<=a[start+1])
 				start=mid+1;
 			else
 				end=mid-1;
@@ -67,3 +68,32 @@ int main () {
 
 	return 0;
 }
+/*
+public int rotatedSearch(int[] values, int start, int end,
+                          int x){
+    if(values[start] == x){
+        return start;
+    } else if(values[end] == x){
+        return end;
+    } else if(end - start == 1) {
+        return -1;
+    }
+    int middle = (start + end) / 2;
+
+    if(values[start] <= values[middle]){
+        if(x <= values[middle] && x >= values[start]){
+            return rotatedSearch(values, start, middle, x);
+        } else {
+            return rotatedSearch(values, middle, end, x);
+        }
+    } else if(values[middle] <= values[end]){
+        if(x >= values[middle] && x <= values[end] ){
+            return rotatedSearch(values, middle, end, x);
+        } else {
+            return rotatedSearch(values, start, middle, x);
+        }
+    } else {
+        return -1;
+    }
+}
+*/

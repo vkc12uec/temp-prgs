@@ -1,0 +1,50 @@
+#!/usr/bin/perl
+
+my ($activity, $cal);
+my %act_cal=();
+
+open (FH, "<data.txt") or die "Cant open input file, $!";
+while (<FH>) {
+	chomp $_;
+	#print "\n[$_]";
+	($activity, $cal)=split(" ", $_);
+	#print "\n
+	$act_cal{$activity} = $cal;
+}
+
+my ($P, $N)=(0,0);
+foreach $value (values %act_cal) {
+	if ($value < 0) { $N+=$value; }
+	else { $P+=$value; }
+}
+
+print "\nP=$P, N=$N";
+
+my %sumtuples=();
+
+foreach $key (keys %act_cal) {
+	$sumtuples{$key} = $act_cal{$key};
+
+	foreach $key1 (keys %sumtuples) {
+		if ($key1 eq $key) {next;}
+
+		my $temp = $sumtuples{$key1} + $act_cal{$key};
+		if ($temp < N or $temp > P) { 
+			next;
+			print "\nnext1";
+		}
+		if ($temp == 0) {
+			print "\nrequired key = ".$key1+$key;
+		}
+		print "\ncombined key = $key1+$key";
+		$sumtuples{$key1+$key} = $sumtuples{$key1} + $act_cal{$key};
+	}
+	#$sumtuples{$key} = $act_cal{$key};
+}	# foreach act_cal hash
+
+print "\n --------------------- ";
+foreach $key (keys %sumtuples) {
+	print "\n $key -> $sumtuples{$key}";
+}
+
+exit;

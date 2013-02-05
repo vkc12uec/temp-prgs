@@ -1,0 +1,38 @@
+
+
+bool new_cood ( point &curr, int option) {
+  // N E S W D
+
+  switch (option) {
+    case 1:
+      if ( curr.y == 0)
+        return false;
+      else
+        curr.y -= 1;
+      break;
+    case 2:
+      if ( curr.z == 2)
+        return false;
+      else
+        curr.z += 1;
+      break;
+    case 3:
+      if ( curr.y == 2)
+        return false;
+      else
+        curr.y += 1;
+      break;
+    case 4:
+if ( curr.z == 0)
+        return false;
+      else
+        curr.z -= 1;
+      break;
+    case 5:
+      if ( curr.x == 2)
+        return false;
+      else
+        curr.x += 1;
+      break;
+  }
+}

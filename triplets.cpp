@@ -1,0 +1,61 @@
+/*
+   There is an integer array d which does not contain more than two elements of the same value. How many distinct ascending triples (d[i] < d[j] < d[k], i < j < k) are present? 
+
+ * 
+ 6
+ 1 1 2 2 3 4
+ * 
+ */
+
+#include "topcoder_header.h"
+
+int main () {
+  int len;
+  string inp;
+
+  cin >> len;
+
+  int a[len];
+
+  for (int i=0; i<len; i++)
+    cin >> a[i];
+
+  for (int i=0; i<len; i++)
+    cout << "\n\t" << a[i];
+
+  int itemsSmallLeft[len];
+  int itemsLargeRight[len];
+
+  for (int i=0; i<len; i++)
+    itemsLargeRight[i] = itemsSmallLeft[i] = 0;
+
+  int mmax=INT_MIN, cnt=0;
+
+  itemsSmallLeft[0] = 0;
+  for (int i=1; i<len; i++) {
+    for (int j=0; j<i; j++)
+      if(a[i] > a[j])
+        itemsSmallLeft[i]++;
+
+  }
+
+  itemsLargeRight[len-1] = 0;
+  for (int i=len-2; i>=0; i--) {
+    for (int j=len-1; j>i; j--)
+      if(a[i] < a[j])
+        itemsLargeRight[i]++;
+
+  }
+
+  /*
+     hasLargeOnRight[len-1] = a[len-1];
+     for (int i=len-2; i>=0; i++) 
+     hasLargeOnRight[i] = max (hasLargeOnRight[i+1], a[i]);
+
+     printArr(hasLargeOnRight, len);
+     */
+  printArr(itemsSmallLeft, len);
+  printArr(itemsLargeRight, len);
+
+  return 0;
+}

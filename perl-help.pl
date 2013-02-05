@@ -2,6 +2,688 @@ intitle:"index.of" linkin (mp3|mp4|flv|avi|mpg|wmv) -html-htm-php-jsp-asp
 http://www.ihas1337code.com/2010/04/hacking-google-interview-from-mit.html
 
 ###########################################
+# Dijkstra algo with -ve edge (how to modify existing algo. to take care of -ve edge)
+
+A slight variant to Dijkstra algorithm will work on a graph with negative weight, without negative cycle (Competitive Programming 2, Steven Halim). For a general graph (which may contain negative cycle), use Bellman-Ford algorithm, which has fixed time complexity of O(VE), but guarantees termination, and allow detection of negative cycle (we detects the negative cycle, since the shortest path is ill-defined in this case).
+
+We can categorize nodes in Dijkstra's algorithm into 3 types of nodes: processed (whose value will never change), unprocessed (has non-infinity value, but may change), and unreached (whose value is infinity, since we haven't reached the node). In the pseudocode for Dijkstra algorithm on Wikipedia (original?), relax operation is never called on processed node.
+
+A variant to Dijkstra's algorithm will only store the unprocessed nodes in a data structure for "get-min" and "update" operation, and pop out node to process it. It will relax all neighbors of the node alike, and push/modify whichever node whose distance is improved back to the data structure. In this way, the processed node can be reverted to an unprocessed node, and its neighbors will be updated again when it is popped out. The method is correct, since changes to the current best value of a node is always propagated.
+
+""'
+
+###########################################
+# JVM | garbage collection
+
+# class loader is not garbage collected, it means there is a memleak:
+          http://javarevisited.blogspot.sg/2012/01/tomcat-javalangoutofmemoryerror-permgen.html
+
+http://javarevisited.blogspot.com/2011/05/java-heap-space-memory-size-jvm.html
+
+
+Read more: http://javarevisited.blogspot.com/2011/04/garbage-collection-in-java.html#ixzz2GV4OBffw
+
+5) Before removing an object from memory Garbage collection thread invokes finalize () method of that object and gives an opportunity to perform any sort of cleanup required.
+
+7) There are methods like System.gc () and Runtime.gc () which is used to send request of Garbage collection to JVM but its not guaranteed that garbage collection will happen.
+
+
+# Always try to avoid or minimize full garbage collection or Full GC because it affects performance of Java application. When you work in finance domain for electronic trading platform and with high volume low latency systems performance of java application becomes extremely critical an you definitely like to avoid full GC during trading period.
+
+
+  
+###########################################
+/*
+DiamMOND PROBLEM :
+*/
+								
+class Animal { /* ... */ }; // base class
+
+class Tiger : public Animal { /* ... */ };
+
+class Lion : public Animal { /* ... */ }	
+						
+class Liger : public Tiger, public Lion { /* ... */ };	
+
+# Solution:
+class Tiger : virtual public Animal { /* ... */ };
+
+class Lion : virtual public Animal { /* ... */ }
+
+
+# Java soln.
+#
+Languages that allow only single inheritance, where a class can only derive from one base class, do not have the diamond problem. The reason for this is that such languages have at most one implementation of any method at any level in the inheritance chain regardless of the repetition or placement of methods. Typically these languages allow classes to implement multiple protocols, called interfaces in Java. These protocols define methods but do not provide concrete implementations. This strategy has been used by ActionScript, C#, D, Java, Nemerle, Object Pascal (Delphi), Objective-C, Ruby and Smalltalk. All but Smalltalk allow classes to implement multiple protocols.
+
+Moreover, languages such as Ada, Objective-C, C#, Delphi/Free Pascal and Java allow multiple-inheritance of interfaces (called protocols in Objective-C). Interfaces are like abstract base classes that specify method signatures without implementing any behavior. ("Pure" interfaces such as Java's do not permit any implementation or instance data in the interface.) Nevertheless, even when several interfaces declare the same method signature, as soon as that method is implemented (defined) anywhere in the inheritance chain, it overrides any implementation of that method in the chain above it (in its superclasses). Hence, at any given level in the inheritance chain, there can be at most one implementation of any method. Thus, single-inheritance method implementation does not exhibit the Diamond Problem even with multiple-inheritance of interfaces.
+
+
+###########################################
+
+http://www.cplusplus.com/forum/general/7474/
+
+I'm not sure what other methods you tried, but you might have been misled by temporaries that were being created and destroyed by the compiler.
+
+Consider the following code:
+
+string foo() {
+    string result( "Hello World" );
+    return result;
+}
+
+// ...
+string hw = foo();
+
+
+In the above code, with no optimizations, the compiler creates result on the stack inside foo() and then the value is "returned". Returning it in this case means that hw is assigned the returned value, possibly through operator= or the copy constructor; likely the latter) and then "result" is destroyed.
+
+You haven't lost data; it was just transferred from one location to another.
+
+With optimizations turned on, assuming my foo() did something more than it does, the same thing will occur. However, with optimizations turned on, your x() function is so trivial that the compiler is using an optimization technique called Return Value Optimzation (RVO) wherein the local variable (also named x) is actually constructed in the same memory location (stack location) occupied by main()'s local variable a. Which means that when x() returns, no copying is needed since there isn't really a second (temporary) instance, and therefore no destructor needs to run.
+'
+###########################################
+#compiler temp vars:
+the temprovary variables are created on the stack by the compiler and are used during reference initialization and during evaluation of expressions including standard type conversions, argument passing, function returns.
+
+
+###########################################
+# epoll simple explanation: http://kovyrin.net/2006/04/13/epoll-asynchronous-network-programming/
+
+###########################################
+# Circular buffer impl. using circular pointers.
+Note that a circular buffer with n elements is usually used to implement a queue with n-1 elements--there is always one empty element in the buffer. Otherwise, it becomes difficult to distinguish between a full and empty queue--the read and write pointers would be identical in both cases.
+
+How many items are in the queue ?
+Some people use a integer to remember exactly how many items are in the queue.
+With this "extra" data, a buffer of n elements can hold the full n data items, rather than n-1 data items. When both pointers point to the same location (buffer.insert == buffer.remove), then buffer.size distinguishes between the empty buffer (0 == buffer.size) or a full buffer ( n == buffer.size ).
+Other people don't like this "extra" data -- it's too much hassle to keep it synchronized with the pointers. (It violates OnceAndOnlyOnce). Easier just to make the buffer 1 element larger. If we ever want to know the size, use
+
+   size = (n + buffer.insert - buffer.remove) mod n;
+.
+
+###########################################
+Triangle detection in graphs:
+
+It is possible to test whether a graph with m edges is triangle-free in time O(m1.41) (Alon, Yuster & Zwick 1994). Another approach is to find the trace of A3, where A is the adjacency matrix of the graph. The trace is zero if and only if the graph is triangle-free. For dense graphs, it is more efficient to use this simple algorithm which relies on matrix multiplication, since it gets the time complexity down to O(n2.373), where n is the number of vertices.
+###########################################
+#Dynamic linking has many advantages over static linking. Here are two:
+
+Reduced use of disk space. Dynamically linked executables tend to be much smaller than statically linked executables.
+More efficient use of memory at run time. Dynamically linked executables allow the operating system to play clever tricks that may reduce total memory use when many programs are running simultaneously. (Ask me in a lab period if you would like a less vague explanation.)
+
+###########################################
+# Thread v/s process:
+
+By contrast, a thread is a coding construct that doesn't affect the architecture of an application. A single process might contains multiple threads; all threads within a process share the same state and same memory space, and can communicate with each other directly, because they share the same variables'
+
+# https://computing.llnl.gov/tutorials/pthreads/
+
+This independent flow of control is accomplished because a thread maintains its own:
+  Stack pointer
+  Registers
+  Scheduling properties (such as policy or priority)
+  Set of pending and blocked signals
+  Thread specific data
+
+Because threads within the same process share resources:
+Changes made by one thread to shared system resources (such as closing a file) will be seen by all other threads.
+Two pointers having the same value point to the same data.
+Reading and writing to the same memory locations is possible, and therefore requires explicit synchronization by the programmer.
+
+# Shared Memory Model:
+
+All threads have access to the same global, shared memory
+Threads also have their own private data
+Programmers are responsible for synchronizing access (protecting) globally shared data
+
+
+###########################################
+In most systems a stack frame has a field to contain the previous value of the frame pointer register, the value it had while the caller was executing. For example, in the diagram above, the stack frame of DrawLine would have a memory location holding the frame pointer value that DrawSquare uses. The value is saved upon entry to the subroutine and restored for the return. Having such a field in a known location in the stack frame enables code to access each frame successively underneath the currently executing routine's frame, and also allows the routine to easily restore the frame pointer to the caller's frame, just before it returns.
+###########################################
+# static functions:
+For some reason, static has different meanings in in different contexts.
+
+    When specified on a function declaration, it makes the function local to the file.
+
+    When specified with a variable inside a function, it allows the vairable to retain its value between calls to the function. See static variables. 
+
+It seems a little strange that the same keyword has such different meanings.... 
+
+###########################################
+# C program code segment:
+
+When a program is loaded into memory, it resides in memory like following figure:
++-------------------+-------------------+----------+-----------+-----------+
+| Code segment(r+x) | Data segment(r+w) | BSS(r+w) | Heap(r+w) | Stack(r+w)|
++--------------------------------------------------------------------------+
+Figure-5: Runtime Memory Layout
+
+Start of BSS : 'break'
+
+brk and sbrk are used to change dynamically the amount of space allocated for the calling process's data segment. The change is made by resetting the process's break value. The break value is the address of the first location beyond the end of the data segment. The amound of allocated space increases as the break value increases. The current value of the break may be determined by calling sbrk(0).
+
+# pointer arithemtic:
+Pointer subtraction is also valid: if p and q point to elements of the same array, and p<q, then q-
+p+1 is the number of elements from p to q inclusive. This fact can be used to write yet another
+version of strlen:
+
+###########################################
+# Dynamic libs:
+
+To create shared library, you have to use -fPIC or  -fpic options beside -shared options. A
+function in shared library will  be placed diffirent  address  in memory for each program.  For that
+reason we have to generate position indipendent code (PIC). -fPIC option generates larger object
+file then -fpic. -fpic generates smaller and faster objects. But they will be platform dependent
+and they will include less debug informations.
+
+
+# Static libs:
+
+main.c
+#include <stdio.h>
+
+/* functions have to be external */
+extern void test();
+extern void util();
+
+int main() {
+  printf("in main");
+  /* Let call functions in library */
+  test();
+  util();
+  return 0; 
+}
+
+# test.c
+int test() {
+  printf("in test");
+  return 0;
+}
+
+# util.c
+int util() {
+  printf("in util");
+  return 0;
+}
+Lets compile above source codes:
+$ gcc -c test.c
+$ gcc -c util.c
+$ ar rc libtest.a test.o util.o
+$ ranlib libtest.a
+$ gcc -c main.c
+$ gcc main.o -L /home/simsek -ltest -o testprog
+
+
+###########################################
+# addresses in various segments of program:
+
+#include <stdio.h>
+#include <stdlib.h>
+int uig;
+int ig = 5;
+int func()
+{
+        return 0;
+}
+int main()
+{
+        int local;
+        int *ptr;
+        ptr = (int *) malloc(sizeof(int));
+        printf("An address from BSS: %p\n", &uig);            // uninit globals or static
+        printf("An address from Data segment: %p\n", &ig);
+        printf("An address from Code segment: %p\n", &func);
+        printf("An address from Stack segment: %p\n", &local);
+        printf("An address from Heap: %p\n", ptr);
+        printf("Another address from Stack: %p\n", &ptr);
+        free(ptr);
+        return 0;
+}
+
+
+###########################################
+# struct alignment
+Here is a structure with members of various types, totaling 8 bytes before compilation:
+
+struct MixedData
+{
+    char Data1;
+    short Data2;
+    int Data3;
+    char Data4;
+};
+
+After compilation the data structure will be supplemented with padding bytes to ensure a proper alignment for each of its members:
+
+struct MixedData  /* After compilation in 32-bit x86 machine */
+{
+    char Data1; /* 1 byte */
+    char Padding1[1]; /* 1 byte for the following 'short' to be aligned on a 2 byte boundary
+assuming that the address where structure begins is an even number */
+    short Data2; /* 2 bytes */
+    int Data3;  /* 4 bytes - largest structure member */
+    char Data4; /* 1 byte */
+    char Padding2[3]; /* 3 bytes to make total size of the structure 12 bytes */
+};
+
+The compiled size of the structure is now 12 bytes. It is important to note that the last member is padded with the number of bytes required so that the total size of the structure should be a multiple of the largest alignment of any structure member (alignment(int) in this case, which = 4 on linux-32bit/gcc)
+
+struct FinalPadShort {
+  short s;
+  char n[3];
+};
+
+In this example the total size of the structure sizeof(FinalPadShort) = 6 not 5 (not 8 either) (so that the size is a multiple of 2 (alignment(short) = 2 on linux-32bit/gcc)).
+
+###########################################
+How Big is the Heap?
+It can only contain as much physical memory as you have installed or as much virtual memory as your operating system can make available (if it supports virtual memory)
+
+Running Out of Memory:
+Most applications request memory from the heap when they are running
+It is possible to run out of memory (you may even have gotten a message like "Running Low On Virtual Memory")
+So, it is important to return memory to the heap when you no longer need it
+
+
+###########################################
+Syscalll imple:
+
+Implementing system calls requires a control transfer which involves some sort of architecture-specific feature. A typical way to implement this is to use a software interrupt or trap. Interrupts transfer control to the operating system kernel so software simply needs to set up some register with the system call number needed, and execute the software interrupt.
+
+###########################################
+[16.12] What if I forget the [] when deleteing an array allocated via new T[n]?
+
+All life comes to a catastrophic end.
+
+It is the programmer's —not the compiler's— responsibility to get the connection between new T[n] and delete[] p correct. If you get it wrong, neither a compile-time nor a run-time error message will be generated by the compiler. Heap corruption is a likely result. Or worse. Your program will probably die.
+
+
+- Take heart. In C++, if the runtime system cannot allocate sizeof(Fred) bytes of memory during p = new Fred(), a std::bad_alloc exception will be thrown. Unlike malloc(), new never returns NULL!
+
+Therefore you should simply write:
+
+ Fred* p = new Fred();  ? no need to check if p is NULL
+
+
+[16.1] Does delete p delete the pointer p, or the pointed-to-data *p?
+
+The pointed-to-data.
+
+The keyword should really be delete_the_thing_pointed_to_by. The same abuse of English occurs when freeing the memory pointed to by a pointer in C: free(p) really means free_the_stuff_pointed_to_by(p).
+
+###########################################
+# difference b/w c++ map and hashmap
+They are implemented in very different ways.
+
+hash_map (unordered_map in TR1 and Boost; use those instead) use a hash table where the key is hashed to a slot in the table and the value is stored in a list tied to that key.
+
+map is implemented as a balanced binary search tree (usually a red/black tree).
+
+An unordered_map should give slightly better performance for accessing known elements of the collection, but a map will have additional useful characteristics (e.g. it is stored in sorted order, which allows traversal from start to finish). Unordered_map will be faster on insert and delete than a map
+
+###########################################
+# loadbalancing:
+
+http://haproxy.1wt.eu/#desi
+
+###########################################
+# java serialization: http://www.tutorialspoint.com/java/java_serialization.htm
+
+wiki:
+There are three primary reasons why objects are not serializable by default and must implement the Serializable interface to access Java's serialization mechanism.'
+
+    Not all objects capture useful semantics in a serialized state. For example, a Thread object is tied to the state of the current JVM. There is no context in which a deserialized Thread object would maintain useful semantics.
+    The serialized state of an object forms part of its class's 'compatibility contract. Maintaining compatibility between versions of serializable classes requires additional effort and consideration. Therefore, making a class serializable needs to be a deliberate design decision and not a default condition.
+    Serialization allows access to non-transient private members of a class that are not otherwise accessible. Classes containing sensitive information (for example, a password) should not be serializable nor externalizable.
+
+The standard encoding method uses a simple translation of the fields into a byte stream. Primitives as well as non-transient, non-static referenced objects are encoded into the stream. Each object that is referenced by the serialized object and not marked as transient must also be serialized; and if any object in the complete graph of non-transient object references is not serializable, then serialization will fail. The developer can influence this behavior by marking objects as transient, or by redefining the serialization for an object so that some portion of the reference graph is truncated and not serialized.
+
+
+Notice that for a class to be serialized successfully, two conditions must be met:
+
+    The class must implement the java.io.Serializable interface.
+
+    All of the fields in the class must be serializable. If a field is not serializable, it must be marked transient.
+
+###########################################
+# select sample code:
+The following is a sample codes for Echo server using a single process. [select]
+
+int main(int argc, char *argv[ ])
+{
+  char   *service = "echo";
+  struct sockaddr_in fsin;
+  int    msock;
+  fd_set rfds;
+  fd_set afds;
+  int    alen;
+  int    fd, nfds;
+  msock = passiveTCP(service, QLEN);
+  nfds = getdtablesize();
+  FD_ZERO(&afds);
+  FD_SET(msock, &afds);
+  while (1) {
+    memcpy(&rfds, &afds, sizeof(rfds));
+    if(select(nfds, &rfds, (fd_set *)0, (fd_set *)0, (struct timeval *)0) < 0)
+      errexit("select: %s\n", strerror(errno));
+    if(FD_ISSET(msock, &rfds))
+    {
+      int ssock;
+      alen = sizeof(fsin);
+      ssock = accept(msock, (struct sockaddr *)&fsin, &alen);
+      if(ssock < 0)
+        errexit("accept: %s\n", strerror(errno));
+      FD_SET(ssock, &afds);
+    }
+    for(fd=0; fd < nfds; ++fd)
+      if(fd != msock && FD_ISSET(fd, &rfds))
+        if(echo(fd) == 0)
+        {
+          (void) close(fd);
+          FD_CLR(fd, &afds);
+        }
+  }
+}
+int echo(int fd)
+{
+  char buf[BUFSIZ];
+  int  cc;
+  cc = read(fd, buf, sizeof buf);
+  if(cc < 0)
+    errexit("echo read: %s\n", strerror(errno));
+  if(cc && write(fd, buf, cc) < 0)
+    errexit("echo write: %s\n", strerror(errno));
+  return cc;
+}
+
+
+####
+#Concurrent, Connection-Oriented Server Algorithm
+
+    The following is a sample of pseudo codes for connection-oriented server.
+    create a socket
+    bind to a well-known port
+    use listen to place in passive mode
+    while (1)
+    {
+        accept a client connection
+        fork
+        if (child)
+        {
+            communicate with new socket
+            close new socket
+            exit
+         }
+     else
+     {close new socket}
+    }
+    Single program has master and slave code.
+    It is possible for slave to use execve.
+
+# Concurrency Using a Single Process
+    int select(int n, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout);
+    FD_CLR(int fd, fd_set *set);      =>    removes fb from set
+    FD_ISSET(int fd, fd_set *set);    =>    is 'fd' ON in 'set'
+    FD_SET(int fd, fd_set *set);      =>    put 'fd' in 'set'
+    FD_ZERO(fd_set *set);             =>    very first calls, clears 'set'
+
+#    The following is a sample of pseudo codes for concurrency using a single process.
+    create a socket
+    bind to a well-known port
+    while (1)
+    {
+        use select to wait for I/O
+     if(original socket is ready)
+        {
+            accept() a new connection and add to read list
+        }
+     else if (a socket is ready for read)
+     {
+            read data from a client
+            if(data completes a request)
+            {
+               do the request
+               if(reply needed) add socket to write list
+            }
+     }
+     else if (a socket is ready for write)
+     {
+       write data to a client
+       if(message is complete)
+       {
+           remove socket from write list
+       }
+     else
+     {
+        adjust write parameters and leave in write list
+     }
+     }
+    }
+
+###########################################
+
+Long-term scheduler (or job scheduler) . selects which
+processes should be brought into the ready queue.
+
+Short-term scheduler (or CPU scheduler) . selects which process should be executed next and allocates CPU
+
+Short-term scheduler is invoked very frequently
+(milliseconds)  (must be fast).
+Long-term scheduler is invoked very infrequently
+(seconds, minutes) (may be slow).
+The long-term scheduler controls the degree of
+multiprogramming.
+
+
+
+buff full condition :
+while (((in + 1) % BUFFER_SIZE) == out)
+- buff empty condi.:
+while (in == out)
+
+
+consumer:
+
+item nextConsumed;
+while (1) {
+	while (in == out)
+	; /* do nothing */
+	nextConsumed = buffer[out];
+	out = (out + 1) % BUFFER_SIZE;
+}
+
+producer:
+
+item nextProduced;
+while (1) {
+	while (((in + 1) % BUFFER_SIZE) == out)
+	; /* do nothing */
+	buffer[in] = nextProduced;
+	in = (in + 1) % BUFFER_SIZE;
+}
+
+
+
+- Every thread has stack and segment of its own
+
+- Each user-level thread maps to kernel thread.
+n Examples
+- Windows 95/98/NT/2000
+- OS/2
+
+- Windows has :
+Each thread contains
+- a thread id
+- register set
+- separate user and kernel stacks
+- private data storage area
+
+
+- Associate with each process the length of its next CPU
+burst. Use these lengths to schedule the process with the
+shortest time.
+- SJF is optimal . gives minimum average waiting time for
+a given set of processes
+
+* Multilevel queuing:
+
+Each queue has its own scheduling algorithm,
+foreground . RR
+background . FCFS
+-  Scheduling must be done between the queues.
+. Fixed priority scheduling; (i.e., serve all from foreground
+	then from background). Possibility of starvation.
+. Time slice . each queue gets a certain amount of CPU time
+which it can schedule amongst its processes; i.e., 80% to
+foreground in RR
+. 20% to background in FCFS
+
+* spinlocks ?
+
+* test-and-set
+
+        function Lock(boolean *lock) {
+          while (test_and_set (lock) == 1)
+          ;
+        }
+
+        function TestAndSet(boolean lock) {
+          boolean initial = lock
+          lock = true
+          return initial
+        }
+
+* The efficient implementation of spinlocks is of great concern because spinlocks are the usual foundation for synchronization, expecially in multiprocessor systems. They are used everywhere and very frequently. As the use of multiprocessor systems increases so will the interest in efficient spinlocks and in alternative synchronization mechanisms
+
+* Spinlocks should only be held for a short period of time, and attempting to claim a spinlock will never cause a thread to be suspended. This means that there is no need to worry about priority inversion problems, and concepts such as priority ceilings and inheritance do not apply.
+
+* Paravirtualization is different from full
+virtualization, where the unmodified OS does not know it is virtualized and sensitive OS calls are
+trapped using binary translation. The value proposition of paravirtualization is in lower
+virtualization overhead, but the performance advantage of paravirtualization over full
+virtualization can vary greatly depending on the workload. As paravirtualization cannot support
+unmodified operating systems (e.g. Windows 2000/XP), its compatibility and portability is poor.
+Paravirtualization can also introduce significant support and maintainability issues in production
+environments as it requires deep OS kernel modifications. The open source Xen project is an
+example of paravirtualization that virtualizes the processor and memory using a modified Linux
+kernel and virtualizes the I/O using custom guest OS device drivers.
+
+* do {
+	while (TestAndSet(lock)) ;
+	critical section
+	lock = false;
+	remainder section
+}
+
+boolean TestAndSet(boolean &target) {
+	boolean rv = target;
+	tqrget = true;
+	return rv;
+}
+
+* Reader / Writers:
+
+Readers-Writers Problem Writer Process
+-Writeer:
+
+wait(wrt);
+...
+writing is performed
+...
+signal(wrt);
+
+- Reader:
+
+wait(mutex);
+readcount++;
+if (readcount == 1)
+wait(wrt);
+signal(mutex);
+...
+reading is performed
+...
+wait(mutex);
+readcount--;
+if (readcount == 0)
+signal(wrt);
+signal(mutex):
+
+* Havenders four necessary conditions
+
+Havender identified four condtions which are necessary for a deadlock to occur:
+Mutual exclusion -- i.e., one-at-a-time sharing
+Hold and wait -- A process may hold one resource while holding another
+No preemption -- Resources are held until voluntarily released.
+Circular wait.
+These conditions can be used as the basis for deadlock prevention techniques.
+
+* In this scheme every data/instruction access requires two
+memory accesses. One for the page table and one for
+the data/instruction.
+I The two memory access problem can be solved by the
+use of a special fast-lookup hardware cache called
+associative memory or translation look-aside buffers
+(TLBs)
+
+* Memory protection implemented by associating protection
+bit with each frame.
+I Valid-invalid bit attached to each entry in the page table:
+? “valid” indicates that the associated page is in the process’
+logical address space, and is thus a legal page.
+? “invalid” indicates that the page is not in the process’ logical
+address space.
+
+* During address translation, if valid–invalid bit in page
+table entry is 0 page fault.
+
+* lru stack working with a stack with doubly link list types .... http://www.slideshare.net/guest628caa/lru-stack
+'
+###########################################
+# barrier synchronization
+
+method 1:
+
+#################################################'
+#
+# For N process to do a barrier syncro, use another new process_barr {} which will sync. these N process.
+# search for its relevant text
+
+
+# method 1: using 2 processes
+semaphore s [N] = {1};    # this shud be 0 ... check
+semaphore all_arrived = 0;
+
+process_i () {
+  signal(s[i]);
+  wait(all_arrived);
+}
+
+process_barrier () {
+  for (int i =0;i<N;i++)
+  wait(s[i]);
+  for (int i =0;i<N;i++)
+  signal[all_arrived];
+}
+
+# method 2: (taken from Sema book)
+
+1 rendezvous
+2
+3 mutex.wait()
+4 count = count + 1
+5 mutex.signal()
+6
+7 if count == n: 
+    barrier.signal()
+8
+9 barrier.wait()
+10 barrier.signal()
+11
+12 critical point
+
+
+
+###########################################
 Although inline functions are similar to macros (because the function code is expanded at the point of the call at compile time), inline functions are parsed by the compiler, whereas macros are expanded by the preprocessor. As a result, there are several important differences:
 
 Inline functions follow all the protocols of type safety enforced on normal functions.
@@ -17,10 +699,10 @@ Expressions passed as arguments to inline functions are evaluated once. In some 
 #define toupper(a) ((a) >= 'a' && ((a) <= 'z') ? ((a)-('a'-'A')):(a))
 
 int main() {
-   char ch;
-   printf_s("Enter a character: ");
-   ch = toupper( getc(stdin) );
-   printf_s( "%c", ch );
+char ch;
+printf_s("Enter a character: ");
+ch = toupper( getc(stdin) );
+printf_s( "%c", ch );
 }
 
 
@@ -70,7 +752,7 @@ Now I am terrible at checking to make sure I do everything in order. Computers a
 So rather than just using an 'int' for my spinlocks, I use a struct as follows:
 
 typedef struct { char spinlock_flag; // the usual 0=unlocked, 1=locked
-unsigned char spinlock_level; // 'locking' order
+	unsigned char spinlock_level; // 'locking' order
 } Spinlock;
 
 Then I have a spinlock_wait routine that checks to make sure my new spinlock's level is .gt. the last spinlock's
@@ -81,7 +763,7 @@ level that was locked by this cpu. If I try to do it out of order, the routine p
 - ARP provides mapping
 32bit IP address <-> 48bit MAC address
 128.97.89.153  <-> 00-C0-4F-48-47-93
-- ARP cache 
+- ARP cache
 maintains the recent mappings from IP addresses to MAC addresses
 Protocol
 1. ARP request broadcast on Ethernet
@@ -92,8 +774,6 @@ IP: Internet Protocol
 - Responsible for routing of data through intermediate networks and computers
 
 IP packet encapsulates the TCP/UDP packet.
-
-
 
 ###########################################
 
@@ -114,84 +794,84 @@ The compiler will implicitly define a default constructor if no constructors are
 # 5 types following ... u can init an array of objects
 
 class MyClass {		# using set/get methods
-  int x;
-public:
-  void setX(int i) { x = i; }
-  int getX() { return x; }
+	int x;
+	public:
+	void setX(int i) { x = i; }
+	int getX() { return x; }
 };
 
 int main()
 {
-  MyClass obs[4];
-  int i;
+	MyClass obs[4];
+	int i;
 
-  for(i=0; i < 4; i++)
-    obs[i].setX(i);
+	for(i=0; i < 4; i++)
+	obs[i].setX(i);
 
---
+	--
 
-class Fred {
- public:
-   Fred();
-   ...
- };
+	class Fred {
+		public:
+		Fred();
+		...
+	};
 
- int main()
- {
-   Fred a[10];              ? calls the default constructor 10 times
-   Fred* p = new Fred[10];  ? calls the default constructor 10 times
-   ...
- }
+	int main()
+	{
+		Fred a[10];              ? calls the default constructor 10 times
+		Fred* p = new Fred[10];  ? calls the default constructor 10 times
+		...
+	}
 
- ---
-class Fred {
- public:
-   Fred(int i, int j);      ? assume there is no default constructor
-   ...
- };
+	---
+	class Fred {
+		public:
+		Fred(int i, int j);      ? assume there is no default constructor
+		...
+	};
 
- int main()
- {
-   Fred a[10];              ? ERROR: Fred doesn't have a default constructor
-   Fred* p = new Fred[10];  ? ERROR: Fred doesn't have a default constructor
-   ...
- }
+	int main()
+	{
+		Fred a[10];              ? ERROR: Fred doesn't have a default constructor
+		Fred* p = new Fred[10];  ? ERROR: Fred doesn't have a default constructor
+		...
+	}
 
----
+	---
 
 #include <vector>
 
- int main()
- {
-   std::vector<Fred> a(10, Fred(5,7));  ? the 10 Fred objects in std::vector a will be initialized with Fred(5,7)
-   ...
- }
+	int main()
+	{
+		std::vector<Fred> a(10, Fred(5,7));  ? the 10 Fred objects in std::vector a will be initialized with Fred(5,7)
+		...
+	}
 
- ---
-class Fred {
- public:
-   Fred(int i, int j);      ? assume there is no default constructor
-   ...
- };
+	---
+	class Fred {
+		public:
+		Fred(int i, int j);      ? assume there is no default constructor
+		...
+	};
 
- int main()
- {
-   Fred a[10] = {
-     Fred(5,7), Fred(5,7), Fred(5,7), Fred(5,7), Fred(5,7),  // The 10 Fred objects are
-     Fred(5,7), Fred(5,7), Fred(5,7), Fred(5,7), Fred(5,7)   // initialized using Fred(5,7)
-   };
-   ...
- }
+	int main()
+	{
+		Fred a[10] = {
+			Fred(5,7), Fred(5,7), Fred(5,7), Fred(5,7), Fred(5,7),  // The 10 Fred objects are
+			Fred(5,7), Fred(5,7), Fred(5,7), Fred(5,7), Fred(5,7)   // initialized using Fred(5,7)
+		};
+		...
+	}
 
 
 
 
 ###########################################
-IPv6 addresses are written in eight groups of four hexadecimal digits separated by colons, for example, 2001:0db8:85a3:0000:0000:8a2e:0370:7334
+	IPv6 addresses are written in eight groups of four hexadecimal digits separated by colons, for example, 2001:0db8:85a3:0000:0000:8a2e:0370:7334
 ###########################################
-Actually, the conversion rules are
+	Actually, the conversion rules are
 
-a) Convert to the larger type.
+	a) Convert to the larger type.
 b) In case of equal size prefer usigned over signed.
 
 You can verify this by changing the declaration of int b to int64_t b. The output would now say Negative.
@@ -216,15 +896,15 @@ Shared libraries are handled with a more advanced form of linking, which makes t
 To minimize the number of broadcasts, ARP maintains a cache of IP address-to-media access control address mappings for future use. The ARP cache can contain both dynamic and static entries. Dynamic entries are added and removed automatically over time. Static entries remain in the cache until the computer is restarted.
 
 # ICMP:
- You can use the ping command to send ICMP echo request messages and record the receipt of ICMP echo reply messages. With these messages, you
+You can use the ping command to send ICMP echo request messages and record the receipt of ICMP echo reply messages. With these messages, you can detect network or host communication failures and troubleshoot common TCP/IP connectivity problems.
 
 #IGMP:
 Other important aspects of IP multicasting include the following:
 
-    Group membership is dynamic, allowing hosts to join and leave the group at any time.
-    The ability of hosts to join multicast groups is performed through the sending of IGMP messages.
-    Groups are not limited by size and members can be spread out across multiple IP networks (if connecting routers support the propagation of IP multicast traffic and group membership information).
-    A host can send IP traffic to the group's IP address without belonging to the corresponding group
+Group membership is dynamic, allowing hosts to join and leave the group at any time.
+The ability of hosts to join multicast groups is performed through the sending of IGMP messages.
+Groups are not limited by size and members can be spread out across multiple IP networks (if connecting routers support the propagation of IP multicast traffic and group membership information).
+A host can send IP traffic to the group's IP address without belonging to the corresponding group
 '
 #UDP
 UDP is fast, has low overhead requirements, and can support point-to-point and point-to-multipoint communication.
@@ -247,7 +927,7 @@ Passing 2-dimensional arrays as parameters
 
 C++ doesn't care about bounds, but it needs to compute the memory address given the subscripts (see below). To do this it needs to know the row width (number of columns). Therefore formal 2-dimensional array parameters must be declared with the row size, altho the number of rows may be omitted. For example,
 void clearBoard(ticTacToeBoard[][3]) {
-   . . .
+. . .
 }
 '
 ###########################################
@@ -280,17 +960,17 @@ so the minimum such N is the answer
 ###########################################
 ###########################################
 Bucket Sort:
-	N nos., each M bit:		O(N)
-	http://www.personal.kent.edu/~rmuhamma/Algorithms/MyAlgorithms/Sorting/bucketSort.htm
+N nos., each M bit:		O(N)
+http://www.personal.kent.edu/~rmuhamma/Algorithms/MyAlgorithms/Sorting/bucketSort.htm
 
 Radix sort:
-	O(M*N)
-	M is for outer loop.
-	Each internal loop is for N times, using bucket sort
+O(M*N)
+M is for outer loop.
+Each internal loop is for N times, using bucket sort
 
 Count sort:
-	O(N)
-	http://www.personal.kent.edu/~rmuhamma/Algorithms/MyAlgorithms/Sorting/countingSort.htm
+O(N)
+http://www.personal.kent.edu/~rmuhamma/Algorithms/MyAlgorithms/Sorting/countingSort.htm
 ###########################################
 babylonian method:
 
@@ -300,46 +980,46 @@ Let xn+1 be the average of xn and S / xn (using the arithmetic mean to approxima
 Repeat step 2 until the desired accuracy is achieved.
 
 ###########################################
-    abstract class GraphicObject {
-        int x, y;
-        ...
-        void moveTo(int newX, int newY) {
-            ...
-        }
-        abstract void draw();
-        abstract void resize();
-    }
+abstract class GraphicObject {
+	int x, y;
+	...
+	void moveTo(int newX, int newY) {
+		...
+	}
+	abstract void draw();
+	abstract void resize();
+}
 
 Each non-abstract subclass of GraphicObject, such as Circle and Rectangle, must provide implementations for the draw and resize methods:
 
-    class Circle extends GraphicObject {
-        void draw() {
-            ...
-        }
-        void resize() {
-            ...
-        }
-    }
-    class Rectangle extends GraphicObject {
-        void draw() {
-            ...
-        }
-        void resize() {
-            ...
-        }
-    }
+class Circle extends GraphicObject {
+	void draw() {
+		...
+	}
+	void resize() {
+		...
+	}
+}
+class Rectangle extends GraphicObject {
+	void draw() {
+		...
+	}
+	void resize() {
+		...
+	}
+}
 
 ###########################################
 sudo apt-get update
-	To install all available updates:
+To install all available updates:
 sudo apt-get upgrade
-	To search for a package:
+To search for a package:
 apt-cache search package
-	To install a package:
+To install a package:
 sudo apt-get install package
-	To remove a package:
+To remove a package:
 sudo apt-get remove package
-	To list other apt commands and options:
+To list other apt commands and options:
 apt-get help
 
 ###########################################
@@ -371,8 +1051,8 @@ The wc section of code works the same way, except in revers
 Unions like structure contain members whose individual data types may differ from one another. However the members that compose a union all share the same storage area within the computers memory where as each member within a structure is assigned its own unique storage area. Thus unions are used to conserve memory. They are useful for application involving multiple members. Where values need not be assigned to all the members at any one time. Like structures union can be declared using the keyword union as follows:
 
 union {
-float coords[3];
-char about[20];
+	float coords[3];
+	char about[20];
 } assocdata;
 
 code.m=456;
@@ -391,9 +1071,9 @@ http://developers.facebook.com/docs/guides/web
 ###########################################
 Some examples of sorts which are not comparison sorts include:
 
-    * Radix sort (examines individual bits of keys)
-    * Counting sort (indexes using key values)
-    * Bucket sort (examines bits of keys)
+* Radix sort (examines individual bits of keys)
+* Counting sort (indexes using key values)
+* Bucket sort (examines bits of keys)
 
 ###########################################
 http://www.cplusplus.com/doc/tutorial/typecasting/
@@ -401,7 +1081,7 @@ http://www.cplusplus.com/doc/tutorial/typecasting/
 http://code.google.com/p/memcached/wiki/NewUserInternals
 http://www.usenix.org/event/usenix99/full_papers/pai/pai_html/node8.html
 ###########################################
-infix to postfix:
+# infix to postfix:
 
 http://scriptasylum.com/tutorials/infix_postfix/algorithms/infix-postfix/index.htm
 http://www.coders2020.com/what-is-infix-prefix-postfix-how-can-you-convert-from-one-representation-to-another-how-do-you-evaluate-these-expressions
@@ -425,13 +1105,13 @@ Infix to Postfix Conversion :
 
 In normal algebra we use the infix notation like a+b*c. The corresponding postfix notation is abc*+. The algorithm for the conversion is as follows :
 
-    * Scan the Infix string from left to right.
-    * Initialise an empty stack.
-    * If the scannned character is an operand, add it to the Postfix string. If the scanned character is an operator and if the stack is empty Push the character to stack.
-          o If the scanned character is an Operand and the stack is not empty, compare the precedence of the character with the element on top of the stack (topStack). If topStack has higher precedence over the scanned character Pop the stack else Push the scanned character to stack. Repeat this step as long as stack is not empty and topStack has precedence over the character.
-      Repeat this step till all the characters are scanned.
-    * (After all characters are scanned, we have to add any character that the stack may have to the Postfix string.) If stack is not empty add topStack to Postfix string and Pop the stack. Repeat this step as long as stack is not empty.
-    * Return the Postfix string.
+* Scan the Infix string from left to right.
+* Initialise an empty stack.
+* If the scannned character is an operand, add it to the Postfix string. If the scanned character is an operator and if the stack is empty Push the character to stack.
+o If the scanned character is an Operator and the stack is not empty, compare the precedence of the character with the element on top of the stack (topStack). If topStack has higher precedence over the scanned character Pop the stack else Push the scanned character to stack. Repeat this step as long as stack is not empty and topStack has precedence over the character.
+Repeat this step till all the characters are scanned.
+* (After all characters are scanned, we have to add any character that the stack may have to the Postfix string.) If stack is not empty add topStack to Postfix string and Pop the stack. Repeat this step as long as stack is not empty.
+* Return the Postfix string.
 
 Conversion from infix to prefix:
 
@@ -471,13 +1151,13 @@ http://www.parashift.com/c++-faq-lite/ctors.html#faq-10.6
 # if you use const data member, then use initialization list to assign values
 1	class Something
 2	{
-3	private:
-4	    const int m_nValue;
-5	public:
-6	    Something(): m_nValue(5)
-7	    {
-8	    }
-9	};
+	3	private:
+	4	    const int m_nValue;
+	5	public:
+	6	    Something(): m_nValue(5)
+	7	    {
+		8	    }
+	9	};
 
 Consider the following constructor that initializes member object x_ using an initialization list: Fred::Fred() : x_(whatever) { }. The most common benefit of doing this is improved performance. For example, if the expression whatever is the same type as member variable x_, the result of the whatever expression is constructed directly inside x_ — the compiler does not make a separate copy of the object. Even if the types are not the same, the compiler is usually able to do a better job with initialization lists than with assignments.
 
@@ -485,86 +1165,86 @@ The other (inefficient) way to build constructors is via assignment, such as: Fr
 
 # why is named cstor needed
 
- class Point {
- public:
-   Point(float x, float y);     // Rectangular coordinates
-   Point(float r, float a);     // Polar coordinates (radius and angle)
-   // ERROR: Overload is Ambiguous: Point::Point(float,float)
- };
+class Point {
+	public:
+	Point(float x, float y);     // Rectangular coordinates
+	Point(float r, float a);     // Polar coordinates (radius and angle)
+	// ERROR: Overload is Ambiguous: Point::Point(float,float)
+};
 
- int main()
- {
-   Point p = Point(5.7, 1.2);   // Ambiguous: Which coordinate system?
-   ...
- }
+int main()
+{
+	Point p = Point(5.7, 1.2);   // Ambiguous: Which coordinate system?
+	...
+}
 One way to solve this ambiguity is to use the Named Constructor Idiom:
 
- #include <cmath>               // To get std::sin() and std::cos()
+#include <cmath>               // To get std::sin() and std::cos()
 
- class Point {
- public:
-   static Point rectangular(float x, float y);      // Rectangular coord's
-   static Point polar(float radius, float angle);   // Polar coordinates
-   // These static methods are the so-called "named constructors"
-   ...
+class Point {
+	public:
+	static Point rectangular(float x, float y);      // Rectangular coord's
+	static Point polar(float radius, float angle);   // Polar coordinates
+	// These static methods are the so-called "named constructors"
+	...
 
-'
+	'
 
 
 ###########################################
-qsrot.h @ sahni codes:
+	qsrot.h @ sahni codes:
 	E:\My eBooks\Algo\Sahni Codes\all
 ###########################################
 
 
 ###########################################
-#
+	#
 
 ###########################################
-static variables are stored in the data segment or BSS of the process memory.
+	static variables are stored in the data segment or BSS of the process memory.
 
-xinu: un-initialised data in BSS
-
-###########################################
-in STL, map is implemented by RB tree, while hashmap is implemented via hash
-
-In STL, map is implemented by RB Tree whereas Hashmap is implemented by linkedlists/vectors
-Map does have duplicates. HashMap has.
-Map does not have collisions.
-Map has a complexity O(logn), hashmaps generally have O(1).
-
+	xinu: un-initialised data in BSS
 
 ###########################################
-const int x;      // constant int
-x = 2;            // illegal - can't modify x
+	in STL, map is implemented by RB tree, while hashmap is implemented via hash
 
-const int* pX;    // changeable pointer to constant int
-*pX = 3;          // illegal -  can't use pX to modify an int
-pX = &someOtherIntVar;      // legal - pX can point somewhere else
+	In STL, map is implemented by RB Tree whereas Hashmap is implemented by linkedlists/vectors
+	Map does have duplicates. HashMap has.
+	Map does not have collisions.
+	Map has a complexity O(logn), hashmaps generally have O(1).
 
-int* const pY;              // constant pointer to changeable int
-*pY = 4;                    // legal - can use pY to modify an int
-pY = &someOtherIntVar;      // illegal - can't make pY point anywhere else
 
-const int* const pZ;        // const pointer to const int
-*pZ = 5;                    // illegal - can't use pZ to modify an int
-pZ = &someOtherIntVar;      // illegal - can't make pZ point anywhere else
+###########################################
+	const int x;      // constant int
+	x = 2;            // illegal - can't modify x
 
-'
+	const int* pX;    // changeable pointer to constant int
+	*pX = 3;          // illegal -  can't use pX to modify an int
+	pX = &someOtherIntVar;      // legal - pX can point somewhere else
+
+	int* const pY;              // constant pointer to changeable int
+	*pY = 4;                    // legal - can use pY to modify an int
+	pY = &someOtherIntVar;      // illegal - can't make pY point anywhere else
+
+	const int* const pZ;        // const pointer to const int
+	*pZ = 5;                    // illegal - can't use pZ to modify an int
+	pZ = &someOtherIntVar;      // illegal - can't make pZ point anywhere else
+
+	'
 ###########################################
 #http://www.cplusplus.com/doc/tutorial/exceptions/
 
-float myfunction (char param) throw (int);
+	float myfunction (char param) throw (int);
 
 
-This declares a function called myfunction which takes one agument of type char and returns an element of type float. The only exception that this function might throw is an exception of type int. If it throws an exception with a different type, either directly or indirectly, it cannot be caught by a regular int-type handler.
+	This declares a function called myfunction which takes one agument of type char and returns an element of type float. The only exception that this function might throw is an exception of type int. If it throws an exception with a different type, either directly or indirectly, it cannot be caught by a regular int-type handler.
 
 
-int myfunction (int param) throw(); // no exceptions allowed
-int myfunction (int param);         // all exceptions allowed
+	int myfunction (int param) throw(); // no exceptions allowed
+	int myfunction (int param);         // all exceptions allowed
 
 
-'
+	'
 ###########################################
 what are allocators ?
 
@@ -600,36 +1280,36 @@ As usual with the Named Constructor Idiom, the constructors are all private or p
 
 Note also that you can make another class Wilma a friend of Fred if you want to allow a Wilma to have a member object of class Fred, but of course this is a softening of the original goal, namely to force Fred objects to be allocated via new.
 
-		 class Fred {
-		 public:
-		   // The create() methods are the "named constructors":
-		   static Fred* create()                 { return new Fred();     }
-		   static Fred* create(int i)            { return new Fred(i);    }
-		   static Fred* create(Fred const& fred) { return new Fred(fred); }
-		   ...
+class Fred {
+	public:
+	// The create() methods are the "named constructors":
+	static Fred* create()                 { return new Fred();     }
+	static Fred* create(int i)            { return new Fred(i);    }
+	static Fred* create(Fred const& fred) { return new Fred(fred); }
+	...
 
-		 private:
-		   // The constructors themselves are private or protected:
-		   Fred();
-		   Fred(int i);
-		   Fred(Fred const& fred);
-		   ...
-		 };
+	private:
+	// The constructors themselves are private or protected:
+	Fred();
+	Fred(int i);
+	Fred(Fred const& fred);
+	...
+};
 
-		int main()
-		 {
-		   Fred* p = Fred::create(5);
-		   ...
-		   delete p;
-		   ...
-		 }
+int main()
+{
+	Fred* p = Fred::create(5);
+	...
+	delete p;
+	...
+}
 
 for e.g.: // vkc
 
 class x {
 	public:
 	static x* (int a) { return new x(a); }		// we make static so that it can be called by
-							// class name
+	// class name
 
 	private:
 	int datamem;
@@ -653,10 +1333,10 @@ class A { };
 
 compiler should provide (as and when needed)
 
-       1. a constructor
-       2. a destructor
-       3. a copy constructor
-       4. = operator
+1. a constructor
+2. a destructor
+3. a copy constructor
+4. = operator
 
 #
 ###########################################
@@ -670,25 +1350,25 @@ based on sub sequence problem ....
 
 int FindMax ( int amount, ...)
 {
-  int i,val,greater;
-  va_list vl;
-  va_start(vl,amount);
-  greater=va_arg(vl,int);
-  for (i=1;i<amount;i++)
-  {
-    val=va_arg(vl,int);
-    greater=(greater>val)?greater:val;
-  }
-  va_end(vl);
-  return greater;
+	int i,val,greater;
+	va_list vl;
+	va_start(vl,amount);
+	greater=va_arg(vl,int);
+	for (i=1;i<amount;i++)
+	{
+		val=va_arg(vl,int);
+		greater=(greater>val)?greater:val;
+	}
+	va_end(vl);
+	return greater;
 }
 
 int main ()
 {
-  int m;
-  m= FindMax (7,702,422,631,834,892,104,772);
-  printf ("The greatest one is: %d\n",m);
-  return 0;
+	int m;
+	m= FindMax (7,702,422,631,834,892,104,772);
+	printf ("The greatest one is: %d\n",m);
+	return 0;
 }
 
 
@@ -728,8 +1408,8 @@ mutable keyword indicates that particular member of a structure or class can be 
 
 struct data
 {
-char name[80];
-mutable double salary;
+	char name[80];
+	mutable double salary;
 }
 
 const data MyStruct = { "Satish Shetty", 1000 }; //initlized by complier
@@ -750,18 +1430,18 @@ constructor with a single argument makes that constructor as conversion ctor and
 using namespace std;
 class Boo
 {
-    int x;
-  public:
-    Boo( int i ){
-        x=i;
-    }
-    void prnt(){    cout << x; }
+	int x;
+	public:
+	Boo( int i ){
+		x=i;
+	}
+	void prnt(){    cout << x; }
 };
 
 int main () {
-Boo BooObject = 10 ; // assigning int 10 Boo object
-BooObject.prnt();
-return 0;
+	Boo BooObject = 10 ; // assigning int 10 Boo object
+	BooObject.prnt();
+	return 0;
 }
 
 
@@ -781,8 +1461,8 @@ bipartite: http://en.wikipedia.org/wiki/Bipartite_graph
 
 Any graph with no odd cycles is bipartite. As a consequence of this:
 
-    * Every tree is bipartite.
-    * Cycle graphs with an even number of vertices are bipartite.
+* Every tree is bipartite.
+* Cycle graphs with an even number of vertices are bipartite.
 
 
 http://en.wikipedia.org/wiki/Shortest_path
@@ -792,28 +1472,28 @@ The travelling salesman problem is the problem of finding the shortest path that
 http://geek-o-pedia.blogspot.com/2008/03/recently-i-encountered-trivial-but.html
 2 queues into a stack:
 
-    * Version A: The stack should be efficient when pushing an item.
-    * Version B: The stack should be efficient when popping an item.
+* Version A: The stack should be efficient when pushing an item.
+* Version B: The stack should be efficient when popping an item.
 
 
 Version A:
 
-    * push:
-          o enqueue in queue1	: 1,2,3,4,5
-    * pop:
-          o while size of queue1 is bigger than 1, pipe dequeued items from queue1 into queue2	{1,2,3,4} last = {5}
-          o dequeue and return the last item of queue1, then switch the names of queue1 and queue2
-	  	return 5 as pop and queue2 is now queue1
+* push:
+o enqueue in queue1	: 1,2,3,4,5
+* pop:
+o while size of queue1 is bigger than 1, pipe dequeued items from queue1 into queue2	{1,2,3,4} last = {5}
+o dequeue and return the last item of queue1, then switch the names of queue1 and queue2
+return 5 as pop and queue2 is now queue1
 
 Version B:
 
-    * push:
-          o enqueue in queue2 	: 1,2,3,4,5
-          o enqueue all items of queue1 in queue2, then switch the names of queue1 and queue2
-	  		q1 = 1,2,3,4,5
-			q2 = {}
-    * pop:
-          o deqeue from queue1
+* push:
+o enqueue in queue2 	: 1,2,3,4,5
+o enqueue all items of queue1 in queue2, then switch the names of queue1 and queue2
+q1 = 1,2,3,4,5
+q2 = {}
+* pop:
+o deqeue from queue1
 
 
 
@@ -824,20 +1504,20 @@ Snapshot is point in time image of any individual file/directory or entire File 
 
 ###########################################
 todo:
-	operator overloading in classes
-	the way done in sartaj sahni for outputtting..
+      operator overloading in classes
+      the way done in sartaj sahni for outputtting..
 
-	template<class T>
-	void LinearList<T>::Output(ostream& out) const
-	{// Put the list into the stream out.
-	   for (int i = 0; i < length; i++)
-	      out << element[i] << "  ";
-	}
+      template<class T>
+      void LinearList<T>::Output(ostream& out) const
+      {// Put the list into the stream out.
+        for (int i = 0; i < length; i++)
+        out << element[i] << "  ";
+        }
 
-	// overload <<
-	template <class T>
-	ostream& operator<<(ostream& out, const LinearList<T>& x)
-	   {x.Output(out); return out;}
+        // overload <<
+        template <class T>
+        ostream& operator<<(ostream& out, const LinearList<T>& x)
+           {x.Output(out); return out;}
 
 ################################################
 
@@ -845,17 +1525,17 @@ Or it can be done by directly using a friend function...
 
 friend ostream &operator<<(ostream &out, Complex c)     //output
 {
-        out<<"real part: "<<<"\n";
-        out<<"imag part: "<<<"\n";
-        return out;
+	out<<"real part: "<<<"\n";
+	out<<"imag part: "<<<"\n";
+	return out;
 }
 friend istream &operator>>(istream &in, Complex &c)     //input
 {
-        cout<<"enter real part:\n";
-        in>>c.real;
-        cout<<"enter imag part: \n";
-        in>>c.imag;
-        return in;
+	cout<<"enter real part:\n";
+	in>>c.real;
+	cout<<"enter imag part: \n";
+	in>>c.imag;
+	return in;
 }
 
 ###########################################
@@ -934,7 +1614,7 @@ $filename = $query->param("song");
 $filename =~ s/.*[\/\\](.*)/$1/;		# EXTRACT JUST THE LAST NAME
 						# $filename = "c:/hel/one/two/three";
 						# $1 = three
-$upload_filehandle = $query->upload("song");
+						$upload_filehandle = $query->upload("song");
 
 open(UPLOADFILE, ">$upload_dir/$filename") or die "Can't open '$upload_dir/$filename': $!";
 binmode UPLOADFILE;
@@ -979,7 +1659,7 @@ $server = IO::Socket::INET->new(LocalPort => $server_port, Proto=>"udp") or
 	die "Couldn't be a udp server on port $server_port : $@\n";
 
 while ($him = $server->recv($datagram, $MAX_TO_READ, $flags)) {
-   	# do something
+	# do something
 }
 
 udpqotd - UDP message server
@@ -1090,8 +1770,8 @@ class MaxHeap {
       ~MaxHeap() {delete [] heap;}
       int Size() const {return CurrentSize;}
       T Max() {if (CurrentSize == 0)
-                  throw OutOfBounds();
-               return heap[1];}
+		  throw OutOfBounds();
+	       return heap[1];}
       MaxHeap<T>& Insert(const T& x);
       MaxHeap<T>& DeleteMax(T& x);
       void Initialize(T a[], int size, int ArraySize);
@@ -1165,21 +1845,21 @@ Code:
 class Base
 {
        public:
-          Base(){ cout<<"Constructor: Base"<<endl;}
-          //~Base(){ cout<<"Destructor : Base"<<endl;}
-          virtual ~Base(){ cout<<"Destructor : Base"<<endl;}
+	  Base(){ cout<<"Constructor: Base"<<endl;}
+	  //~Base(){ cout<<"Destructor : Base"<<endl;}
+	  virtual ~Base(){ cout<<"Destructor : Base"<<endl;}
 };
 class Derived: public Base
 {
      //Doing a lot of jobs by extending the functionality
        public:
-           Derived(){ cout<<"Constructor: Derived"<<endl;}
-           ~Derived(){ cout<<"Destructor : Derived"<<endl;}
+	   Derived(){ cout<<"Constructor: Derived"<<endl;}
+	   ~Derived(){ cout<<"Destructor : Derived"<<endl;}
  };
 
 <main>
 	Base *Var = new Derived();
-        delete Var;
+	delete Var;
 
 If Base has a virtual dest. o/p will be like:
 	Constructor: Base
@@ -1326,10 +2006,10 @@ bool IntersectRect(const RECT * r1, const RECT * r2)
 // recheck
 {
     return ! ( r2->left > r1->right
-        || r2->right < r1->left
-        || r2->top > r1->bottom
-        || r2->bottom > r1->top
-        );
+	|| r2->right < r1->left
+	|| r2->top > r1->bottom
+	|| r2->bottom > r1->top
+	);
 }
 
 The above algorithm finds the conditions at which the rectangles do not intersect and then negates the values to get the result. There is a straight forward way of doing the same algorithm, but it requires far more conditions than the one above.
@@ -1494,10 +2174,10 @@ InitLsaString(
     DWORD StringLength;
 
     if (String == NULL) {
-        LsaString->Buffer = NULL;
-        LsaString->Length = 0;
-        LsaString->MaximumLength = 0;
-        return;
+	LsaString->Buffer = NULL;
+	LsaString->Length = 0;
+	LsaString->MaximumLength = 0;
+	return;
     }
 
     StringLength = wcslen(String);
@@ -1523,22 +2203,22 @@ OpenPolicy(
     ZeroMemory(&ObjectAttributes, sizeof(ObjectAttributes));
 
     if (ServerName != NULL) {
-        //
-        // Make a LSA_UNICODE_STRING out of the LPWSTR passed in
-        //
-        InitLsaString(&ServerString, ServerName);
-        Server = &ServerString;
+	//
+	// Make a LSA_UNICODE_STRING out of the LPWSTR passed in
+	//
+	InitLsaString(&ServerString, ServerName);
+	Server = &ServerString;
     }
 
     //
     // Attempt to open the policy.
     //
     return LsaOpenPolicy(
-                Server,
-                &ObjectAttributes,
-                DesiredAccess,
-                PolicyHandle
-                );
+		Server,
+		&ObjectAttributes,
+		DesiredAccess,
+		PolicyHandle
+		);
 }
 
 /*++
@@ -1575,48 +2255,48 @@ GetAccountSid(
     // initial memory allocations
     //
     if((*Sid=HeapAlloc(
-                    GetProcessHeap(),
-                    0,
-                    cbSid
-                    )) == NULL) break;
+		    GetProcessHeap(),
+		    0,
+		    cbSid
+		    )) == NULL) break;
 
     if((ReferencedDomain=(LPTSTR)HeapAlloc(
-                    GetProcessHeap(),
-                    0,
-                    cchReferencedDomain * sizeof(TCHAR)
-                    )) == NULL) break;
+		    GetProcessHeap(),
+		    0,
+		    cchReferencedDomain * sizeof(TCHAR)
+		    )) == NULL) break;
 
     //
     // Obtain the SID of the specified account on the specified system.
     //
     while(!LookupAccountName(
-                    SystemName,         // machine to lookup account on
-                    AccountName,        // account to lookup
-                    *Sid,               // SID of interest
-                    &cbSid,             // size of SID
-                    ReferencedDomain,   // domain account was found on
-                    &cchReferencedDomain,
-                    &peUse
-                    )) {
-        if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
-            //
-            // reallocate memory
-            //
-            if((*Sid=HeapReAlloc(
-                        GetProcessHeap(),
-                        0,
-                        *Sid,
-                        cbSid
-                        )) == NULL) break;
+		    SystemName,         // machine to lookup account on
+		    AccountName,        // account to lookup
+		    *Sid,               // SID of interest
+		    &cbSid,             // size of SID
+		    ReferencedDomain,   // domain account was found on
+		    &cchReferencedDomain,
+		    &peUse
+		    )) {
+	if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
+	    //
+	    // reallocate memory
+	    //
+	    if((*Sid=HeapReAlloc(
+			GetProcessHeap(),
+			0,
+			*Sid,
+			cbSid
+			)) == NULL) break;
 
-            if((ReferencedDomain=(LPTSTR)HeapReAlloc(
-                        GetProcessHeap(),
-                        0,
-                        ReferencedDomain,
-                        cchReferencedDomain * sizeof(TCHAR)
-                        )) == NULL) break;
-        }
-        else break;
+	    if((ReferencedDomain=(LPTSTR)HeapReAlloc(
+			GetProcessHeap(),
+			0,
+			ReferencedDomain,
+			cchReferencedDomain * sizeof(TCHAR)
+			)) == NULL) break;
+	}
+	else break;
     }
 
     //
@@ -1633,10 +2313,10 @@ GetAccountSid(
     HeapFree(GetProcessHeap(), 0, ReferencedDomain);
 
     if(!bSuccess) {
-        if(*Sid != NULL) {
-            HeapFree(GetProcessHeap(), 0, *Sid);
-            *Sid = NULL;
-        }
+	if(*Sid != NULL) {
+	    HeapFree(GetProcessHeap(), 0, *Sid);
+	    *Sid = NULL;
+	}
     }
 
 
@@ -1662,21 +2342,21 @@ SetPrivilegeOnAccount(
     // grant or revoke the privilege, accordingly
     //
     if(bEnable) {
-        return LsaAddAccountRights(
-                PolicyHandle,       // open policy handle
-                AccountSid,         // target SID
-                &PrivilegeString,   // privileges
-                1                   // privilege count
-                );
+	return LsaAddAccountRights(
+		PolicyHandle,       // open policy handle
+		AccountSid,         // target SID
+		&PrivilegeString,   // privileges
+		1                   // privilege count
+		);
     }
     else {
-        return LsaRemoveAccountRights(
-                PolicyHandle,       // open policy handle
-                AccountSid,         // target SID
-                FALSE,              // do not disable all rights
-                &PrivilegeString,   // privileges
-                1                   // privilege count
-                );
+	return LsaRemoveAccountRights(
+		PolicyHandle,       // open policy handle
+		AccountSid,         // target SID
+		FALSE,              // do not disable all rights
+		&PrivilegeString,   // privileges
+		1                   // privilege count
+		);
     }
 }
 
@@ -1707,33 +2387,33 @@ DisplayWinError(
     fprintf(stderr,"%s error!\n", szAPI);
 
     if(dwBufferLength=FormatMessageA(
-                        FORMAT_MESSAGE_ALLOCATE_BUFFER |
-                        FORMAT_MESSAGE_FROM_SYSTEM,
-                        NULL,
-                        WinError,
-                        GetUserDefaultLangID(),
-                        (LPSTR) &MessageBuffer,
-                        0,
-                        NULL
-                        ))
+			FORMAT_MESSAGE_ALLOCATE_BUFFER |
+			FORMAT_MESSAGE_FROM_SYSTEM,
+			NULL,
+			WinError,
+			GetUserDefaultLangID(),
+			(LPSTR) &MessageBuffer,
+			0,
+			NULL
+			))
     {
-        DWORD dwBytesWritten; // unused
+	DWORD dwBytesWritten; // unused
 
-        //
-        // Output message string on stderr.
-        //
-        WriteFile(
-            GetStdHandle(STD_ERROR_HANDLE),
-            MessageBuffer,
-            dwBufferLength,
-            &dwBytesWritten,
-            NULL
-            );
+	//
+	// Output message string on stderr.
+	//
+	WriteFile(
+	    GetStdHandle(STD_ERROR_HANDLE),
+	    MessageBuffer,
+	    dwBufferLength,
+	    &dwBytesWritten,
+	    NULL
+	    );
 
-        //
-        // Free the buffer allocated by the system.
-        //
-        LocalFree(MessageBuffer);
+	//
+	// Free the buffer allocated by the system.
+	//
+	LocalFree(MessageBuffer);
     }
 }
 
@@ -1760,9 +2440,9 @@ main(int argc, char *argv[])
 
     if(argc == 1)
     {
-        fprintf(stderr,"Usage: %s <Account> [TargetMachine]\n",
-            argv[0]);
-        return RTN_USAGE;
+	fprintf(stderr,"Usage: %s <Account> [TargetMachine]\n",
+	    argv[0]);
+	return RTN_USAGE;
     }
 
     //
@@ -1781,12 +2461,12 @@ main(int argc, char *argv[])
     // Open the policy on the target machine.
     //
     if((Status=OpenPolicy(
-                wComputerName,      // target machine
-                POLICY_CREATE_ACCOUNT | POLICY_LOOKUP_NAMES,
-                &PolicyHandle       // resultant policy handle
-                )) != STATUS_SUCCESS) {
-        DisplayNtStatus("OpenPolicy", Status);
-        return RTN_ERROR;
+		wComputerName,      // target machine
+		POLICY_CREATE_ACCOUNT | POLICY_LOOKUP_NAMES,
+		&PolicyHandle       // resultant policy handle
+		)) != STATUS_SUCCESS) {
+	DisplayNtStatus("OpenPolicy", Status);
+	return RTN_ERROR;
     }
 
     //
@@ -1797,34 +2477,34 @@ main(int argc, char *argv[])
     // trusted domains.
     //
     if(GetAccountSid(
-            NULL,       // default lookup logic
-            AccountName,// account to obtain SID
-            &pSid       // buffer to allocate to contain resultant SID
-            )) {
-        //
-        // We only grant the privilege if we succeeded in obtaining the
-        // SID. We can actually add SIDs which cannot be looked up, but
-        // looking up the SID is a good sanity check which is suitable for
-        // most cases.
+	    NULL,       // default lookup logic
+	    AccountName,// account to obtain SID
+	    &pSid       // buffer to allocate to contain resultant SID
+	    )) {
+	//
+	// We only grant the privilege if we succeeded in obtaining the
+	// SID. We can actually add SIDs which cannot be looked up, but
+	// looking up the SID is a good sanity check which is suitable for
+	// most cases.
 
-        //
-        // Grant the SeServiceLogonRight to users represented by pSid.
-        //
-        if((Status=SetPrivilegeOnAccount(
-                    PolicyHandle,           // policy handle
-                    pSid,                   // SID to grant privilege
-                    L"SeServiceLogonRight", // Unicode privilege
-                    TRUE                    // enable the privilege
-                    )) == STATUS_SUCCESS)
-            iRetVal=RTN_OK;
-        else
-            DisplayNtStatus("AddUserRightToAccount", Status);
+	//
+	// Grant the SeServiceLogonRight to users represented by pSid.
+	//
+	if((Status=SetPrivilegeOnAccount(
+		    PolicyHandle,           // policy handle
+		    pSid,                   // SID to grant privilege
+		    L"SeServiceLogonRight", // Unicode privilege
+		    TRUE                    // enable the privilege
+		    )) == STATUS_SUCCESS)
+	    iRetVal=RTN_OK;
+	else
+	    DisplayNtStatus("AddUserRightToAccount", Status);
     }
     else {
-        //
-        // Error obtaining SID.
-        //
-        DisplayWinError("GetAccountSid", GetLastError());
+	//
+	// Error obtaining SID.
+	//
+	DisplayWinError("GetAccountSid", GetLastError());
     }
 
     //
@@ -1957,7 +2637,7 @@ break;
 http://en.wikipedia.org/wiki/C_preprocessor
 
 #define _STATE_TO_STRING(_st) \
-  	case Veritas::HAL::SVC::HALSVC_##_st: n = #_st; break;
+	case Veritas::HAL::SVC::HALSVC_##_st: n = #_st; break;
 
     _STATE_TO_STRING(STARTING);
     _STATE_TO_STRING(RUNNING);
@@ -1976,6 +2656,29 @@ http://en.wikipedia.org/wiki/C_preprocessor
 
 
 ==================THREADSAFE NUMBER THROERY=====================
+
+There are a few ways to achieve thread safety:
+	#Re-entrancy
+	#Mutual exclusion or Process synchronization
+	#Thread-local storage
+	#Atomic operations
+#Re-entrancy
+    Writing code in such a way that it can be partially executed by a thread, reexecuted by the same thread or simultaneously executed by another thread and still correctly complete the original execution. This requires the saving of state information in variables local to each execution, usually on a stack, instead of in static or global variables or other non-local state. There are still some rare cases where non-local state can be used in a reentrant function, if the access is done through atomic operations and the data-structure is re-entrancy safe.
+
+#In the following piece of C code, the function is thread-safe, but not reentrant:
+
+int function()
+{
+        mutex_lock();
+        ...
+        function body
+        ...
+        mutex_unlock();
+}
+
+In the above, function can be called by different threads without any problem. But if the function is used in a reentrant interrupt handler and a second interrupt arises inside the function, the second routine will hang forever. As interrupt servicing can disable other interrupts, the whole system could suffer.
+
+
 
 threadsafe and re-entrant
 ~~~~~~~
@@ -2023,10 +2726,10 @@ number of factors.
 
 #if defined(WIN32)
   #include "VxExecPipeW32.h"
-  typedef CVxExecPipeW32 CVxExecPipe;
+  typedef _vkc_cvxExecPipeW32 _vkc_cvxExecPipe;
 #elif defined(SOLARIS)
   #include "VxExecPipeSolaris.h"
-  typedef CVxExecPipeSolaris CVxExecPipe;
+  typedef _vkc_cvxExecPipeSolaris _vkc_cvxExecPipe;
 
   pragma:
   #include<windows.h>
@@ -2054,7 +2757,7 @@ vector iterator:
 vector<string> vecTags;
     vector<string>::iterator itr;
     for (itr = vecTags.begin(); itr != vecTags.end(); itr++) {
-        __m_sMaskingTags.push_back(*itr);
+	__m_sMaskingTags.push_back(*itr);
     }
 
     ===============================THROW + VIRTUAL:=================================
@@ -2063,13 +2766,13 @@ virtual int  ExecPipe(string strCmd, string sCurrentWorkingDir) throw (EVxExecPi
 
 	FOR ERROR NO. DO FOLLOWING:
 #include <errno.h>
-            VxITLTrace(tlError, "VxExecPipeBase: cannot copy string (%s), errno %d",
-                   itrenv->c_str(), errno);
+	    VxITLTrace(tlError, "VxExecPipeBase: cannot copy string (%s), errno %d",
+		   itrenv->c_str(), errno);
 
 	  FOR STATIC DECLARALATION IN A CLASS LIKE:
-		static CVxLock m_Lock;
+		static _vkc_cvxLock m_Lock;
 	DO INITIALISE LIKE:
-		CVxLock CVxExecPipeW32::m_Lock;
+		_vkc_cvxLock _vkc_cvxExecPipeW32::m_Lock;
 
     ===============================THROW + VIRTUAL:=================================
 
@@ -2101,7 +2804,7 @@ the request cannot be satisfied. The storage is initialized to zero.
 The pointer returned by malloc or calloc has the proper alignment for the object in question,
 but it must be cast into the appropriate type, as in
 		int *ip;
- 		   ip = (int *) calloc(n, sizeof(int));
+		   ip = (int *) calloc(n, sizeof(int));
 
 
 ==================================	CALLOC & MALLOC=======================
@@ -2192,22 +2895,22 @@ On Mon, Jun 1, 2009 at 4:01 PM, Manish Bansode <manishbansode@gmail.com> wrote:
     while(<H>)
     {
     #       $lines.=$_;
-            @arr = split(/ /, $_);
-            foreach $entry(@arr)
-            {
-                    if( exists $inv_hash{$entry} )
-                    {
-                            $array_ref = $inv_hash{$entry};
-                            push(@$array_ref, $j);
-                    }
-                    else
-                    {
-                            my @array = ();
-                            push(@array, $j);
-                            $inv_hash{$entry} = \@array;
-                    }
-            }
-            $j++;
+	    @arr = split(/ /, $_);
+	    foreach $entry(@arr)
+	    {
+		    if( exists $inv_hash{$entry} )
+		    {
+			    $array_ref = $inv_hash{$entry};
+			    push(@$array_ref, $j);
+		    }
+		    else
+		    {
+			    my @array = ();
+			    push(@array, $j);
+			    $inv_hash{$entry} = \@array;
+		    }
+	    }
+	    $j++;
     }
 
     #print "\nj=$j\nsize=".keys(%inv_hash)."\n";

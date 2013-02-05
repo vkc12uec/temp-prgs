@@ -1,0 +1,18 @@
+
+ dummy = [1234]
+ orig | dum | out MADAM 1234  Gè»†
+ new str = M*ADAM
+ new str = M*A*DAM
+ new str = M*A*D*AM
+ new str = M*A*D*A*M
+ new str = M*A*DA*M
+ new str = M*AD*AM
+ new str = M*AD*A*M
+ new str = M*ADA*M
+ new str = MA*DAM
+ new str = MA*D*AM
+ new str = MA*D*A*M
+ new str = MA*DA*M
+ new str = MAD*AM
+ new str = MAD*A*M
+ new str = MADA*M

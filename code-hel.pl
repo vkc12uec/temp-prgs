@@ -18,11 +18,13 @@ http://letschat.info/list-of-facebook-questions/
 # OO design questions:
   https://sites.google.com/site/steveyegge2/five-essential-phone-screen-questions
 
-# LRU implementation like Galvin:
+# LRU implementation like Galvin:  
+  # http://www.geeksforgeeks.org/implement-lru-cache/
   DLL as Queue, most recently used is at head, LRU at tail
   Hashmap <key = page number , value is Queue node* >
 
 # fb_ques
+    # http://www.glassdoor.com/Interview/You-are-trying-to-rob-houses-on-a-street-Each-house-has-some-ve-amount-of-cash-Your-goal-is-to-rob-houses-such-that-you-QTN_117978.htm
 You are trying to rob houses on a street. Each house has some +ve amount of cash. Your goal is to rob houses such that you maximize the total robbed amount. The constraint is once you rob a house you cannot rob a house adjascent to that house.
 
 
@@ -31,14 +33,16 @@ You are trying to rob houses on a street. Each house has some +ve amount of cash
   std::sort(word.begin(), word.end());
   see "amz_sort_char_array.cpp" where u can impl. class which overloads operator() (int i, int j)
   For C++ string, u can use macroo like tr(), all()
-'
+
 # MEDIAN of stream of nos. :
+  # http://codercareer.blogspot.com/2012/01/no-30-median-in-stream.html
       Soln:   Use min-heap and max-heap and keep on putting new elements 
               in of the heaps on a decision, and their tops will be the median
 
 # Babylonian method for sqrt:
     X(n+1) = 1/2 * ( X(n) + S/X(n) )
     S => whose sqrt has to be found
+    You choose seed as X(n) and then iterate. Keep on looping till X(n+1) ~ X(n)
 
 # TSP dynamic programing : O(n^2 2^n) algorithm for TSP
 
@@ -94,7 +98,8 @@ A set of n points in the plane can be preprocessed in O(nlogn) time into a data 
   
 
 ###########################################
-# bellman-ford : Bellman.Ford runs in O(|V|·|E|) time, where |V| and |E| are the number of vertices and edges respectively.
+# bellman-ford : (single source shortest path)
+# Bellman.Ford runs in O(|V|·|E|) time, where |V| and |E| are the number of vertices and edges respectively.
   Main loop runs for V-1 times. 
   In LAST:     if (for every edge u-v)  
                   u.distance + uv.weight < v.distance:
@@ -114,7 +119,7 @@ A set of n points in the plane can be preprocessed in O(nlogn) time into a data 
                  
     # http://www.geeksforgeeks.org/dynamic-programming-set-23-bellman-ford-algorithm/
 
-# -ve weight cycle means that it has a cycle with -ve cost. Hence it keeps on rotating
+# -ve weight cycle means that it has a cycle with summing -ve cost. Hence it keeps on rotating
 
 # Dijkstra (directed/undirected)
       Time Complexity of the implementation is O(V^2). If the input graph is represented using adjacency list, it can be reduced to O(E log V) with the help of binary heap. We will soon be discussing O(E Log V) algorithm as a separate post.
@@ -127,20 +132,20 @@ A set of n points in the plane can be preprocessed in O(nlogn) time into a data 
 
       procedure FloydWarshallWithPathReconstruction ()
          for each vertex v
-            dist[v][v] ? 0
+            dist[v][v] = 0
          for each edge (u,v)
-            dist[u][v] ? w(u,v)  // the weight of the edge (u,v)
+            dist[u][v] = w(u,v)  // the weight of the edge (u,v)
          for k from 1 to |V|
             for i from 1 to |V|
                for j from 1 to |V|
                   if dist[i][k] + dist[k][j] < dist[i][j] then
-                     dist[i][j] ? dist[i][k] + dist[k][j]
-                     next[i][j] ? k
+                     dist[i][j] = dist[i][k] + dist[k][j]
+                     next[i][j] = k
 
       function Path (i, j)
-         if dist[i][j] = 8 then
+         if dist[i][j] = INFINITY then
            return "no path"
-         var intermediate ? next[i][j]
+         var intermediate = next[i][j]
          if intermediate = null then
            return " "   // the direct edge from i to j gives the shortest path
          else
@@ -149,6 +154,7 @@ A set of n points in the plane can be preprocessed in O(nlogn) time into a data 
 
           >> Hence, to detect negative cycles using the Floyd–Warshall algorithm, one can inspect the diagonal of the path matrix, and the presence of a negative number indicates that the graph contains at least one negative cycle.[2] Obviously, in an undirected graph a negative edge creates a negative cycle (i.e., a closed walk) involving its incident vertices.
           >> The idea is to one by one pick all vertices and update all shortest paths which include the picked vertex as an intermediate vertex in the shortest path. When we pick vertex number k as an intermediate vertex, we already have considered vertices {0, 1, 2, .. k-1} as intermediate vertices. 
+          >> Find cycle of shortest length in a directed graph with positive weights @ http://stackoverflow.com/questions/3911626/find-cycle-of-shortest-length-in-a-directed-graph-with-positive-weights/3912537#3912537
 
 
 # DFS application (path finding, cycle finding (nodes forming cycle))
@@ -170,32 +176,35 @@ A set of n points in the plane can be preprocessed in O(nlogn) time into a data 
 ###########################################
 # DP:
 
-#  Given an array of strings of 0s and 1s. X and Y are also given. Return the maximum number of elements in a subset of the array elements which will X number of zeroes and Y number 
-#   of 1s when combined. For eg: if array[] = {"01  * ", "10", "0", "110"} X=3, Y=2 Answer should be 3 since first 3 strings when combined will give the required number of 0s and 1s.
+#  Given an array of strings of 0s and 1s. X and Y are also given. Return the maximum number of elements in a subset of the array elements which will X number of zeroes and Y number of 1s when combined. For eg: if array[] = {"01", "10", "0", "110"} X=3, Y=2 | Answer should be 3 since first 3 strings when combined will give the required number of 0s and 1s.
               B(k, (X,Y)) = max (_1, _2);
                             _1 => B(k-1, (X,Y))
                             _2 => B(k-1, (X-x[k],Y-y[k]))
 
 
-#
 # Optimal BST "keys[0.. n-1] of search keys and an array freq[0.. n-1] of frequency counts"
      >> it fills like Matrix multiplication
 
 # 0-1 Knapsack problem algo:
     B[i, K] -> max. benefit  using i items and K size knapsack
     B[i, K] = max { B[i-1, K] if w[i] > K
-                  { max (B[i-1, K] , B[i-1, K-w[i]+v[i])
+                  { max (B[i-1, K] , B[i-1, K-w[i]]+v[i])
 
 
-# Knapsack problem (multiple items allowed) algo:
+# Knapsack problem (multiple items allowed) algo:   @ http://tech-queries.blogspot.com/2011/04/integer-knapsack-problem-duplicate.html
     M(j) -> maximum posssible value one can pack in size=j knapsack
     M(j) = max { 
                 M(j-1) ,      if jth slot is empty in optimal soln.
-                forall (items i) max { M(j-w[i]) + v[i] }     if some item [i] occupies jth slot
+                forall (items i) 
+                  max { M(j-w[i]) + v[i] }     if some item [i] occupies jth slot
               }
                 
 
-#LIS (nlogn): http://www.geeksforgeeks.org/longest-monotonically-increasing-subsequence-size-n-log-n/
+#LIS :
+# DP approach:
+#             LIS ending at index(i) = max (LIS ending at index(j)) + 1 [ if a[i] > a[j] ]
+#
+# nlogn approach: http://www.geeksforgeeks.org/longest-monotonically-increasing-subsequence-size-n-log-n/
 
               1. Design an algorithm to construct the longest increasing list. Also, model your solution using DAGs.
               2. Design an algorithm to construct all monotonically increasing lists of equal longest size.

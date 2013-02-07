@@ -14,9 +14,11 @@
 #include <iterator>
 #include <stack>
 #include <climits>
+#if __linux
 #include <sys/dir.h>
 #include <errno.h>
 #include <sys/stat.h>
+#endif
 
 using namespace std;
 

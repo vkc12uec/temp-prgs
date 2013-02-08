@@ -1692,24 +1692,22 @@ Remember my post: Determine if a Binary Tree is a Binary Search Tree (BST)?
 
 We use the same idea here. We pass the valid range of the values from the parent node to its child nodes. When we are about to insert a node, we will check if the insert value is in the valid range. If it is, this is the right space to insert. If it is not, we will try the next empty space. Reconstructing the whole BST from a file will take only O(n) time.
 
-void readBSTHelper(int min, int max, int &insertVal,BinaryTree *&p, ifstream &fin) {
-  if (insertVal > min && insertVal < max) {
-    int val = insertVal;
-    p = new BinaryTree(val);
-    if (fin >> insertVal) {
-      readBSTHelper(min, val, insertVal, p->left, fin);
-      readBSTHelper(val, max, insertVal, p->right, fin);
-    }
-  }
-}
-
 void readBST(BinaryTree *&root, ifstream &fin) {
   int val;
   fin >> val;
   readBSTHelper(INT_MIN, INT_MAX, val, root, fin);
 }
 
-
+void readBSTHelper(int min, int max, int &insertVal,BinaryTree *&p, ifstream &fin) {
+  if (insertVal > min && insertVal < max) {
+    int val = insertVal;
+    p = new BinaryTree(val);
+    if (fin >> insertVal) {
+      readBSTHelper(min, val, insertVal, p->left, fin);   // IF THIS FAILS, IT MEANS THAT insertVal canNOT be in left child
+      readBSTHelper(val, max, insertVal, p->right, fin);
+    }
+  }
+}
 
 ###########################################
 # LCA of bt
@@ -2637,6 +2635,7 @@ If the counter is not 0, we increment or decrement the counter according to whet
 When we are done, the current candidate is the majority element, if there is a majority.
 
 // if any 2 nos. appear > n/3 times : GOOGLE interview
+  # The basic idea is similar to majority-finding. In majority finding, we use the property that deleting any two distinct elements preserves majority elements, in the sense that any element that was majority before is still majority. Here, we use the property that deleting any three distinct elements preserves special elements.
 
 ###########################################
 # make a stack with min/max/push/pop in O(1) time
@@ -2708,7 +2707,12 @@ static TreeNode* createTreeFromLevelOrder(int inorder[],int levelorder[], int st
 
 ###########################################
 
-# construct from PRE and POST a complete/full BT
+# construct from PRE and POST a complete/full BT  | http://www.geeksforgeeks.org/full-and-complete-binary-tree-from-given-preorder-and-postorder-traversals/
+      struct node *constructTree (int pre[], int post[], int size)
+      {
+        int preIndex = 0;
+        return constructTreeUtil (pre, post, &preIndex, 0, size - 1, size);
+      }
 
       // preIndex is used to keep track of index in pre[].
       // l is low index and h is high index for the current subarray in post[]
@@ -2743,13 +2747,6 @@ static TreeNode* createTreeFromLevelOrder(int inorder[],int levelorder[], int st
 
         return root;
       }
-
-      struct node *constructTree (int pre[], int post[], int size)
-      {
-        int preIndex = 0;
-        return constructTreeUtil (pre, post, &preIndex, 0, size - 1, size);
-      }
-
 
 # construct binary tree from inorder and preorder
 #
@@ -3180,23 +3177,24 @@ int cyclePresent (node *head) {
 ###########################################
 
 bool Network::findPath(int v, int w, int &length, int path[], int reach[])
-{// Actual path finder v != w.
- // Performs a depth-first search for a path to w.
-   reach[v] = 1;
-   int u = Begin(v);
-   while (u) {
-      if (!reach[u]) {
-         length++;
-         path[length] = u; // add u to path
-         if (u == w) return true;
-         if (findPath(u, w, length, path, reach))
-            return true;
-         // no path from u to w
-         length--; // remove u
-         }
-      u = NextVertex(v);
-      }
-   return false;
+{ 
+  // Actual path finder v != w.
+  // Performs a depth-first search for a path to w.
+  reach[v] = 1;
+  int u = Begin(v);
+  while (u) {
+    if (!reach[u]) {
+      length++;
+      path[length] = u; // add u to path
+      if (u == w) return true;
+      if (findPath(u, w, length, path, reach))
+        return true;
+      // no path from u to w
+      length--; // remove u
+    }
+    u = NextVertex(v);
+  }
+  return false;
 }
 
 ###########################################
@@ -3222,11 +3220,10 @@ void print_paths(int x, int y) {
   current_path.REMOVE(path(x, y);
 }
 
-''"
 ###########################################
 bool Network::Topological(int v[])
 {// Compute topological ordering of digraph vertices.
- // Return true if a topological order is found.
+                                                 // Return true if a topological order is found.
  // In this case return the order in v[0:n-1].
  // Return false if there is no topological order.
 
@@ -3346,7 +3343,6 @@ void Network::BFS(int v, int reach[], int label)
   }
   DeactivatePos(); // free iterator array
 }
-
 ###########################################
 
 Graphs:
@@ -3526,6 +3522,42 @@ N=4, Coins = {1,2,3}; with infinite supply | table can be 1D or 2D    | http://w
         Given a value N, if we want to make change for N cents, and we have infinite supply of each of S = { S1, S2, .. , Sm} valued coins, how many ways can we make the change? The order of coins doesn’t matter.
         For example, for N = 4 and S = {1,2,3}, there are four solutions: {1,1,1,1},{1,1,2},{2,2},{1,3}. So output should be 4. For N = 10 and S = {2, 5, 3, 6}, there are five solutions: {2,2,2,2,2}, {2,2,3,3}, {2,2,6}, {2,3,5} and {5,5}. So the output should be 5.
 
+        # Just give no. of ways. Not the min. # of coins
+        Let count(S[], m, n) be the function to count the number of solutions, then it can be written as sum of count(S[], m-1, n) and count(S[], m, n-Sm).
+
+        # 2D table 
+        table[n+1][m]     answer is table[n][m-1]     // always initialize base case
+        int count( int S[], int m, int n )
+        {
+            int i, j, x, y;
+         
+            // We need n+1 rows as the table is consturcted in bottom up manner using
+            // the base case 0 value case (n = 0)
+            int table[n+1][m];
+            
+            // Fill the enteries for 0 value case (n = 0)
+            for (i=0; i<m; i++)
+                table[0][i] = 1;
+         
+            // Fill rest of the table enteries in bottom up manner 
+            for (i = 1; i < n+1; i++)
+            {
+                for (j = 0; j < m; j++)
+                {
+                    // Count of solutions including S[j]
+                    x = (i-S[j] >= 0)? table[i - S[j]][j]: 0;
+         
+                    // Count of solutions excluding S[j]
+                    y = (j >= 1)? table[i][j-1]: 0;
+         
+                    // total count
+                    table[i][j] = x + y;
+                }
+            }
+            return table[n][m-1];
+        }
+ 
+        # 1D
         int count( int S[], int m, int n )
         {
           // table[i] will be storing the number of solutions for
@@ -3560,7 +3592,7 @@ N=4, Coins = {1,2,3}; with infinite supply | table can be 1D or 2D    | http://w
       Arrays.fill( table, Integer.MAX_VALUE - 100 );
         table[0] = 0;
 
-      for ( int i = 1; i < table.length; i++ ) {
+      for ( int i = 1; i < table.length; i++ ) {    // amount u need
           for ( int j = 0; j < coins.length; j++ ) {
             if ( coins[j] <= i && table[i - coins[j]] + 1 < table[i] ) {
                                   table[i] = table[i - coins[j]] + 1;
@@ -3571,26 +3603,20 @@ N=4, Coins = {1,2,3}; with infinite supply | table can be 1D or 2D    | http://w
       }
 
 https://docs.google.com/file/d/18Ls8SnBofO3daV0VNn7-OHCQWEw_1nDmvvwy27qsGME0TO5SbkF9Auz6kowf/edit
+Compute the Value of the Optimal Solution Bottom-up. Consider the following piece of pseu-docode, where d is the array of denomination values, k is the number of denominations, and n is the amount for which change is to be made.
+
 Change(d, k, n)
-  1 C[0] . 0
-  2 for p . 1 to n
-  3
-  min . .
-  4
-  for i . 1 to k
-  5
-  if d[i] . p then
-  6
-  if 1 + C[p . d[i]] < min then
-  7
-  min . 1 + C[p . d[i]]
-  8
-  coin . i
-  9
-  C[p] . min
-  10
-  S[p] . coin
-  11 return C and S
+  C[0] = 0
+  for p = 1 to n
+    min = INFINTY
+    for i = 1 to k
+      if d[i] <= p then
+        if 1 + C[p - d[i]] < min then
+          min = 1 + C[p - d[i]]
+          coin = i
+      C[p] = min
+      S[p] = coin
+  return C and S
 
 # what coin denomination are used ?
 Make-Change(S, d, n)
@@ -3624,7 +3650,7 @@ http://www.ccs.neu.edu/home/jaa/CSG713.04F/Information/Handouts/dyn_prog.pdf
 
     for w = 0 to W
       B[0,w] = 0
-    for i = 1 to n
+    for i = 1 to n    //items
       B[i,0] = 0
 
     for i = 1 to n
@@ -3760,8 +3786,6 @@ Node *reverseList(Node *current, Node *parent)
 
 Initial method call should be
 	head = reverseList(head,NULL)
-
-###########################################
 
 ###########################################
        http://www.yolinux.com/TUTORIALS/C++Singleton.html

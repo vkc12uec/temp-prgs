@@ -75,14 +75,14 @@ You are trying to rob houses on a street. Each house has some +ve amount of cash
 # Range type Trees:
 
 # Interval Tree : (Cormen) Intervals given in form (low, high). Make AVL BST using low as keys. Each node also tells max. 'high' its subtree has). Pg. 369 - cormen
-  You can search in log(n) time, any given interval 'i' if it even slipghtly overlaps with any interval in BST
+  You can search in log(n) time, any given interval 'i' if it even slightly overlaps with any interval in BST
   Insert/Delete takes log(n) time.
   -> Time to build : nlogn (building AVL tree)
   -> Space         : n
   -> Query time    : O(log n)
   -> Can do        : Can search for an overlapping 'i'
 
-# Segment Tree: In computer science, a segment tree is a tree data structure for storing intervals, or segments. It allows querying which of the stored segments contain a given point. It is, in principle, a static structure; that is, its content cannot be modified once the structure is built. A similar data structure is the interval tree. 
+# Segment Tree: In computer science, a segment tree is a tree data structure for storing intervals, or segments. It allows querying 'which of the stored segments contain a given point'. It is, in principle, a static structure; that is, its content cannot be modified once the structure is built. A similar data structure is the interval tree. 
 A segment tree for a set I of n intervals uses O(n log n) storage and can be built in O(n log n) time. Segment trees support searching for all the intervals that contain a query point in O(log n + k), k being the number of retrieved intervals or segments.[1]
   -> Time to build : nlogn
   -> Space         : nlogn
@@ -249,7 +249,7 @@ A set of n points in the plane can be preprocessed in O(nlogn) time into a data 
               isSum[0] = 1;
               for(i=0;i<n;i++)
               {
-                isSum[set[i]] = 1;
+                isSum[set[i]] = 1 (possible, TRUE);
               }
               for (i = 0; i < n; i++) {
                   for (j = sum - set[i]; j >= 0; j--) {
@@ -301,7 +301,7 @@ A set of n points in the plane can be preprocessed in O(nlogn) time into a data 
 #
         Array on integer is given
         find out next bigger number 
-        Ex {2,5,3,4,61}
+        Ex {2,5,3,4,6,1}
         Out: 2->5
         5->6
         3->4
@@ -348,7 +348,12 @@ http://stackoverflow.com/questions/69192/how-to-implement-a-queue-using-two-stac
 #tr1::shared_ptr (problem of reference cycle), tr1::weak_ptr (2 smart pointers in tr1)
 
 #std::auto_ptr and std::tr:ptr are used for storing ptrs so that desctructor are called when var is out of scope item13:
-    they are not gud with arrays
+      * The major problems introduced by auto_ptr are:
+
+          * Copying and assigning changes the owner of a resource, modifying not only the destination but also the source, which it not intuitive.
+          * It cannot be used in STL containers because the constraint that a container's elements must be copy constructable and assignable does not apply to this class.'
+
+#they are not gud with arrays
 
     e.g. std:tr1:shared_ptr<Widget> pw (new Widget());
 
@@ -424,6 +429,7 @@ which is used in lock-free and wait-free algorithms. Here is an example: conside
             int temp = x;
             temp++;
             x = temp;
+
           Thus it is non safe under concurrency. Here is a lock-free implementation of the increment
             int temp = x;
             while (!CAS(&x, temp, temp+1)) {
@@ -3313,6 +3319,7 @@ END DFS()
                   if (dfs (u, L[]))
                     return TRUE;
               }
+              u = next(v);
             }   // end while
             
             L[u] = BLACK;

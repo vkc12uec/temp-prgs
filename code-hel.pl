@@ -574,7 +574,8 @@ which is used in lock-free and wait-free algorithms. Here is an example: conside
           for (int i = 0; i < parent->children.size(); i++){
             ss >>  data >>  num_children;      
             parent->children[i]= new Node(data, num_children);
-            if (num_children > 0)  q.push(parent->children[i]);
+            if (num_children > 0)  
+              q.push(parent->children[i]);
           }
         }
        
@@ -613,33 +614,31 @@ which is used in lock-free and wait-free algorithms. Here is an example: conside
                                                                                         : rightTreeSum.maxSumFromRootToLeaf + root.data;
               return new TreeSum(maxSumBetweenTwoNodesOfChildren, maxSumFromRootToLeaf);
           }
+    
+      # method 2: http://fenghaolw.blogspot.com/2012/11/binary-tree-maximum-path-sum.html
+      #
+    int maxPathSum(TreeNode *root) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+        int csum;
+        int maxsum = INT_MIN;
+        maxPathSumHelper(root, csum, maxsum);
+        return maxsum;
+        
+    }
+      // csum is the sum which you want to propagate above
 
-          int maxPathSum(TreeNode *root) {
-                  int csum;
-                  int maxsum;
-                  bool flag = true;
-                  maxPathSumHelper(root, csum, maxsum, flag);
-                  return maxsum;
-
-              }
-              void maxPathSumHelper(TreeNode *node, int &csum, int &maxsum, bool &flag) {
-                  if (!node) {
-                      csum = 0;
-                      return;
-                  }
-                  int lsum = 0, rsum = 0;
-                  maxPathSumHelper(node->left, lsum, maxsum, flag);
-                  maxPathSumHelper(node->right, rsum, maxsum, flag);
-                  csum = max(node->val, max(node->val + lsum, node->val + rsum));
-                  if (flag) {
-                      maxsum = max(csum, node->val + lsum + rsum);
-                      flag = false;
-                  }
-                  else {
-                      maxsum = max(maxsum, max(csum, node->val + lsum + rsum));
-                  }
-              }
-          };
+    void maxPathSumHelper(TreeNode *node, int &csum, int &maxsum) {
+        if (!node) {
+            csum = 0;
+            return;
+        }
+        int lsum = 0, rsum = 0;
+        maxPathSumHelper(node->left, lsum, maxsum);
+        maxPathSumHelper(node->right, rsum, maxsum);
+        csum = max(node->val, max(node->val + lsum, node->val + rsum));
+        maxsum = max (maxsum, max(csum, node->val + lsum + rsum));
+    }
 
 
 
@@ -854,13 +853,13 @@ Same above funda will solve the skewed tree, just that if (pn->next->left == nul
   you have to keep moving right using ur parents next pointer until u reach a node or lastly NULL
 
 ###########################################
-Directed acyclic word graph
+# Directed acyclic word graph
 
 This is a tree whuich u can form by compressing Trie (prefix tree). In this, prefix and suffixes are shared.
 
 
 # Print all the combination from a candidate set that sum to a target value
-achieved thru recursion   "subset_sum_equal_n.cpp"
+achieved thru recursion   "subset_sum_equal_n.cpp"  OR use the dp approach given above [ isSubsetSum() ]
 
 ###########################################
 Consistent hashing (used in web cacheing etc.). 

@@ -20,8 +20,10 @@ void DoCombine (char in[], char out [] , int length, int recursLev, int start, i
 
     //if (recursLev == limit) {
       out[recursLev + 1] = '\0' ; /* tack on NUL for printf */ 
-      if (strlen (out) == limit)
+      if (strlen (out) == limit) {
         printf("%s\n", out); 
+        //return;
+        }
     //}
 
     if (i < length - 1) /* recurse if more letters in input */ 

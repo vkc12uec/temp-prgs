@@ -2,6 +2,33 @@ intitle:"index.of" linkin (mp3|mp4|flv|avi|mpg|wmv) -html-htm-php-jsp-asp
 http://www.ihas1337code.com/2010/04/hacking-google-interview-from-mit.html
 
 ###########################################
+Sites that contain algorithmic question. These sites are useful if one has little preperation time (a few days to one or two weeks). 
+
+    http://courses.csail.mit.edu/iap...
+    http://www.leetcode.com
+    http://www.xorswap.com
+    GeeksforGeeks - A computer science portal for geeks
+    http://www.qubeet.com/
+    http://everything2.com/title/har...
+    http://www.intertechtion.com/ans...
+    http://algomuse.appspot.com/archive
+    Interview Questions | CareerCup
+
+
+Sites that have online judges, and are useful for longer term growth (think 2 months or more):
+
+    http://www.topcoder.com
+    http://www.interviewstreet.com
+    http://code.google.com/codejam/c...
+    http://www.codeforces.com
+    http://www.codechef.com
+    http://www.spoj.pl
+    http://www.projecteuler.com
+
+
+The wiki is incomplete. Please add to it as necessary.
+
+###########################################
 # Inner vs Outer Joins
 
 We can see that an inner join will only return rows in which there is a match based on the join predicate. In this case, what that means is anytime the Employee and Location table share an Employee ID, a row will be generated in the results to show the match. Looking at the original tables, one can see that those Employee ID’s that are shared by those tables are displayed in the results. But, with a left or right outer join, the result set will retain all of the rows from either the left or right table

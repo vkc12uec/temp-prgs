@@ -16,32 +16,44 @@
 #include "topcoder_header.h"
 vi empty(0);
 
-void subsets (int N, vvi &res) {
+void subsets (int N, vvi &res, int limit) {
   if (N==0) {
-    res.pb(empty());
+    res.pb(empty);
     return;
   }
   else if (N>0) {
     vvi tmp;
-    subsets (N-1, tmp);
-    vvi copy=tmp;
+    subsets (N-1, tmp, limit);
+    res=tmp;
 
     tr (tmp, it) {
       // *it is a vec
+      if (sz(*it) == limit)
+        continue;
       it->pb(N);
     }
-    // union copy and tmp
+
+    // union res and tmp
+    tr (tmp, it) {
+      res.pb(*it);
+    }
   }
 }
 
 int main () {
-  int N=5;
+  int N=5, limit=3;
   vvi res;
   vi empty(0);
 
   res.pb(empty);
 
-  subsets (N, res);
-  return ;
+  subsets (N, res, limit);
+
+  tr (res, it) {
+    printVector (*it);
+    cout << "\n --";
+  }
+
+  return 0;
 }
 

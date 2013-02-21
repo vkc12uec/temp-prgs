@@ -23,6 +23,17 @@ http://letschat.info/list-of-facebook-questions/
   DLL as Queue, most recently used is at head, LRU at tail
   Hashmap <key = page number , value is Queue node* >
 
+  # impl. of Trie:  http://www.cs.bu.edu/teaching/c/tree/trie/  
+  Implements like:
+  typedef struct trieNodeTag {
+    char key;
+    trieValueT value;
+    struct trieNodeTag *next, *children;    // chars at single level under a single node are in link list, *children is the first children
+  } trieNodeT;
+  # Looking up data in a trie is faster in the worst case, O(m) time, compared to an imperfect hash table. An imperfect hash table can have key collisions. A key collision is the hash function mapping of different keys to the same position in a hash table. The worst-case lookup speed in an imperfect hash table is O(N) time, but far more typically is O(1), with O(m) time spent evaluating the hash.
+
+
+
 # fb_ques
     # http://www.glassdoor.com/Interview/You-are-trying-to-rob-houses-on-a-street-Each-house-has-some-ve-amount-of-cash-Your-goal-is-to-rob-houses-such-that-you-QTN_117978.htm
 You are trying to rob houses on a street. Each house has some +ve amount of cash. Your goal is to rob houses such that you maximize the total robbed amount. The constraint is once you rob a house you cannot rob a house adjascent to that house.

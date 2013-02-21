@@ -7,6 +7,18 @@
 #include "string.h"
 using namespace std;
 
+void nCk_recursive(string actual, string result, int start, int end, int k)
+{
+ if(result.length() == k) {
+   cout << result << endl; return;
+ }
+ for(int i = start; i < end; ++i) {
+   string temp = result;
+   temp += actual[i];
+   nCk_recursive(actual, temp, i+1, end, k);
+ }
+}
+
 void DoCombine (char in[], char out [] , int length, int fillptr, int start, int m)
 {
   int i ;
@@ -41,6 +53,8 @@ void combine (char *a, int size, char *res, int fill, int m , int base) {
 }
 
 int main () {
+  nCk_recursive("abcde", "", 0, 5, 3);
+  return -1;
   char a[] = {'a', 'b', 'c', 'd', 'e', 'f'};
   
   int size = sizeof(a)/sizeof (char);

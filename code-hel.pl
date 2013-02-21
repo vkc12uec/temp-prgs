@@ -15,6 +15,25 @@ projecteuler.net
 http://letschat.info/list-of-all-google-interview-questions/
 http://letschat.info/list-of-facebook-questions/
 
+# epic : http://www.careercup.com/question?id=14946605        GOOD  (3 ways)
+#   1. make a graph, find longest path
+#   2. brute force : start from every i,j
+#   3. dynamic programming
+
+      for each cell we need to keep maximum length of a snake which ends in this cell. Corresponding recurrence for calculating value in cell[i][j]:
+
+         dp[i][j] = 1; // snake can always be of length 1
+         if (abs(grid[i][j - 1] - grid[i][j]) == 1){
+            dp[i][j] = max(dp[i][j], dp[i][j - 1] + 1);
+         }
+         if (abs(grid[i - 1][j] - grid[i][j]) == 1){
+            dp[i][j] = max(dp[i][j], dp[i - 1][j] + 1);
+         }
+
+      The answer would be the maximum of dp[i][j] for all i, j on the grid.
+      Space/Time complexity O(n*m).
+
+
 # OO design questions:
   https://sites.google.com/site/steveyegge2/five-essential-phone-screen-questions
 
@@ -62,6 +81,68 @@ You are trying to rob houses on a street. Each house has some +ve amount of cash
 # Median of medians:
     T(n) = T(n/5) + O(n) +          T(7n/10)
           = (finding good pivot) + iterate of the max. size bag
+
+###########################################
+#Tic-tac-toe N*N board:
+
+    Use NxN int matrix and 2N + 2 integers representing the sum of N cols, N rows and 2 diagonals.
+    Player 1's choices will be marked as 1.
+    Player 2's choices will be marked as -1.
+    Add that mark (+-1) to the relevant row/col/diag counters.
+    Player 1 wins if after adding the mark the row/col/diag is sum is N.
+    Player 1 wins if after adding the mark the row/col/diag is sum is -N.
+    They draw if matrix is full.
+
+    Calculating game result is immediate.
+
+    - avico81 on November 06, 2012 | Flag
+
+###########################################
+# Next higher palindrome number:
+
+          case 1: midle left> midle right.
+
+          take the case of say. 934267 take middle two numbers 4 and 2 . if left greater than right change 2 to 4.and replace other numbers from left to right ,, therefre..
+
+          934267
+
+          934467
+
+          934439
+
+          case 2: middle left < middle right
+
+          take 932467
+
+          take middle two.. if left <right.. left++ …. rigt = left
+
+          932467
+
+          933367
+
+          933339
+
+          case 3:middle numbers are equal.
+
+          take 932267
+
+          if middle numbers equal..
+
+          increment middle numbers.
+
+          by 1.and make palindrome.
+
+          933339
+
+          neone finds a case that does not match ?? please let me know.
+
+          2353 ->2442
+
+          4245->4334
+
+          395887->396693
+
+
 
 ###########################################
 # Min max of array
@@ -209,6 +290,32 @@ A set of n points in the plane can be preprocessed in O(nlogn) time into a data 
                 forall (items i) 
                   max { M(j-w[i]) + v[i] }     if some item [i] occupies jth slot
               }
+              # Integer knapsack , multiple items permitted:
+
+              int knapsack(int value[], int weight[], int n, int C, vector<int> backtrack)
+              {
+               int *M = new int[C+1];
+               int i, j, tmp, pos;
+               for(i=1; i<= C; i++)
+               {
+                   M[i] = M[i-1];
+                   pos = i-1;             
+                   for(j=0; j< n; j++)
+                   {
+                       if (i >= weight[j])
+                           tmp = M[i-weight[j]] + value[j];
+                       if (tmp > M[i]){
+                           M[i] = tmp;
+                           pos = i - weight[j];
+                       }
+                   }
+                   backtrack.push_back(pos);
+               } 
+               int ans = M[C];
+               delete[] M;      
+               return ans;
+              }
+
                 
 
 #LIS :
@@ -3319,12 +3426,16 @@ END DFS()
 
             int u = begin(v);
             while (u) {
-              if (L[u] == GREY) 
+              if (L[u] == GREY)  {
+                // pop from stack 'Cycle' till u get node u
                 return TRUE;
+              }
 
               else if (L[u] == WHITE) {
+                Cycle.push (u);
                   if (dfs (u, L[]))
                     return TRUE;
+                Cycle.pop();
               }
               u = next(v);
             }   // end while
@@ -3595,26 +3706,29 @@ N=4, Coins = {1,2,3}; with infinite supply | table can be 1D or 2D    | http://w
 # coin denonimation problem: Return min. no. of coins which can give u 'amount' Rs. with infinite repetion
 # complexity = nW
 # W is the width or max. amt. of weight a knapsack can have
-	# infinite supply of coins
+# infinite supply of coins
 #####
-      int coins( int[] coins, int amount ) {
-        int[] table = new int[amount+1];
+        int coins( int[] coins, int amount ) {
+          int[] table = new int[amount+1];
 
-      Arrays.fill( table, Integer.MAX_VALUE - 100 );
-        table[0] = 0;
+          Arrays.fill( table, Integer.MAX_VALUE - 100 );
+          table[0] = 0;
 
-      for ( int i = 1; i < table.length; i++ ) {    // amount u need
-          for ( int j = 0; j < coins.length; j++ ) {
-            if ( coins[j] <= i && table[i - coins[j]] + 1 < table[i] ) {
-                                  table[i] = table[i - coins[j]] + 1;
-                              }
-                      }
+          for ( int i = 1; i < table.length; i++ ) {    // running amount u need
+            for ( int j = 0; j < coins.length; j++ ) {
+              if ( coins[j] <= i ) {                    // if that coin value can be considered
+                table[i] = MIN (table[i], table[i - coins[j]]+1);
               }
-      return table[amount];
-      }
+            }
+          }
+          return table[amount];
+        }
 
 https://docs.google.com/file/d/18Ls8SnBofO3daV0VNn7-OHCQWEw_1nDmvvwy27qsGME0TO5SbkF9Auz6kowf/edit
 Compute the Value of the Optimal Solution Bottom-up. Consider the following piece of pseu-docode, where d is the array of denomination values, k is the number of denominations, and n is the amount for which change is to be made.
+
+C[p] = { 0        if p=0
+       { min forall d[i]<=p { 1 + C[p-d[i] }
 
 Change(d, k, n)
   C[0] = 0
@@ -3625,8 +3739,8 @@ Change(d, k, n)
         if 1 + C[p - d[i]] < min then
           min = 1 + C[p - d[i]]
           coin = i
-      C[p] = min
-      S[p] = coin
+    C[p] = min
+    S[p] = coin
   return C and S
 
 # what coin denomination are used ?
@@ -3666,11 +3780,8 @@ http://www.ccs.neu.edu/home/jaa/CSG713.04F/Information/Handouts/dyn_prog.pdf
 
     for i = 1 to n
       for w = 0 to W
-        if wi <= w // item i can be part of the solution
-          if bi + B[i-1,w-wi] > B[i-1,w]
-            B[i,w] = bi + B[i-1,w- wi]
-          else
-            B[i,w] = B[i-1,w]
+        if w[i] <= w // item i can be part of the solution
+           B[i,w] = MAX (bi + B[i-1,w- wi] , B[i-1, w]);
         else B[i,w] = B[i-1,w] // wi > w
 
 -------------------------
@@ -3683,7 +3794,7 @@ Input: S, a set of n items as described earlier, W the total
 weight of the knapsack. (Assume that the weights and values
 are stored in separate arrays named w and v, respectively.)
 
-B[k, w] = B[k - 1,w], if w[k] > w
+B[k, w] = B[k - 1,w],             if w[k] > w
         = max { B[k - 1,w], B[k - 1,w - w[k]] + v[k]}
 
 
@@ -3702,6 +3813,9 @@ Output: The maximal value of items in a valid knapsack.
         }
       }
 
+
+
+# 
 ###########################################
 Maximum sub-sequence problem: in an interger arrray containing +ve and -ve nos..
 
@@ -4169,7 +4283,7 @@ void findpath (int s, int tillnow0) {
             //Calculating Li
             while (!St.empty())
             {
-              if(arr[i] <= arr[St.top()])
+              if(arr[i] <= arr[St.top()])     // stack will always contain the lowest height seen to left from bar[i]
               {
                 St.pop();
               }
@@ -4182,7 +4296,8 @@ void findpath (int s, int tillnow0) {
               t = St.top();
             //Calculating Li
             area[i] = i - t - 1;
-            St.push(i);
+
+            St.push(i);                     // IMP step
           }
 
           //clearing stack for finding Ri
@@ -4256,65 +4371,7 @@ void zigzag (node *r) {
 }
 
 ####################################
-# Question: Binary tree structure is defined as:
-
-struct tree{  
-  int val;  
-  tree* left;  
-  tree* right;  
-  tree* rpeer;      
-};  
-
-# ‘rpeer’ will have the address of next node of same level. For last node at any level, rpeer will be NULL.
-# At the beginning, all the rpeer nodes are assigned NULL. Write a program to populate correct value in rpeer for whole tree.
-
-# 
-void set_peer_SimplelevelOrder (node *n) {
-  if (!n) return;
-  /*
-  Queue <node *> Q(0);
-  int nodes = count(n);
-  Q.add(n);
-  Q.add("\n");
-  n->peer = 0;
-  LinkedList <node*> ll(0);
-
-  while (!Q.isEmpty()) {
-  node *x = Q.delete();
-  if (x->data == "\n") {
-  Q.add ("\n");
-  assign peer in array list
-  }
-  else {
-  if (x->left) Q.add (x->left);
-  if (x->right) Q.add (x->right);
-  }
-  } */
-
-  ArrayList <node *> al(0);
-  al.add (n);
-  al.add ("\n");
-  ptr = 0;
-  nodes--;
-
-  while (1) {
-    if (al[ptr]->data == "\n") {
-      al.add ("\n");
-    }
-    else {
-      if (x->left) {  Q.add (x->left); --nodes; }
-      if (x->right) { Q.add (x->right); --nodes; }
-    }
-    if (!nodes)
-    break;
-  }
-
-  // Traverse the list 'al' and assign the 'peer' pointers
-}
-
-
-####################################
-# Number of inversions in an Array:
+# Number of inversions in an Array:   @ http://www.geeksforgeeks.org/counting-inversions/
 ####################################
 
 int merge(int arr[],int beg,int mid,int end) {
@@ -4365,9 +4422,6 @@ system("pause");
 return 0;
 }
 '''"//
-################################################
-
-
 
 Clone a graph (use BFS or DFS but with a global hashmap)
 ################################################

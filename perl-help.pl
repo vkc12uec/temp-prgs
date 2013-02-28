@@ -112,8 +112,15 @@ Generally an object becomes eligible for garbage collection in Java on following
 
 # Always try to avoid or minimize full garbage collection or Full GC because it affects performance of Java application. When you work in finance domain for electronic trading platform and with high volume low latency systems performance of java application becomes extremely critical an you definitely like to avoid full GC during trading period.
 
-
+'
   
+###########################################
+# Sealed C#
+#
+A sealed class cannot be inherited. It is an error to use a sealed class as a base class. Use the sealed modifier in a class declaration to prevent inheritance of the class.
+It is not permitted to use the abstract modifier with a sealed class.
+Structs are implicitly sealed; therefore, they cannot be inherited.
+
 ###########################################
 /*
 DiamMOND PROBLEM :
@@ -224,6 +231,10 @@ Programmers are responsible for synchronizing access (protecting) globally share
 
 
 ###########################################
+DrawSquare calls DrawLine
+
+http://en.wikipedia.org/wiki/Call_stack#Storing_the_address_to_the_caller.27s_frame
+
 In most systems a stack frame has a field to contain the previous value of the frame pointer register, the value it had while the caller was executing. For example, in the diagram above, the stack frame of DrawLine would have a memory location holding the frame pointer value that DrawSquare uses. The value is saved upon entry to the subroutine and restored for the return. Having such a field in a known location in the stack frame enables code to access each frame successively underneath the currently executing routine's frame, and also allows the routine to easily restore the frame pointer to the caller's frame, just before it returns.
 ###########################################
 # static functions:

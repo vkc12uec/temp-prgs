@@ -2,6 +2,50 @@ intitle:"index.of" linkin (mp3|mp4|flv|avi|mpg|wmv) -html-htm-php-jsp-asp
 http://www.ihas1337code.com/2010/04/hacking-google-interview-from-mit.html
 
 ###########################################
+# diff abstract class v/s interface
+http://javapapers.com/core-java/abstract-and-interface-core-java-2/difference-between-a-java-interface-and-a-java-abstract-class/
+###########################################
+
+Static member functions are considered to have class scope. In contrast to nonstatic member functions, these functions have no implicit this argument; therefore, they can use only static data members, enumerators, or nested types directly. Static member functions can be accessed without using an object of the corresponding class type. Consider this example:
+Example
+
+       // static_member_functions.cpp
+      class StaticTest
+      {
+      private:
+          static int x;
+      public:
+          static int count()
+          {
+              return x;
+          }
+      };
+
+      int StaticTest::x = 9;
+
+      int main()
+      {
+          printf_s("%d\n", StaticTest::count());
+      }
+
+#
+###########################################
+
+Frame–Stewart algorithm  : General Hanoi problem
+
+The Frame–Stewart algorithm, giving a presumably optimal solution for four (or even more) pegs, is described below:
+Let n  be the number of disks.
+Let r  be the number of pegs.
+Define  to be the minimum number of moves required to transfer n disks using r pegs T(n,r)
+
+The algorithm can be described recursively:
+For some k 1 <= k < n, transfer the top  disks to a single peg other than the start or destination pegs, taking T(k,r) moves.
+Without disturbing the peg that now contains the top k disks, transfer the remaining n-k disks to the destination peg, using only the remaining r-1 pegs, taking T(n-k, r-1)  moves.
+Finally, transfer the top k disks to the destination peg, taking T(k,r)  moves.
+The entire process takes 2T(k,r) + T(n-k, r-1) moves. Therefore, the k count  should be picked for which this quantity is minimum.
+This algorithm (with the above choice for k ) is presumed to be optimal, and no counterexamples are known.
+
+###########################################
 Sites that contain algorithmic question. These sites are useful if one has little preperation time (a few days to one or two weeks). 
 
     http://courses.csail.mit.edu/iap...

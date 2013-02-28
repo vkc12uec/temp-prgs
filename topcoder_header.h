@@ -13,8 +13,8 @@
 #include <stdlib.h>
 #include <iterator>
 #include <stack>
-#include <climits>
 #if __linux
+#include <climits>
 #include <sys/dir.h>
 #include <errno.h>
 #include <sys/stat.h>

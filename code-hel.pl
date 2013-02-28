@@ -1,4 +1,17 @@
 ###########################################
+# Sum carry 3 bits
+a , b, c
+
+sum = (a+b+c)%2;  = a^b^c
+car = (a+b+c)/2;  = (a&b) | (b&c) | (c&a)
+
+Value
+kilobyte (kB) 10^3 2^10 
+megabyte (MB) 10^6 2^20
+gigabyte (GB) 10^9 2^30
+terabyte (TB) 10^12  2^40
+
+###########################################
 vids:
 #http://openclassroom.stanford.edu/MainFolder/CoursePage.php?course=IntroToAlgorithms
 http://www.cs.pitt.edu/~kirk/algorithmcourses/index.html
@@ -36,6 +49,8 @@ http://letschat.info/list-of-facebook-questions/
 
 # OO design questions:
   https://sites.google.com/site/steveyegge2/five-essential-phone-screen-questions
+
+# http://www.quora.com/Dynamic-Programming/How-do-you-solve-the-pots-of-gold-game
 
 # LRU implementation like Galvin:  
   # http://www.geeksforgeeks.org/implement-lru-cache/

@@ -73,6 +73,9 @@ Sites that have online judges, and are useful for longer term growth (think 2 mo
 The wiki is incomplete. Please add to it as necessary.
 
 ###########################################
+# Managed code:   http://msdn.microsoft.com/en-us/library/ddk909ch(v=vs.71).aspx
+                  http://interactiveasp.net/blogs/natesstuff/archive/2008/08/11/managed-vs-unmanaged-round-1-theoretical.aspx
+###########################################
 # Inner vs Outer Joins
 
 We can see that an inner join will only return rows in which there is a match based on the join predicate. In this case, what that means is anytime the Employee and Location table share an Employee ID, a row will be generated in the results to show the match. Looking at the original tables, one can see that those Employee ID’s that are shared by those tables are displayed in the results. But, with a left or right outer join, the result set will retain all of the rows from either the left or right table

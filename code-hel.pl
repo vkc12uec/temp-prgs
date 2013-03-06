@@ -114,6 +114,39 @@ class RC
 
 
 ###########################################
+# memcpy    : no overlap check
+#include <stddef.h> /* size_t */
+void *memcpy(void *dest, const void *src, size_t n)
+{
+  char *dp = dest;
+  const char *sp = src;
+  while (n--)
+    *dp++ = *sp++;
+  return dest;
+}
+
+# memmove : check overlap, slower than memcpy
+void *memmove(void *dest, const void *src, size_t n)
+{
+    unsigned char *pd = dest;
+    const unsigned char *ps = src;
+    if (__np_anyptrlt(ps, pd))
+        for (pd += n, ps += n; n--;)    // do backward copying
+            *--pd = *--ps;
+    else
+        while(n--)
+            *pd++ = *ps++;
+    return dest;
+}
+
+# __np_anyptrlt  => zero if p1 and p2 point within the same object and p1 is greater than p2
+
+With memcpy, the destination cannot overlap the source at all. With memmove it can. This means that memmove might be very slightly slower than memcpy, as it cannot make the same assumptions.
+
+For example, memcpy might always copy addresses from low to high. If the destination overlaps after the source, this means some addresses will be overwritten before copied. memmove would detect this and copy in the other direction - from high to low - in this case. However, checking this and switching to another (possibly less efficient) algorithm takes time.
+
+
+###########################################
 vids:
 #http://openclassroom.stanford.edu/MainFolder/CoursePage.php?course=IntroToAlgorithms
 http://www.cs.pitt.edu/~kirk/algorithmcourses/index.html
@@ -4184,6 +4217,18 @@ c
 cd
 d
 
+##################
+void nCk_recursive(string actual, string result, int start, int end, int k)
+{
+ if(result.length() == k) {
+   cout << result << endl; return;
+ }
+ for(int i = start; i < end; ++i) {
+   string temp = result;
+   temp += actual[i];
+   nCk_recursive(actual, temp, i+1, end, k);
+ }
+}
 
 ###########################################
 sartaj sahni:

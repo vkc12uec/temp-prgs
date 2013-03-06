@@ -5,6 +5,11 @@ http://www.ihas1337code.com/2010/04/hacking-google-interview-from-mit.html
 # diff abstract class v/s interface
 http://javapapers.com/core-java/abstract-and-interface-core-java-2/difference-between-a-java-interface-and-a-java-abstract-class/
 ###########################################
+# C++ ctor initialization list:
+
+Assuming that those values are primitive types, then no, there's no difference. Initialization lists only make a difference when you have objects as members, since instead of using default initialization followed by assignment, the initialization list lets you initialize the object to its final value. This can actually be noticeably faster.'
+
+###########################################
 
 Static member functions are considered to have class scope. In contrast to nonstatic member functions, these functions have no implicit this argument; therefore, they can use only static data members, enumerators, or nested types directly. Static member functions can be accessed without using an object of the corresponding class type. Consider this example:
 Example
@@ -225,6 +230,7 @@ This independent flow of control is accomplished because a thread maintains its 
   Scheduling properties (such as policy or priority)
   Set of pending and blocked signals
   Thread specific data
+  Program counter
 
 # Because threads within the same process share resources:
     Changes made by one thread to shared system resources (such as closing a file) will be seen by all other threads.
@@ -1229,7 +1235,11 @@ An object of the class that contains one or more virtual functions contains a vi
 
 How virtual functions are implemented C++?
 
-Virtual functions are implemented using a table of function pointers, called the vtable.  There is one entry in the table per virtual function in the class.  This table is created by the constructor of the class.  When a derived class is constructed, its base class is constructed first which creates the vtable.  If the derived class overrides any of the base classes virtual functions, those entries in the vtable are overwritten by the derived class constructor.  This is why you should never call virtual functions from a constructor: because the vtable entries for the object may not have been set up by the derived class constructor yet, so you might end up calling base class implementations of those virtual functions
+Virtual functions are implemented using a table of function pointers, called the vtable.  There is one entry in the table per virtual function in the class.  
+
+*This table is created by the constructor of the class.  *
+
+When a derived class is constructed, its base class is constructed first which creates the vtable.  If the derived class overrides any of the base classes virtual functions, those entries in the vtable are overwritten by the derived class constructor.  This is why you should never call virtual functions from a constructor: because the vtable entries for the object may not have been set up by the derived class constructor yet, so you might end up calling base class implementations of those virtual functions
 
 slide 38 : vtable-Polymorphism_Part1_Print.pdf
 

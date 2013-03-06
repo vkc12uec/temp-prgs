@@ -12,6 +12,108 @@ gigabyte (GB) 10^9 2^30
 terabyte (TB) 10^12  2^40
 
 ###########################################
+# Own shared_ptr impl.
+
+template < typename T > 
+class SP
+{
+  private:
+    T*    pData;       // pointer
+    RC* reference; // Reference count
+
+  public:
+    SP() : pData(0), reference(0) 
+  {
+    // Create a new reference 
+    reference = new RC();
+    // Increment the reference count
+    reference->AddRef();
+  }
+
+    SP(T* pValue) : pData(pValue), reference(0)
+  {
+    // Create a new reference 
+    reference = new RC();
+    // Increment the reference count
+    reference->AddRef();
+  }
+
+    SP(const SP<T>& sp) : pData(sp.pData), reference(sp.reference)
+  {
+    // Copy constructor
+    // Copy the data and reference pointer
+    // and increment the reference count
+    reference->AddRef();
+  }
+
+    ~SP()
+    {
+      // Destructor
+      // Decrement the reference count
+      // if reference become zero delete the data
+      if(reference->Release() == 0)
+      {
+        delete pData;
+        delete reference;
+      }
+    }
+
+    T& operator* ()
+    {
+      return *pData;
+    }
+
+    T* operator-> ()
+    {
+      return pData;
+    }
+
+    SP<T>& operator = (const SP<T>& sp)
+    {
+      // Assignment operator
+      if (this != &sp) // Avoid self assignment
+      {
+        // Decrement the old reference count
+        // if reference become zero delete the old data
+        if(reference->Release() == 0)
+        {
+          delete pData;
+          delete reference;
+        }
+
+        // Copy the data and reference pointer
+        // and increment the reference count
+        pData = sp.pData;
+        reference = sp.reference;
+        reference->AddRef();
+      }
+      return *this;
+    }
+};
+
+
+class RC
+{
+  private:
+    int count; // Reference count
+
+  public:
+    void AddRef()
+    {
+      // Increment the reference count
+      count++;
+    }
+
+    int Release()
+    {
+      // Decrement the reference count and
+      // return the reference count.
+      return --count;
+    }
+};
+
+
+###########################################
 vids:
 #http://openclassroom.stanford.edu/MainFolder/CoursePage.php?course=IntroToAlgorithms
 http://www.cs.pitt.edu/~kirk/algorithmcourses/index.html
@@ -1337,9 +1439,9 @@ void BruteForce(char *x /* pattern */,
 
 
   /* Searching */
-  for (j = 0; j <= (n - m); ++j)
+  for (j = 0; j <= (n - m); ++j)      // j is base
   {
-    for (i = 0; i < m && x[i] == y[i + j]; ++i);
+    for (i = 0; i < m && x[i] == y[j + i]; ++i);
     if (i >= m) {printf("\nMatch found at\n\n->[%d]\n->[%s]\n",j,y+j);}
   }
 }
@@ -4685,4 +4787,26 @@ READER:
             out = (out+1)%BUFFER_SIZE; 
             /* consume item */
           }
+
+
+        semaphore fillCount = 0; // items produced
+        semaphore emptyCount = BUFFER_SIZE; // remaining space
+         
+        procedure producer() {
+            while (true) {
+                item = produceItem();
+                down(emptyCount);
+                    putItemIntoBuffer(item);
+                up(fillCount);
+            }
+        }
+         
+        procedure consumer() {
+            while (true) {
+                down(fillCount);
+                    item = removeItemFromBuffer();
+                up(emptyCount);
+                consumeItem(item);
+            }
+        }
 

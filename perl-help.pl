@@ -92,6 +92,11 @@ A variant to Dijkstra's algorithm will only store the unprocessed nodes in a dat
 ""'
 
 ###########################################
+# Generic GC techniques:  | wiki
+
+- Tracing collecion -> mark & sweep
+- 
+###########################################
 # JVM | garbage collection
 
 # class loader is not garbage collected, it means there is a memleak:
@@ -867,8 +872,8 @@ level that was locked by this cpu. If I try to do it out of order, the routine p
 - ARP cache
 maintains the recent mappings from IP addresses to MAC addresses
 Protocol
-1. ARP request broadcast on Ethernet
-2. Destination host ARP layer responds
+      1. ARP request broadcast on Ethernet
+      2. Destination host ARP layer responds
 
 IP: Internet Protocol
 - Unreliable … connectionless datagram delivery service

@@ -45,7 +45,7 @@ int main () {
 
   cin.ignore();
   getline (cin, tmp);
-  cout << "\n tmp = ["<<tmp<<"]";
+  //cout << "\n tmp = ["<<tmp<<"]";
   make_state(init, k, tmp);
 
   //cout << "\n mid ";
@@ -53,7 +53,7 @@ int main () {
   tmp="";
   //cin.ignore();
   getline (cin, tmp);
-  cout << "\n tmp = ["<<tmp<<"]";
+  //cout << "\n tmp = ["<<tmp<<"]";
   make_state(term, k, tmp);
 
   // test init state
@@ -66,17 +66,9 @@ int main () {
     cout << "\n ** \n";
   }
 
+  bfs (init, term);
   return 0;
-
-  cin.get();
-  start = string (line);
-
-  cin.getline(line, 1024);
-  end = string (line);
-
-  cout << "\n start = [" << start<<"]";
-
-  //feed_invec (vec, start);
-  return 0;
-
 }
+
+void bf(
+

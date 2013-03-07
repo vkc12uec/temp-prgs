@@ -20,8 +20,6 @@
 #include <sys/stat.h>
 #endif
 
-using namespace std;
-
 typedef vector<int> vi; 
 typedef vector<string> vs; 
 typedef vector<vi> vvi; 

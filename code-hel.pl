@@ -504,6 +504,8 @@ A set of n points in the plane can be preprocessed in O(nlogn) time into a data 
         isSubsetSum (arr, n, sum/2) = isSubsetSum (arr, n-1, sum/2) || isSubsetSum (arr, n-1, sum/2 - arr[n-1])
 
         # Dynamic Programming Solution 2D table
+        # http://www.youtube.com/watch?v=GdnpQY2j064&list=PL962BEE1A26238CA3&index=10
+        # see the comment here , wrong way it seems => http://www.youtube.com/watch?v=ItF22I8f3Xs
           The problem can be solved using dynamic programming when the sum of the elements is not too big. We can create a 2D array part[][] of size (sum/2)*(n+1). And we can construct the solution in bottom up manner such that every filled entry has following property
 
           part[i][j] = true if a subset of {arr[0], arr[1], ..arr[j-1]} has sum 
@@ -530,6 +532,41 @@ A set of n points in the plane can be preprocessed in O(nlogn) time into a data 
                 
               return 0;
           }
+
+        # 2nd way:
+          int BalancedPartition ( int a[] , int n ){
+              int sum = 0;
+              for( int i = 0 ; i < n ; i++)
+                  sum += a[i];
+
+              int *s = new int[sum+1];
+
+              s[0] = 1;
+              for(int i = 1 ; i < sum+1 ; i++)    
+                s[i] = 0;
+
+              int diff = INT_MAX , ans;
+
+              for(int i = 0 ; i < n ; i++)
+              {
+                  for(int j = sum ; j >= a[i] ; j--)
+                  {
+                      s[j] = s[j] | s[j-a[i]];
+                      if( s[j] == 1 )
+                      {
+                          if( diff > abs( sum/2 - j) )
+                          {
+                              diff = abs( sum/2 - j );
+                              ans = j;
+                          }
+
+                      }
+                  }
+              }
+              cout<< ans << " " << sum-ans<< endl; //two balanced partitions
+              return min( ans , sum-ans );
+          }
+
 
  
 

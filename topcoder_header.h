@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <iterator>
 #include <stack>
+
 #if __linux
 #include <climits>
 #include <sys/dir.h>
@@ -20,17 +21,26 @@
 #include <sys/stat.h>
 #endif
 
+using namespace std;
+
 typedef vector<int> vi; 
 typedef vector<string> vs; 
 typedef vector<vi> vvi; 
 typedef pair<int,int> ii; 
+typedef vector < ii > vii;
 typedef map<int,char> mic; 
 typedef map<char,int> mci; 
 typedef map< ii, int > miii; 
+
 #define sz(a) int((a).size()) 
 #define pb push_back 
 #define all(c) (c).begin(),(c).end() 
+#ifdef _WIN32
+#define tr(c,i) for( auto i = (c).begin(); i != (c).end(); i++ )
+#endif
+#ifdef __linux__
 #define tr(c,i) for( typeof((c).begin()) i = (c).begin(); i != (c).end(); i++ )
+#endif
 #define present(c,x) ((c).find(x) != (c).end())  // map | set
 #define cpresent(c,x) (find(all(c),x) != (c).end())  // vector
 

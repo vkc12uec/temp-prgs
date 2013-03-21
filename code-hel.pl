@@ -12,6 +12,9 @@ gigabyte (GB) 10^9 2^30
 terabyte (TB) 10^12  2^40
 
 ###########################################
+# in c++ , u can pass 2d like:
+  how-to-pass-2d.cpp
+###########################################
 # Own shared_ptr impl.
 
 template < typename T > 

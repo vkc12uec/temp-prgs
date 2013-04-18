@@ -114,6 +114,10 @@ class RC
       return --count;
     }
 };
+  #   Always create smart pointers on a separate line of code, never in a parameter list, so that a subtle resource leak won't occur due to certain parameter list allocation rules.
+    http://msdn.microsoft.com/en-us/library/vstudio/hh279674.aspx
+
+
 
 
 ###########################################
@@ -210,6 +214,33 @@ http://letschat.info/list-of-facebook-questions/
     # http://www.glassdoor.com/Interview/You-are-trying-to-rob-houses-on-a-street-Each-house-has-some-ve-amount-of-cash-Your-goal-is-to-rob-houses-such-that-you-QTN_117978.htm
 You are trying to rob houses on a street. Each house has some +ve amount of cash. Your goal is to rob houses such that you maximize the total robbed amount. The constraint is once you rob a house you cannot rob a house adjascent to that house.
 
+              public class Solution {
+                  public int findMax(int[] houses) {
+                      if (houses == null || houses.length == 0) {
+                          return 0;
+                      } else if (houses.length == 1) {
+                          return houses[0];
+                      } else if (houses.length == 2) {
+                          return Math.max(houses[0], houses[1]);
+                      }
+
+                      int[] res = new int[houses.length];
+                      res[0] = houses[0];
+                      res[1] = Math.max(houses[0], houses[1]);
+
+                      int max = res[1];
+
+                      for (int i = 2; i < houses.length; i++) {
+                          res[i] = Math.max(res[i - 2] + houses[i], res[i - 1]);
+
+                          if (res[i] > max) {
+                              max = res[i];
+                          }
+                      }
+
+                      return max;
+                  }
+              }
 
 # sort C++ string 
   string word = "dbac";
@@ -221,6 +252,57 @@ You are trying to rob houses on a street. Each house has some +ve amount of cash
   # http://codercareer.blogspot.com/2012/01/no-30-median-in-stream.html
       Soln:   Use min-heap and max-heap and keep on putting new elements 
               in of the heaps on a decision, and their tops will be the median
+
+             void Insert(T num)
+            {
+                if(((minHeap.size() + maxHeap.size()) & 1) == 0)
+                {
+                    if(maxHeap.size() > 0 && num < maxHeap[0])
+                    {
+                        maxHeap.push_back(num);
+                        push_heap(maxHeap.begin(), maxHeap.end(), less<T>());
+
+                        num = maxHeap[0];
+
+                        pop_heap(maxHeap.begin(), maxHeap.end(), less<T>());
+                        maxHeap.pop_back();
+                    }
+
+                    minHeap.push_back(num);
+                    push_heap(minHeap.begin(), minHeap.end(), greater<T>());
+                }
+                else
+                {
+                    if(minHeap.size() > 0 && minHeap[0] < num)
+                    {
+                        minHeap.push_back(num);
+                        push_heap(minHeap.begin(), minHeap.end(), greater<T>());
+
+                        num = minHeap[0];
+
+                        pop_heap(minHeap.begin(), minHeap.end(), greater<T>());
+                        minHeap.pop_back();
+                    }
+
+                    maxHeap.push_back(num);
+                    push_heap(maxHeap.begin(), maxHeap.end(), less<T>());
+                }
+            }
+
+            int GetMedian()
+            {
+                int size = minHeap.size() + maxHeap.size();
+                if(size == 0)
+                    throw exception("No numbers are available");
+
+                T median = 0;
+                if(size & 1 == 1)
+                    median = minHeap[0];
+                else
+                    median = (minHeap[0] + maxHeap[0]) / 2;
+
+                return median;
+            }
 
 # Babylonian method for sqrt:
     X(n+1) = 1/2 * ( X(n) + S/X(n) )

@@ -482,6 +482,7 @@ A set of n points in the plane can be preprocessed in O(nlogn) time into a data 
           >> Hence, to detect negative cycles using the Floyd–Warshall algorithm, one can inspect the diagonal of the path matrix, and the presence of a negative number indicates that the graph contains at least one negative cycle.[2] Obviously, in an undirected graph a negative edge creates a negative cycle (i.e., a closed walk) involving its incident vertices.
           >> The idea is to one by one pick all vertices and update all shortest paths which include the picked vertex as an intermediate vertex in the shortest path. When we pick vertex number k as an intermediate vertex, we already have considered vertices {0, 1, 2, .. k-1} as intermediate vertices. 
           >> Find cycle of shortest length in a directed graph with positive weights @ http://stackoverflow.com/questions/3911626/find-cycle-of-shortest-length-in-a-directed-graph-with-positive-weights/3912537#3912537
+            => collorary: You can use Dijkstra to find the shortest-Cycle passing through vertex v    http://goo.gl/BsYU0
 
 
 # DFS application (path finding, cycle finding (nodes forming cycle))
@@ -499,6 +500,20 @@ A set of n points in the plane can be preprocessed in O(nlogn) time into a data 
             if (i < k) then use Select() recursively to find ith smallest     element in first partition
             else (i > k) use Select() recursively to find (i-k)th smallest    element in last partition
 
+###########################################
+# clone a graph: using DFS or BFS
+            Node* DFS(Node *Input, hash_map &hm){
+
+              if(hm.find(Input) != hm.end()){
+                return hm[Input];
+              }
+              Node *output = new Node();
+              hm[Input] = output;
+              for(int i = 0; i next.size();i++){
+                output->next.push_back(DFS(Input->next[i],hm));
+              }
+              return output;
+            }
 
 ###########################################
 # DP:
@@ -519,6 +534,8 @@ A set of n points in the plane can be preprocessed in O(nlogn) time into a data 
 
 
 # Knapsack problem (multiple items allowed) algo:   @ http://tech-queries.blogspot.com/2011/04/integer-knapsack-problem-duplicate.html
+# http://en.wikipedia.org/wiki/Knapsack_problem#Unbounded_knapsack_problem    | good explanation | can reduce complexity by dividing the w's by GCD of W and w[]
+
     M(j) -> maximum posssible value one can pack in size=j knapsack
     M(j) = max { 
                 M(j-1) ,      if jth slot is empty in optimal soln.

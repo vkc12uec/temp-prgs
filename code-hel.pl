@@ -723,12 +723,13 @@ A set of n points in the plane can be preprocessed in O(nlogn) time into a data 
 
     Initialize fin[v] = 0 for all vertices v.
 
+  Mtd1:
     Consider vertices v in topological order:
       for each edge v-w, set fin[w] = max(fin[w], fin[v] + time[w])
       # https://docs.google.com/viewer?a=v&q=cache:-rOBI5bAIMwJ:www.cs.princeton.edu/courses/archive/spr04/cos226/demo/demo-pert.ppt+&hl=en&gl=us&pid=bl&srcid=ADGEESjN3gpAsSK0W0prLG1FsRmWsLvU9y6V4qsjcgAc9Lpj8ATYIegZJe4UvErIvMOC4Rf5qaaa6XZE97TLWrOp7ossjwGADKSyidpKSQvFsbGvCNzDavAIVkp5TMYa6d_8HQJ1BLEl&sig=AHIEtbSfaaUpPsMNt69HXymF60frphH7QQ
 
-      # For each vertex v of the DAG, in the topological ordering, compute the length of the longest path ending at v by looking at its incoming neighbors and adding one to the maximum length recorded for those neighbors. If v has no incoming neighbors, set the length of the longest path ending at v to zero. In either case, record this number so that later steps of the algorithm can access it.
-
+  Mtd2:
+    http://goo.gl/Y7wn3
 
 ###########################################
 # impl. Queue using Stacks:
@@ -789,8 +790,10 @@ http://stackoverflow.com/questions/69192/how-to-implement-a-queue-using-two-stac
 ###########################################
 # binary stream divisble by 3:
 
-    we have to just count the number of 1's (set bits) at even position and number of 1's (set bits) at odd position .
+  Mtd1:
+    we have to just count the number of 1's (set bits) at even position and number of 1's (set bits) at odd position .    (based on bernoulis theorem) put 2 = (3-1)
 
+  Mtd2:
     if((number of 1's at even position - number of 1's at odd position)%3==0)
     then number is divisible by 3.
 
@@ -819,6 +822,28 @@ The gist is the invariant of the binary search.
     }
 
     # another variant of this is AMZ ques. = amz_bin_search.cpp
+    For instance,  2223333444555,   num_occurrence(4) for this array is  3.
+
+    int num_occurrence(int * A, int len, int num)
+    {
+        int mid;
+
+        if (len == 0) return 0; 
+        if (A[0] == num && A[len-1] == num) return len;
+
+        mid = len / 2;
+        
+        if (A[mid] > num) 
+          return num_occurrence(A, mid, num);
+        else if (A[mid] < num)
+          return num_occurrence(A + mid + 1, len - mid - 1, num);
+        else{
+          int left = num_occurrence(A, mid, num);
+          int right = num_occurrence(A + mid + 1, len - mid -1, num);
+          return left+ right + 1;
+        }    
+    }
+
 
 ###########################################
 # semaphores , spinlock gud read: http://www.cis.temple.edu/~giorgio/cis307/readings/spinsem.html
@@ -981,7 +1006,7 @@ which is used in lock-free and wait-free algorithms. Here is an example: conside
           for (int i = 0; i < parent->children.size(); i++){
             ss >>  data >>  num_children;      
             parent->children[i]= new Node(data, num_children);
-            if (num_children > 0)  
+            if (num_children > 0)         // if thats a leaf
               q.push(parent->children[i]);
           }
         }

@@ -1079,11 +1079,14 @@ which is used in lock-free and wait-free algorithms. Here is an example: conside
 # http://www.geeksforgeeks.org/archives/20586
 #
 # http://tech-queries.blogspot.com/2011/09/find-largest-sub-matrix-with-all-1s-not.html
-    Use largest area in histogram as helper
- 
-# largest square sub matrix with all 1's = Dynamic prog. HW - cs580
+    Use largest area in histogram as helper | http://goo.gl/pGG1p
+    http://goo.gl/m1Lte
+    http://goo.gl/pGG1p
 
-# largest rectangular submatrix with 0's = 1's    ? TODO
+ 
+# largest square sub matrix with all 1's = Dynamic prog. HW - cs580     http://www.geeksforgeeks.org/maximum-size-sub-matrix-with-all-1s-in-a-binary-matrix/
+
+# largest rectangular submatrix with 0's = 1's    ? TODO    http://stackoverflow.com/questions/13698298/largest-submatrix-with-equal-no-of-1s-and-0s
 
 # largest k*k submatrix with max sum (done by DP youtube vid)
 
@@ -1235,7 +1238,7 @@ typedef pair<int,int> ii;
             p->nextRight = NULL;
          
             // Set the next right for rest of the nodes (other than root)
-            connectRecur(p);
+            connectRecur(p);    # //PREORDER //
         }
          
         /* Set next right of all descendents of p.

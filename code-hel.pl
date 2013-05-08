@@ -3055,6 +3055,12 @@ In this solution, it is possible that Parker should be renamed to be Car.
 
 
 ###########################################
+Given an integer array such that every element occurs 3 times except one element which occurs only once. how to find that single element in O(1) space and O(n) time complexity?
+
+http://www.quora.com/Algorithms/Given-an-integer-array-such-that-every-element-occurs-3-times-except-one-element-which-occurs-only-once-how-to-find-that-single-element-in-O-1-space-and-O-n-time-complexity
+http://www.geeksforgeeks.org/find-the-element-that-appears-once/
+
+###########################################
 
 # majority algorithm
 # http://www.cs.utexas.edu/~moore/best-ideas/mjrty/example.html
@@ -3069,8 +3075,14 @@ If the counter is 0, we set the current candidate to e and we set the counter to
 If the counter is not 0, we increment or decrement the counter according to whether e is the current candidate.
 When we are done, the current candidate is the majority element, if there is a majority.
 
+  This is a two step process.
+  1. Get an element occurring most of the time in the array. This phase will make sure that if there is a majority element then it will return that only.
+  2. Check if the element obtained from above step is majority element.
+
 // if any 2 nos. appear > n/3 times : GOOGLE interview
   # The basic idea is similar to majority-finding. In majority finding, we use the property that deleting any two distinct elements preserves majority elements, in the sense that any element that was majority before is still majority. Here, we use the property that deleting any three distinct elements preserves special elements.
+  http://apps.topcoder.com/forums/?module=RevisionHistory&messageID=1464587
+  http://karmaandcoding.blogspot.com/2011/12/finding-repeated-elements-in-array.html    using a hashmap of size K if we have to find N/K times
 
 ###########################################
 # make a stack with min/max/push/pop in O(1) time
@@ -3326,6 +3338,41 @@ void preIter (node *n) {
 			break;
 	}
 }
+
+## MS interview: write a class Inorder iterator
+
+class Itr {
+private:
+  node *r;
+  Stack<node*> S;
+
+public:
+  Itr(node *n) : r(n) {
+    node *curr = r;
+    _fillStack (curr);
+  }
+
+  bool hasNext {
+    return !S.IsEmpty();
+  }
+
+  int getNext() {
+    node *top = S.top();
+    S.pop();
+    int ret = top->data;
+    top = top->right;
+    _fillStack(top);
+    return ret;
+  }
+
+  void _fillStack (node* curr) {
+    while (curr) {
+      S.push (curr);
+      curr = curr->left;
+    }
+  }
+
+};
 
 ###########################################
 # very simple ... upside down of pre-orders
@@ -5188,5 +5235,4 @@ ICMP recognises the data as an echo response, ICMP acknowledges receipt by sendi
 
 The above is designed to give an overview of what happens on the network when data is sent from one machine to another. This is by no way to be considered complete as there are additional parameters which can be configured and created both within the IP packet and the Data-Link Frame. The above assumes the use of Ethernet_II frames on the network. No matter how big the network or how many routers the data passes through the process is identical to the above.
 
-“variable_node”
 ## 

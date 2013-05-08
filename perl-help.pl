@@ -573,15 +573,16 @@ int echo(int fd)
 
 ###########################################
 
-Long-term scheduler (or job scheduler) . selects which
-processes should be brought into the ready queue.
+Long-term scheduler (or job scheduler) . selects which processes should be brought into the ready queue.
 
 Short-term scheduler (or CPU scheduler) . selects which process should be executed next and allocates CPU
 
 Short-term scheduler is invoked very frequently
 (milliseconds)  (must be fast).
+
 Long-term scheduler is invoked very infrequently
 (seconds, minutes) (may be slow).
+
 The long-term scheduler controls the degree of
 multiprogramming.
 

@@ -14,6 +14,11 @@ terabyte (TB) 10^12  2^40
 ###########################################
 # in c++ , u can pass 2d like:
   how-to-pass-2d.cpp
+
+# how to init 2d vector of ints       // make sure +1 since base=0
+  int n=3, a=4, s=10;
+  vector< vector<int> > visited (n+1, vector<int> (s+1,0));
+
 ###########################################
 # Own shared_ptr impl.
 

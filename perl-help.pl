@@ -2,6 +2,13 @@ intitle:"index.of" linkin (mp3|mp4|flv|avi|mpg|wmv) -html-htm-php-jsp-asp
 http://www.ihas1337code.com/2010/04/hacking-google-interview-from-mit.html
 
 ###########################################
+why use void*
+
+You should use it when you do not know what data type the memory
+contains. The advantage is that once u know the data type, u may
+typecast the void ptr into the appropriate data type.
+
+###########################################
 # diff abstract class v/s interface
 http://javapapers.com/core-java/abstract-and-interface-core-java-2/difference-between-a-java-interface-and-a-java-abstract-class/
 ###########################################

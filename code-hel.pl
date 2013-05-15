@@ -19,6 +19,18 @@ terabyte (TB) 10^12  2^40
   int n=3, a=4, s=10;
   vector< vector<int> > visited (n+1, vector<int> (s+1,0));
 
+# map can have following key-value types
+
+  // test if map can have types below
+  map <int, vector<int>::iterator> myset;
+  vector<int> v;
+  v.push_back(1);
+  v.push_back(2);
+  v.push_back(3);
+  myset[1] = v.begin()+0;
+  myset[2] = v.begin()+1;
+  myset[3] = v.begin()+2;
+
 ###########################################
 # Own shared_ptr impl.
 

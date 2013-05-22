@@ -12,6 +12,41 @@ gigabyte (GB) 10^9 2^30
 terabyte (TB) 10^12  2^40
 
 ###########################################
+# edit distance "algorithm" to "altruistic"
+
+    int compute_edit_distance(string x, string y)
+    {
+      int x_len = x.length();
+      int y_len = y.length();
+     
+      vector<vector<int> > m(x_len+1, vector<int>(y_len+1, 0));
+     
+      int i, j;
+      for (i = 1; i <= x_len; i++) {
+        m[i][0] = i;
+      }
+     
+      for (j = 1; j <= y_len; j++){
+        m[0][j] = j;
+      }
+         
+      for (i = 1; i <= x_len; i++){
+        for (j = 1; j <= y_len; j++){
+          int c1 = m[i-1][j] + 1;      
+          int c2 = m[i][j-1] + 1;
+          int c3 = (x[i-1] == y[j-1]) ? m[i-1][j-1] : m[i-1][j-1] + 1;
+          m[i][j] = min(c1, min(c2, c3));
+        }
+      }
+     
+      return m[x_len][y_len];
+    }
+ 
+
+###########################################
+# http://stackoverflow.com/questions/245878/how-do-i-choose-between-a-hash-table-and-a-trie-prefix-tree
+
+
 # in c++ , u can pass 2d like:
   how-to-pass-2d.cpp
 

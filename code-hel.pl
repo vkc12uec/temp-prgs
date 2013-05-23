@@ -12,6 +12,12 @@ gigabyte (GB) 10^9 2^30
 terabyte (TB) 10^12  2^40
 
 ###########################################
+# Median of high set of numbers:
+http://stackoverflow.com/questions/3572640/interview-question-find-median-from-mega-number-of-integers?rq=1
+  - 1 - either do external sort and then count the items during merging 
+  - 2 - divide the numbers into ranges/buckets. Find the bucket containing the median, then find median within that
+
+###########################################
 # edit distance "algorithm" to "altruistic"
 
     int compute_edit_distance(string x, string y)
@@ -45,6 +51,17 @@ terabyte (TB) 10^12  2^40
 
 ###########################################
 # http://stackoverflow.com/questions/245878/how-do-i-choose-between-a-hash-table-and-a-trie-prefix-tree
+
+# +# External sort (wiki) says 2 methods:
+  - using K way merge (when chunks are not too muchi. Else read/write page cost will be bad)
+    - pass 0 - sort individual chunks
+    - pass 1 - K way merge
+
+  - using 2 way merges (log n) levels
+    - you have pass 0 to X.
+    - instead of choosing a direct K way merge. Do some k < K way merge.
+    - smth similar to chapeter 11 - dbsys course
+
 
 
 # in c++ , u can pass 2d like:
@@ -233,6 +250,58 @@ For example, memcpy might always copy addresses from low to high. If the destina
  
     return succ;
 }
+
+###########################################
+# morris traversal
++# morris inorder traversal w/o Stacks or recursion
++  http://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion-and-without-stack/
++
++  it modifies right links while traversal , but also keeps changing to that the tree is intact.
++
++      /* Function to traverse binary tree without recursion and
++         without stack */
++      void MorrisTraversal(struct tNode *root)
++      {
++        struct tNode *current,*pre;
++       
++        if(root == NULL)
++           return;
++       
++        current = root;
++        while(current != NULL)
++        {                
++          if(current->left == NULL)
++          {
++            printf(" %d ", current->data);
++            current = current->right;     
++          }   
++          else
++          {
++            /* Find the inorder predecessor of current */
++            pre = current->left;
++            while(pre->right != NULL && pre->right != current)
++              pre = pre->right;
++       
++            /* Make current as right child of its inorder predecessor */
++            if(pre->right == NULL)
++            {
++              pre->right = current;
++              current = current->left;
++            }
++                   
++            /* Revert the changes made in if part to restore the original
++              tree i.e., fix the right child of predecssor */   
++            else 
++            {
++              pre->right = NULL;
++              printf(" %d ",current->data);
++              current = current->right;     
++            } /* End of if condition pre->right == NULL */
++          } /* End of if condition current->left == NULL*/
++        } /* End of while */
++      }
++
++
 
 ###########################################
 vids:
@@ -1160,9 +1229,9 @@ which is used in lock-free and wait-free algorithms. Here is an example: conside
 # http://www.geeksforgeeks.org/archives/20586
 #
 # http://tech-queries.blogspot.com/2011/09/find-largest-sub-matrix-with-all-1s-not.html
-    Use largest area in histogram as helper | http://goo.gl/pGG1p
-    http://goo.gl/m1Lte
-    http://goo.gl/pGG1p
+    Use largest area in histogram as helper | http://stackoverflow.com/questions/7332065/what-is-the-best-algorithm-to-find-the-largest-black-convex-area-in-an-image/7497967#7497967
+    http://stackoverflow.com/questions/6945105/search-matrix-for-all-rectangles-of-given-dimensions-select-blocks-of-seats/7353193#7353193
+    http://stackoverflow.com/questions/7332065/what-is-the-best-algorithm-to-find-the-largest-black-convex-area-in-an-image/7497967#7497967
 
  
 # largest square sub matrix with all 1's = Dynamic prog. HW - cs580     http://www.geeksforgeeks.org/maximum-size-sub-matrix-with-all-1s-in-a-binary-matrix/
@@ -4402,6 +4471,12 @@ return m_pInstance;
 
 
 ###########################################
+
++- To do merge sort inplace, if you have array like struct for e.g.
++  a[] = 9 16 17 | 1 2 3 6 7 10
++  Then merging 2 halves is very tedious. Hence we use an auxiliarry arrray.
++  But if you have a[] as link list, then its probably easier since you just change pointers.
++
 
 how to sort link list:?
 	net says mergesort, but have to read

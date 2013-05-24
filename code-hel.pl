@@ -62,7 +62,7 @@ http://stackoverflow.com/questions/3572640/interview-question-find-median-from-m
     - instead of choosing a direct K way merge. Do some k < K way merge.
     - smth similar to chapeter 11 - dbsys course
 
-
+# C++ doubly link list = std::list
 
 # in c++ , u can pass 2d like:
   how-to-pass-2d.cpp

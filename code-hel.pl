@@ -50,6 +50,15 @@ http://stackoverflow.com/questions/3572640/interview-question-find-median-from-m
  
 
 ###########################################
+# this is how u take input in C++ console ...
+
+int n,k,b,t;
+cin>>n>>k;
+vector<int>a;t=n;
+while(t--){cin>>b;a.push_back(b);}
+
+
+###########################################
 # http://stackoverflow.com/questions/245878/how-do-i-choose-between-a-hash-table-and-a-trie-prefix-tree
 
 # +# External sort (wiki) says 2 methods:
@@ -251,8 +260,94 @@ For example, memcpy might always copy addresses from low to high. If the destina
     return succ;
 }
 
+# MS : given a BST, find the CEILing value for a given key
+http://www.careercup.com/question?id=17833665 '??/
+
+node *ceil (node *r, int x) {
+  if (!r)
+  return 0;
+
+  node *succ=0, curr=r;
+
+  while (r) {
+    if (r->data == x) {
+      node *inoSucc = findSucc (r);
+      // you have to compare inoSucc v/s succ for below scenario
+      /*
+          8
+        /
+       6
+        \
+          7
+      */
+      break;
+    }
+    else if (r->data < x) {
+      succ = r;
+      r = r->left;
+    }
+    else 
+      r = r->right;
+  }
+}
+
 ###########################################
-# morris traversal
+# Amazon: Given bst, root, http://www.careercup.com/question?id=17952669
+# find the 3rd closest element to a given value (node*) and given root
+
+node *closestk (node *r, node*given) {
+  // you might have to find 
+  // k predecessors or k successors 
+
+  write that code
+}
+
+###########################################
+# How to find the closest element to a given key value in a binary search tree?
+as you move down, keep on recording the diff for each node
+
+###########################################
+# morris traversal    inorder & preorder
+
+// Preorder traversal without recursion and without stack
+void morrisTraversalPreorder(struct node* root)
+{
+    while (root)
+    {
+        // If left child is null, print the current node data. Move to
+        // right child.
+        if (root->left == NULL)
+        {
+            printf( "%d ", root->data );
+            root = root->right;
+        }
+        else
+        {
+            // Find inorder predecessor
+            struct node* current = root->left;
+            while (current->right && current->right != root)
+                current = current->right;
+ 
+            // If the right child of inorder predecessor already points to
+            // this node
+            if (current->right == root)
+            {
+                current->right = NULL;
+                root = root->right;
+            }
+ 
+            // If right child doesn't point to this node, then print this
+            // node and make right child point to this node
+            else
+            {
+                printf("%d ", root->data);
+                current->right = root;
+                root = root->left;
+            }
+        }
+    }
+}'
+
 +# morris inorder traversal w/o Stacks or recursion
 +  http://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion-and-without-stack/
 +
@@ -3303,6 +3398,13 @@ static TreeNode* createTreeFromLevelOrder(int inorder[],int levelorder[], int st
 
 
 ###########################################
+
+# construct a BST from a given PREORDER string
+  http://www.geeksforgeeks.org/construct-bst-from-given-preorder-traversa/
+  either use 
+    O(n2) -  divide and conquer
+    O(n)  - use boundaries like int_max, int_min
+
 
 # construct from PRE and POST a complete/full BT  | http://www.geeksforgeeks.org/full-and-complete-binary-tree-from-given-preorder-and-postorder-traversals/
       struct node *constructTree (int pre[], int post[], int size)

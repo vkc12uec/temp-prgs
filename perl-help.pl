@@ -1667,10 +1667,10 @@ todo:
 
 Or it can be done by directly using a friend function...
 
-friend ostream &operator<<(ostream &out, Complex c)     //output
+friend ostream &operator<<(ostream &out, const Complex c)     //output
 {
-	out<<"real part: "<<<"\n";
-	out<<"imag part: "<<<"\n";
+	out<<"real part: "<<c.real <<"\n";
+	out<<"imag part: "<<c.img <<"\n";
 	return out;
 }
 friend istream &operator>>(istream &in, Complex &c)     //input

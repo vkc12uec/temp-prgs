@@ -9,6 +9,8 @@
 
 #include "topcoder_header.h"
 #include "limits.h"
+#include "string"
+#include "cstring"
 
 int lis (int a[], int len) {
   int dp[len];  // = {0};    // dp[i] length of longest seq. ending at a[i]
@@ -20,23 +22,29 @@ int lis (int a[], int len) {
   msum[0]= max(a[0],0); 
 
   for (int i=1; i<len; i++) {
-    int maxfori = INT_MIN;
-    int maxSumfori = INT_MIN;
+    int maxLenAti = INT_MIN;
+    int maxSumAti = INT_MIN;
 
     for (int j=0; j<= i-1; j++) {
       if (a[i] > a[j]) {
-        maxfori = max (dp[j] + 1, maxfori);
-        maxSumfori = max (msum[j]+a[i], maxSumfori);
+        maxLenAti = max (dp[j] + 1, maxLenAti);
+        maxSumAti = max (msum[j]+a[i], maxSumAti);
       }
     }
-    dp[i] = maxfori;
-    msum[i] = maxSumfori;
+    dp[i] = maxLenAti;
+    msum[i] = maxSumAti;
   }
 
   ///* lis code
   int top = dp[0];
   for (int i=1; i<len; i++)
     top = max (top, dp[i]);
+
+int top2 = msum[0];
+  for (int i=1; i<len; i++)
+    top2 = max (top2, msum[i]);
+
+  cout << "\n maxSumAti val = "<< top2;   // this is sum of elements in LIS
 
   return top;
 }

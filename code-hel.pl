@@ -11,11 +11,45 @@ megabyte (MB) 10^6 2^20
 gigabyte (GB) 10^9 2^30
 terabyte (TB) 10^12  2^40
 
+# nCr = n-1Cr + n-1Cr-1
+###########################################
+# C union example
+#
+typedef enum { INTEGER, STRING, REAL, POINTER } Type;
+
+typedef struct
+{
+  Type type;
+  union {
+  int integer;
+  char *string;
+  float real;
+  void *pointer;
+  } x;
+} Value;
+
+Value value_new_integer(int v)
+{
+  Value v;
+  v.type = INTEGER;
+  v.x.integer = v;
+  return v;
+}
+
+# C++ way to store 1 char in string
+        string firstLetter(1,str[0]);
+ 
 ###########################################
 # Median of high set of numbers:
 http://stackoverflow.com/questions/3572640/interview-question-find-median-from-mega-number-of-integers?rq=1
   - 1 - either do external sort and then count the items during merging 
   - 2 - divide the numbers into ranges/buckets. Find the bucket containing the median, then find median within that
+
+###########################################
+# two nos. are given in form of linked list, ones digit at head
+How you add ?
+
+Neat solution is recursive:   Page 191 - Gayle boook
 
 ###########################################
 # edit distance "algorithm" to "altruistic"
@@ -60,6 +94,8 @@ while(t--){cin>>b;a.push_back(b);}
 
 ###########################################
 # http://stackoverflow.com/questions/245878/how-do-i-choose-between-a-hash-table-and-a-trie-prefix-tree
+
+# 
 
 # +# External sort (wiki) says 2 methods:
   - using K way merge (when chunks are not too muchi. Else read/write page cost will be bad)
@@ -235,7 +271,7 @@ For example, memcpy might always copy addresses from low to high. If the destina
 # Inorder successor/predecessors. I parent pointer is given then okay, else its tricky
 # http://www.geeksforgeeks.org/inorder-successor-in-binary-search-tree/
 
-# struct node * inOrderSuccessor(struct node *root, struct node *n)
+struct node * inOrderSuccessor(struct node *root, struct node *n)
 {
     // step 1 of the above algorithm
     if( n->right != NULL )
@@ -777,6 +813,57 @@ A set of n points in the plane can be preprocessed in O(nlogn) time into a data 
     B[i, K] = max { B[i-1, K] if w[i] > K
                   { max (B[i-1, K] , B[i-1, K-w[i]]+v[i])
 
+                                  
+                  // Returns the maximum value that can be put in a knapsack of capacity W
+                  int knapSack(int W, int wt[], int val[], int n)
+                  {
+                     int i, w;
+                     int K[n+1][W+1];
+                   
+                     // Build table K[][] in bottom up manner
+                     for (i = 0; i <= n; i++)
+                     {
+                         for (w = 0; w <= W; w++)
+                         {
+                             if (i==0 || w==0)
+                                 K[i][w] = 0;
+                             else if (wt[i-1] <= w)
+                                   K[i][w] = max(val[i-1] + K[i-1][w-wt[i-1]],  K[i-1][w]);
+                             else
+                                   K[i][w] = K[i-1][w];
+                         }
+                     }
+                   
+                     return K[n][W];
+                  }
+                                
+
+              -------------------------
+              Using 1D array:
+              -------------------------
+              Input: S, a set of n items as described earlier, W the total
+              weight of the knapsack. (Assume that the weights and values
+              are stored in separate arrays named w and v, respectively.)
+
+              B[k, w] = B[k - 1,w],             if w[k] > w
+                      = max { B[k - 1,w], B[k - 1,w - w[k]] + v[k]}
+
+
+              Output: The maximal value of items in a valid knapsack.
+
+                    int w, k;
+                    for (w=0; w <= W; w++)
+                    B[w] = 0
+
+                    for (k=0; k<n; k++) {   // items
+                      for (w = W; w>= w[k]; w--) {    // weigth
+
+                        if (B[w - w[k]] + v[k] > B[w])
+                          B[w] = B[w - w[k]] + v[k]
+
+                      }
+                    }
+
 
 # Knapsack problem (multiple items allowed) algo:   @ http://tech-queries.blogspot.com/2011/04/integer-knapsack-problem-duplicate.html
 # http://en.wikipedia.org/wiki/Knapsack_problem#Unbounded_knapsack_problem    | good explanation | can reduce complexity by dividing the w's by GCD of W and w[]
@@ -788,6 +875,7 @@ A set of n points in the plane can be preprocessed in O(nlogn) time into a data 
                   max { M(j-w[i]) + v[i] }     if some item [i] occupies jth slot
               }
               # Integer knapsack , multiple items permitted:
+              Dividing w_1,,w_2,....,w_n,W by their greatest common divisor is an obvious way to improve the running time
 
               int knapsack(int value[], int weight[], int n, int C, vector<int> backtrack)
               {
@@ -812,8 +900,6 @@ A set of n points in the plane can be preprocessed in O(nlogn) time into a data 
                delete[] M;      
                return ans;
               }
-
-                
 
 #LIS :
 # DP approach:
@@ -1939,14 +2025,15 @@ a[1..Lo-1] zeroes (red)
 a[Lo..Mid-] ones (white)
 a[Mid..Hi] unknown
 a[Hi+1..N] twos (blue)
+
 The unknown region is shrunk while maintaining these conditions
 Lo := 1; Mid := 1; Hi := N;
 while Mid <= Hi do
 Invariant: a[1..Lo-1]=0 and a[Lo..Mid-1]=1 and a[Hi+1..N]=2; a[Mid..Hi] are unknown.
 case a[Mid] in
-0: swap a[Lo] and a[Mid]; Lo++; Mid++
-1: Mid++
-2: swap a[Mid] and a[Hi]; Hi--  (no mid-- becoz u still have to see that value)
+              0: swap a[Lo] and a[Mid]; Lo++; Mid++
+              1: Mid++
+              2: swap a[Mid] and a[Hi]; Hi--  (no mid-- becoz u still have to see that value)
 
 
 ###########################################
@@ -3735,6 +3822,25 @@ E:\My eBooks\Algo\Sahni Codes\all\network.h
 ###########################################
 # cicular sorted array search:
 
+# mtd 0:
+    { 3, 4, 5, 1, 2 }
+    return 3
+
+    int FindSortedArrayRotation(int A[], int N) {
+      int L = 0;
+      int R = N - 1;
+      
+      while (A[L] > A[R]) {
+        int M = L + (R - L) / 2;
+        if (A[M] > A[R])
+          L = M + 1;
+        else
+          R = M;
+      }
+      return L;
+    }
+
+
 # mtd 1
 int rotated_binary_search(int A[], int N, int key) {
   int L = 0;
@@ -4386,50 +4492,6 @@ Towards a recurrence relation for making change
 http://www.ccs.neu.edu/home/jaa/CSG713.04F/Information/Handouts/dyn_prog.pdf
 
 ###########################################
-
-0-1 Knapsack Algorithm
-
-    for w = 0 to W
-      B[0,w] = 0
-    for i = 1 to n    //items
-      B[i,0] = 0
-
-    for i = 1 to n
-      for w = 0 to W
-        if w[i] <= w // item i can be part of the solution
-           B[i,w] = MAX (bi + B[i-1,w- wi] , B[i-1, w]);
-        else B[i,w] = B[i-1,w] // wi > w
-
--------------------------
-0-1 KNAPSACK SOLN.
-
-Here is a dynamic programming algorithm to solve the 0-1
-Knapsack problem:
-
-Input: S, a set of n items as described earlier, W the total
-weight of the knapsack. (Assume that the weights and values
-are stored in separate arrays named w and v, respectively.)
-
-B[k, w] = B[k - 1,w],             if w[k] > w
-        = max { B[k - 1,w], B[k - 1,w - w[k]] + v[k]}
-
-
-Output: The maximal value of items in a valid knapsack.
-
-      int w, k;
-      for (w=0; w <= W; w++)
-      B[w] = 0
-
-      for (k=0; k<n; k++) {   // items
-        for (w = W; w>= w[k]; w--) {    // weigth
-
-          if (B[w - w[k]] + v[k] > B[w])
-            B[w] = B[w - w[k]] + v[k]
-
-        }
-      }
-
-
 
 # 
 ###########################################
@@ -5493,4 +5555,168 @@ ICMP recognises the data as an echo response, ICMP acknowledges receipt by sendi
 
 The above is designed to give an overview of what happens on the network when data is sent from one machine to another. This is by no way to be considered complete as there are additional parameters which can be configured and created both within the IP packet and the Data-Link Frame. The above assumes the use of Ethernet_II frames on the network. No matter how big the network or how many routers the data passes through the process is identical to the above.
 
-## 
+######################################### 
+# linux n/w packet incoming
+    2. Receiving the packet
+    2.1 The receive interrupt
+
+    If the network card receives an ethernet frame which matches the local MAC address or is a linklayer broadcast, it issues an interrupt. The network driver for this particular card handles the interrupt, fetches the packet data via DMA / PIO / whatever into RAM. It then allocates a skb and calls a function of the protocol independent device support routines: net/core/dev.c:netif_rx(skb).
+
+    If the driver didn't already timestamp the skb, it is timestamped now. Afterwards the skb gets enqueued in the apropriate queue for the processor handling this packet. If the queue backlog is full the packet is dropped at this place. After enqueuing the skb the receive softinterrupt is marked for execution via include/linux/interrupt.h:__cpu_raise_softirq().
+
+    The interrupt handler exits and all interrupts are reenabled.
+
+'##########################################
+bool FindPath()
+{// Find a path from (1,1) to the exit (m,m).
+ // Return true if successful, false if impossible.
+ // Throw NoMem exception if inadequate space.
+
+   path = new Stack<Position>(m * m - 1);
+
+   // initialize offsets
+   Position offset[4];
+   offset[0].row = 0; offset[0].col = 1; // right
+   offset[1].row = 1; offset[1].col = 0; // down
+   offset[2].row = 0; offset[2].col = -1; // left
+   offset[3].row = -1; offset[3].col = 0; // up
+   
+   // initialize wall of obstacles around maze
+   for (int i = 0; i <= m+1; i++) {
+      maze[0][i] = maze[m+1][i] = 1; // bottom and top
+      maze[i][0] = maze[i][m+1] = 1; // left and right
+      }
+
+   Position here;
+   here.row = 1;
+   here.col = 1;
+   maze[1][1] = 1; // prevent return to entrance
+   int option = 0; // next move
+   int LastOption = 3;
+   
+   // search for a path
+   while (here.row != m || here.col != m) {// not exit
+      // find a neighbor to move to
+      int r, c;      
+      while (option <= LastOption) {
+         r = here.row + offset[option].row;
+         c = here.col + offset[option].col;
+         if (maze[r][c] == 0) break;
+         option++; // next option
+         }
+
+      // was a neighbor found?
+      if (option <= LastOption) {// move to maze[r][c]
+         path->Add(here);
+         here.row = r; here.col = c;
+         // set to 1 to prevent revisit
+         maze[r][c] = 1;
+         option = 0;
+         }
+      else {// no neighbor to move to, back up
+         if (path->IsEmpty()) return false;
+         Position next;
+         path->Delete(next);
+         if (next.row == here.row)
+            option = 2 + next.col - here.col;
+         else option = 3 + next.row - here.row;
+         here = next;
+         }
+   }
+
+   return true;  // at exit
+}
+
+##########################################
+GOOG:
+Eliminate all ‘b’ and ‘ac’ in an array of characters, you have to replace them in-place, and you are only allowed to iterate over the char array once. 
+Examples: 
+abc -> ac 
+ac->'' 
+react->rt
+##########################################
+# little v/s big endian
+
+Sometimes it matters when you are using type casting, below program is an example.
+
+#include <stdio.h>
+int main()
+{
+    unsigned char arr[2] = {0x01, 0x00};
+    unsigned short int x = *(unsigned short int *) arr;
+    printf("%d", x);
+    getchar();
+    return 0;
+}
+In the above program, a char array is typecasted to an unsigned short integer type. When I run above program on little endian machine, I get 1 as output, while if I run it on a big endian machine I get 256. To make programs endianness independent, above programming style should be avoided.
+
+
+##########################################
+# Volatile in C:
+2 Usages:
+  Global variables modified by an interrupt service routine outside the scope
+  Global variables within a multi-threaded application
+
+  ref: http://www.geeksforgeeks.org/understanding-volatile-qualifier-in-c/
+
+##########################################
+In C/C++, precedence of Prefix ++ (or Prefix -) and dereference (*) operators is same, and precedence of Postfix ++ (or Postfix -) is higher than both Prefix ++ and *.
+
+If p is a pointer then *p++ is equivalent to *(p++) and ++*p is equivalent to ++(*p) (both Prefix ++ and * are right associative).
+##########################################
+int main () {
+//  char *g = "cic";    // this is in read-only data segment, hence crash
+  char g[] = "cic";   // this is on stack
+  g[1] = 'n';
+
+  return 0;
+}
+
+##########################################
+# STATIC functions in C are in file scope
+
+What will be the size of following structure?
+
+      struct employee
+      {
+          int     emp_id;
+          int     name_len;
+          char    name[0];
+      };
+      4 + 4 + 0 = 8 bytes.
+
+Let us see below memory allocation.
+
+      struct employee *e = malloc(sizeof(*e) + sizeof(char) * 128); 
+is equivalent to
+
+        struct employee
+        {
+            int     emp_id;
+            int     name_len;
+            char    name[128]; /* character array of size 128 */
+        };
+      
+
+##########################################
+Let us try an extended verision of the problem. Write a one line function Logn(n ,r) which returns \lfloor\log _r \left( n \right)\rfloor. Following is the solution for the extended problem.
+
+# log n to base r
+      unsigned int Logn(unsigned int n, unsigned int r)
+      {
+         return (n > r-1)? 1 + Logn(n/r, r): 0;
+      }
+       
+      int main()
+      {
+        unsigned int n = 256;
+        unsigned int r = 4;
+        printf("%u", Logn(n, r));
+        getchar();
+        return 0;
+      }
+##########################################
+##########################################
+##########################################
+##########################################
+##########################################

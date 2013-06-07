@@ -2,6 +2,20 @@ intitle:"index.of" linkin (mp3|mp4|flv|avi|mpg|wmv) -html-htm-php-jsp-asp
 http://www.ihas1337code.com/2010/04/hacking-google-interview-from-mit.html
 
 ###########################################
+# find max and 2nd max in array:
+
+@Gauri, the strategy for finding second minimum in n + log(n) - 2 is tournament method.
+
+In tournament method, every number (element) is paired with other number successively to find the maximum number. This forms a tree like structure. We must have n-1 comparisons to find maximum number.
+
+The information gained while finding max number will be used in reducing the comparisons for second largest. It meas, we would need to consider only those which will lost against max number to be considered for second largest.
+
+From the tree structure, we can conclude such lost numbers can't be more than [log(n) - 1] (consider tree height).
+
+Overall, at minimum we need ( n - log(n) - 2 ) comparisons.
+
+'
+###########################################
 why use void*
 
 You should use it when you do not know what data type the memory

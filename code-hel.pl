@@ -296,6 +296,29 @@ struct node * inOrderSuccessor(struct node *root, struct node *n)
     return succ;
 }
 
+# Inorder predecessors in BST:
+
+node *pred (node *r, node *given) {
+  node *pre=0;
+
+  if (given->left)
+    return maxValueIn (given->left);
+
+  while (r) {
+    if (r==g)
+      break;
+    else if (r->data < g->data)
+      r = r->left;
+    else {
+      r = r->right;
+      pre = r;
+    }
+  } // while
+
+  return pre;
+}
+
+
 # MS : given a BST, find the CEILing value for a given key
 http://www.careercup.com/question?id=17833665 '??/
 
@@ -704,6 +727,19 @@ A set of n points in the plane can be preprocessed in O(nlogn) time into a data 
   -> Space         :  O(nlogn)
   -> Can do        :  #of point lying b/w (x1,y1) (x2,y2)
   
+
+# Intersection of horizontal/vertical lines:
+        Events in Plane Sweep
+        . Bottom endpoint of v
+        - Action:
+            insert v into Status(L)
+        . Top endpoint of v
+        - Action:
+            delete v from Status(L)
+        . Horizontal segment h
+        - Action:
+            range query on Status(L) with x-range of h
+
 
 ###########################################
 # bellman-ford : (single source shortest path)
@@ -2733,7 +2769,53 @@ Now size is 2, so median = (max(ar1[0], ar2[0]) + min(ar1[1], ar2[1]))/2
                        = (15 + 17)/2
                        = 16
 
-# when u recurse, u search kth then k/2 th , then k/4 ...
+
+            int getMedian(int ar1[], int ar2[], int n)
+            {
+                int m1; /* For median of ar1 */
+                int m2; /* For median of ar2 */
+             
+                /* return -1  for invalid input */
+                if (n <= 0)
+                    return -1;
+             
+                if (n == 1)
+                    return (ar1[0] + ar2[0])/2;
+             
+                if (n == 2)
+                    return (max(ar1[0], ar2[0]) + min(ar1[1], ar2[1])) / 2;
+             
+                m1 = median(ar1, n); /* get the median of the first array */
+                m2 = median(ar2, n); /* get the median of the second array */
+             
+                /* If medians are equal then return either m1 or m2 */
+                if (m1 == m2)
+                    return m1;
+             
+                 /* if m1 < m2 then median must exist in ar1[m1....] and ar2[....m2] */
+                if (m1 < m2)
+                {
+                    if (n % 2 == 0)
+                        return getMedian(ar1 + n/2 - 1, ar2, n - n/2 +1);
+                    else
+                        return getMedian(ar1 + n/2, ar2, n - n/2);
+                }
+             
+                /* if m1 > m2 then median must exist in ar1[....m1] and ar2[m2...] */
+                else
+                {
+                    if (n % 2 == 0)
+                        return getMedian(ar2 + n/2 - 1, ar1, n - n/2 + 1);
+                    else
+                        return getMedian(ar2 + n/2, ar1, n - n/2);
+                }
+            }
+
+
+# Atcually, you might have to change array variables if you are not using lo, hi different for each array
+when u recurse, u search kth then k/2 th , then k/4 ...
+  k
+  k/2 or k/2+1 (if k is even)
 
 ###########################################
 # longest repeated substring
@@ -3092,7 +3174,7 @@ return 1;
 
 ###########################################
 # lexiographic questions
-http://www.ihas1337code.com/2010/10/amazon-bar-raiser-interview-question.html
+http://www.ihas1337code.com/2010/10/AMAZON-Bar-raiser-interview-question.html
 
 #1
 string numToStr(int n) {
@@ -3117,9 +3199,10 @@ void numTostr(int n) {
   cout << (char)('a'+n%26);
 }
 
-###########################################
-# convert sorted  link list to bst	(bottom up)
-# same to : convert sorted doubly link list to bst
+###########################################'//\\\.'
+# this method will make a copy of BST:
+
+# convert sorted  link list to bst	(bottom up)  # same to : convert sorted doubly link list to bst
 
 BinaryTree* sortedListToBST(ListNode *& list, int start, int end) {
   if (start > end) return NULL;
@@ -3137,7 +3220,8 @@ BinaryTree* sortedListToBST(ListNode *head, int n) {
   return sortedListToBST(head, 0, n-1);
 }
 
-# 2nd method to code:
+###########################################
+# 2nd method to code: O(n)
 
         struct Node* sortedListToBST(struct Node *head)
         {
@@ -3189,42 +3273,43 @@ BinaryTree* sortedArrayToBST(int arr[], int n) {
 // prev (init to NULL) is used to keep track of previously traversed node.
 // head pointer is updated with the list's head as recursion ends.'
 
-    void treeToDoublyList(Node *p, Node *& prev, Node *& head) {
-      if (!p) return;
+// SEEMS OF NO USE, USE THE ONE BELOW THIS
+                                                                                void treeToDoublyList(Node *p, Node *& prev, Node *& head) {
+                                                                                  if (!p) return;
 
-      treeToDoublyList(p->left, prev, head);
+                                                                                  treeToDoublyList(p->left, prev, head);
 
-      // current node's left points to previous node
-      p->left = prev;
+                                                                                  // current node's left points to previous node
+                                                                                  p->left = prev;
 
-      if (prev)
-        prev->right = p;  // previous node's right points to current node
-      else
-        head = p; // current node (smallest element) is head of
-                  // the list if previous node is not available
+                                                                                  if (prev)
+                                                                                    prev->right = p;  // previous node's right points to current node
+                                                                                  else
+                                                                                    head = p; // current node (smallest element) is head of
+                                                                                              // the list if previous node is not available
 
-      // as soon as the recursion ends, the head's left pointer
-      // points to the last node, and the last node's right pointer
-      // points to the head pointer.
+                                                                                  // as soon as the recursion ends, the head's left pointer
+                                                                                  // points to the last node, and the last node's right pointer
+                                                                                  // points to the head pointer.
 
-      Node *right = p->right;
-      head->left = p;
-      p->right = head;
-      // updates previous node
-      prev = p;
+                                                                                  Node *right = p->right;
+                                                                                  head->left = p;
+                                                                                  p->right = head;
+                                                                                  // updates previous node
+                                                                                  prev = p;
 
-      treeToDoublyList(right, prev, head);
-    }
+                                                                                  treeToDoublyList(right, prev, head);
+                                                                                }
 
-// Given an ordered binary tree, returns a sorted circular
-// doubly-linked list. The conversion is done in-place.
+                                                                            // Given an ordered binary tree, returns a sorted circular
+                                                                            // doubly-linked list. The conversion is done in-place.
 
-    Node* treeToDoublyList(Node *root) {
-      Node *prev = NULL;
-      Node *head = NULL;
-      treeToDoublyList(root, prev, head);
-      return head;
-    }
+                                                                                Node* treeToDoublyList(Node *root) {
+                                                                                  Node *prev = NULL;
+                                                                                  Node *head = NULL;
+                                                                                  treeToDoublyList(root, prev, head);
+                                                                                  return head;
+                                                                                }
 
 
 # 2nd method by stan:
@@ -5716,6 +5801,29 @@ Let us try an extended verision of the problem. Write a one line function Logn(n
         return 0;
       }
 ##########################################
+# Amz: ancestor problem:  http://www.careercup.com/question?id=19032665
+
+      int a[n][n] = 0;
+
+      setArray(std::vector<int> arr, node)
+      {
+
+        if(node == NULL)
+        return;
+
+        arr.push_back(node->val);
+        
+        setArray(arr, node->left);
+        setArray(arr, node->right);
+
+
+        arr.pop_back();
+
+        for (std::vector<int>::iterator it = myvector.begin() ; it != myvector.end(); ++it)
+        a[*it][node->val] = 1;
+
+      }
+
 ##########################################
 ##########################################
 ##########################################

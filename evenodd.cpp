@@ -32,9 +32,9 @@ void Print (string path) {
 }
 
 void blanks (int c) {
-    cout << "\n";
-    while (c--)
-      cout << " ";
+  cout << "\n";
+  while (c--)
+    cout << " ";
 }
 
 void _print (string path, int space, string prefix) {
@@ -56,10 +56,43 @@ void _print (string path, int space, string prefix) {
   }
 }
 
+bool isEven (int x) {
+  if (x & 1 == 0)
+    return true;
+  else
+    return false;
+}
+
+void even_odd (int a[], int lo, int hi) {
+  // even to left
+  // left odd ptr, right even ptr
+  int p1=0, p2 = hi;
+
+  while (1) {
+    while (isEven (a[p1]))
+      ++p1;
+
+    while (!isEven(a[p2]))
+      --p2;
+
+    if (p1 > p2)
+      break;
+
+    Swap (a, p1, p2);
+  }
+}
+
 int main () {
   int a[] = {1, 1, 5, 2, 7, 7 };
   //int a[] = {1, 2, 3, 4, 5, 6, 7, 8};
   int len = SizeOfArray(a);
+
+#if testWhile
+  int a[] {1,2,3,4,5,6}
+  len = 6;
+  even_odd (a, 0, len-1);
+  return 0;
+#endif
 
   int firstodd=0, curr=0;
 

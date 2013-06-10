@@ -837,6 +837,33 @@ A set of n points in the plane can be preprocessed in O(nlogn) time into a data 
             => collorary: You can use Dijkstra to find the shortest-Cycle passing through vertex v    http://goo.gl/BsYU0
 
 
+###########################################
+# Graph datastructure:
+
+            // This class represents a directed graph using adjacency list representation
+            class Graph
+            {
+              int V;    // No. of vertices
+              list<int> *adj;    // Pointer to an array containing adjacency lists
+              public:
+              Graph(int V);  // Constructor
+              void addEdge(int v, int w); // function to add an edge to graph
+              bool isReachable(int s, int d);  // returns true if there is a path from s to d
+            };
+
+            Graph::Graph(int V)
+            {
+              this->V = V;
+              adj = new list<int>[V];
+            }
+
+            void Graph::addEdge(int v, int w)
+            {
+              adj[v].push_back(w); // Add w to v.s list.
+            }
+
+
+###########################################
 # DFS application (path finding, cycle finding (nodes forming cycle))
         # http://ww3.algorithmdesign.net/handouts/DFS.pdf
 
@@ -3935,10 +3962,36 @@ E:\My eBooks\Algo\Sahni Codes\all\network.h
 		- stack 0 in-degress vertices
 		- find topo order
 
-# another trick is to start dfs(v) from a random node v , and the end of dfs(v) insert v into a list L
-# list of the nodes in descending order of finish nos. gives the topological order.
+    # another trick is to start dfs(v) from a random node v , and the end of dfs(v) insert v into a list L
+    # list of the nodes in descending order of finish nos. gives the topological order.
+
 # Idea of Topological Sorting: Run the DFS on the DAG and output the vertices in reverse order of finishing time.
 #
+            Problem: given a directed acyclic graph G = (V; E), obtain a linear ordering
+            of the vertices such that for every edge (u; v) . E, u appears before v in the
+            ordering.
+
+            Solution:
+            . Use depth-.rst search, with an initially empty list L.
+            . At the end of procedure dfs(v), insert v to the front of L.
+            . L gives a topological sort of the vertices.
+
+            Observation: the list of nodes in the descending order of .nish numbers
+            yields a topological sort .
+
+
+# shortest path in DAG:
+  http://www.utdallas.edu/~sizheng/CS4349.d/l-notes.d/L17.pdf
+  http://www.geeksforgeeks.org/shortest-path-for-directed-acyclic-graphs/
+
+  Can use Dijkstra : E + Vlog V
+  or use topological sort E + V
+
+##########################################
+# articulation points
+
+http://www.geeksforgeeks.org/articulation-points-or-cut-vertices-in-a-graph/
+
 ###########################################
 # cicular sorted array search:
 
@@ -4136,6 +4189,14 @@ int cyclePresent (node *head) {
 
 ###########################################
 
+1st Way:
+# foreach new nbr 
+  -> push new node in stack
+  -> recurse
+  -> pop
+
+# via BFS: http://www.geeksforgeeks.org/find-if-there-is-a-path-between-two-vertices-in-a-given-graph/
+
 bool Network::findPath(int v, int w, int &length, int path[], int reach[])
 { 
   // Actual path finder v != w.
@@ -4181,6 +4242,52 @@ void print_paths(int x, int y) {
 }
 
 ###########################################
+
+  # put them in stack or store their finish times
+
+                // A recursive function used by topologicalSort
+                void Graph::topologicalSortUtil(int v, bool visited[], stack<int> &Stack)
+                {
+                    // Mark the current node as visited.
+                    visited[v] = true;
+                 
+                    // Recur for all the vertices adjacent to this vertex
+                    list<int>::iterator i;
+                    for (i = adj[v].begin(); i != adj[v].end(); ++i)
+                        if (!visited[*i])
+                            topologicalSortUtil(*i, visited, Stack);
+                 
+                    // Push current vertex to stack which stores result
+                    Stack.push(v);
+                }
+                 
+                // The function to do Topological Sort. It uses recursive topologicalSortUtil()
+                void Graph::topologicalSort()
+                {
+                    stack<int> Stack;
+                 
+                    // Mark all the vertices as not visited
+                    bool *visited = new bool[V];
+                    for (int i = 0; i < V; i++)
+                        visited[i] = false;
+                 
+                    // Call the recursive helper function to store Topological Sort
+                    // starting from all vertices one by one
+                    for (int i = 0; i < V; i++)
+                      if (visited[i] == false)
+                        topologicalSortUtil(i, visited, Stack);
+                 
+                    // Print contents of stack
+                    while (Stack.empty() == false)
+                    {
+                        cout << Stack.top() << " ";
+                        Stack.pop();
+                    }
+                }
+'"";<</.
+
+######
+
 bool Network::Topological(int v[])
 {// Compute topological ordering of digraph vertices.
                                                  // Return true if a topological order is found.

@@ -268,6 +268,41 @@ For example, memcpy might always copy addresses from low to high. If the destina
 
 
 ###########################################
+# Amazon: print alternate ends of binary tree: http://www.careercup.com/question?id=19574703
+
+idea : use 2 stacks for left->right push and right->left push. Top element is the one needed
+
+            void alternate (node *r) {
+              stack<node*> slr, srl;
+              slr.push (r);
+              int chance = 1;   //left to right
+              vector<node*> ret;
+
+              while (slr.size() && srl.size()) {
+                if (chance == 1) {
+                  ret.pb (slr.peek());
+
+                  while (slr.size()) {
+                    node *top = slr.pop();
+                    if (top->left) srl.push (top->left);
+                    if (top->right) srl.push (top->right);
+                  }
+                }
+                else {
+                  ret.pb (srl.peek());
+
+                  while (srl.size()) {
+                    node *top = srl.pop();
+                    if (top->left) slr.push (top->right);
+                    if (top->right) slr.push (top->left);
+                  }
+                }
+
+                chance = chance * -1;
+              }
+            }
+
+###########################################
 # Inorder successor/predecessors. I parent pointer is given then okay, else its tricky
 # http://www.geeksforgeeks.org/inorder-successor-in-binary-search-tree/
 
@@ -5825,6 +5860,23 @@ Let us try an extended verision of the problem. Write a one line function Logn(n
       }
 
 ##########################################
+# determinant:
+This can be represented as
+
+
+ 
+| d1 |        | a1 b1 c1  |  | x1 |
+| d2 |   =   |  a2 b2 c2 |  | x2 |
+| d3 |        |  a3 b3 c3 |  | x3 |
+
+i.e. 
+|D| = | ABC | * | X |
+
+Now use matrix multiplication/division  to get the answer
+
+
+| X | = |D| * | inverse of A|
+      
 ##########################################
 ##########################################
 ##########################################

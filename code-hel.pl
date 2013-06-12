@@ -5983,6 +5983,8 @@ Now use matrix multiplication/division  to get the answer
 
 
 | X | = |D| * | inverse of A|
+
+# Code  for determinant simply writtein HanoiNK.sln
       
 ##########################################
 ##########################################

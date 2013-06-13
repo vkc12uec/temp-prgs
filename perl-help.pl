@@ -2,6 +2,16 @@ intitle:"index.of" linkin (mp3|mp4|flv|avi|mpg|wmv) -html-htm-php-jsp-asp
 http://www.ihas1337code.com/2010/04/hacking-google-interview-from-mit.html
 
 ###########################################
+# quicksort : wiki
+Quicksort also competes with mergesort, another recursive sort algorithm but with the benefit of worst-case O(n log n) running time. Mergesort is a stable sort, unlike standard in-place quicksort and heapsort, and can be easily adapted to operate on linked lists and very large lists stored on slow-to-access media such as disk storage or network attached storage. Like mergesort, quicksort can be implemented as an in-place stable sort,[15] but this is seldom done. Although quicksort can be written to operate on linked lists, it will often suffer from poor pivot choices without random access. The main disadvantage of mergesort is that, when operating on arrays, efficient implementations require O(n) auxiliary space, whereas the variant of quicksort with in-place partitioning and tail recursion uses only O(log n) space. (Note that when operating on linked lists, mergesort only requires a small, constant amount of auxiliary storage.)
+
+###########################################
+DEADLOCK Deadlock is a condition in which a task waits indefinitely for conditions that can never be satisfied - task claims exclusive control over shared resources - task holds resources while waiting for other resources to be released - tasks cannot be forced to relinguish resources - a circular waiting condition exists
+
+LIVELOCK Livelock conditions can arise when two or more tasks depend on and use the some resource causing a circular dependency condition where those tasks continue running forever, thus blocking all lower priority level tasks from running (these lower priority tasks experience a condition called starvation)
+
+
+###########################################
 # find max and 2nd max in array:
 
 @Gauri, the strategy for finding second minimum in n + log(n) - 2 is tournament method.

@@ -13,6 +13,21 @@ terabyte (TB) 10^12  2^40
 
 # nCr = n-1Cr + n-1Cr-1
 ###########################################
+Given a list of natural numbers d1,., dn, show how to decide in polynomial time if there exists an undirected graph G = (V, E) where the node degrees are precisely the numbers d1,.,dn.
+
+Answer:
+----------
+
+    If any of the degrees is 0, this should be an isolated node in the graph; so we can just delete that degree from the list.
+
+    Let us now sort the list so that d1 . . . dn > 0. Let dn = k.
+    Now consider the list L = {d1 . 1, ., dk . 1, dk + 1, ., dn . 1}. 
+
+    Claim: the graph we want exists iff there is a graph whose degrees are the items of L. 
+
+    Note that L has one less element than the original list. So we can proceed recursively to check if G satisfies the desired property.
+
+###########################################
 # C union example
 #
 typedef enum { INTEGER, STRING, REAL, POINTER } Type;
@@ -1520,6 +1535,9 @@ which is used in lock-free and wait-free algorithms. Here is an example: conside
 # largest k*k submatrix with max sum (done by DP youtube vid)
 
 # insert spaces or split a sentences into as many words as possible ( @ ggl2.cpp )
+
+# skyline for 2d points as buildings : 
+www.quora.com/Google/Given-a-set-of-2D-coordinates-for-the-4-corners-of-each-building-in-a-city-skyline-as-if-in-a-photograph-how-would-you-determine-the-outline-of-the-silhouette-of-all-buildings-where-buildings-may-or-may-not-overlap
 
 ###########################################
 My rule of thumb is:  POINTERS vs REFERENCES
@@ -4551,6 +4569,8 @@ REGEX dfa matching
 # two sigma question about wildcard matching using '?' and '*'
 #     http://www.glassdoor.com/Interview/TWO-Sigma-Interview-RVW1827179.htm
 
+// string and patt
+
 bool isMatch (const char *t, const char *g) {
   if (*t == '\0' && *g == '\0')
     return true;
@@ -5395,7 +5415,6 @@ Solution: This is a relatively simple DP problem. Here we only give the main ide
 http://sumitpal.wordpress.com/2012/08/17/histogram-based-water-volume-calculation-algorithm/#comment-223
   based on divide and conquer
   apply simple area of rec.
-
 ################################################
 
 Min Vertex cover of Tree:

@@ -1,4 +1,14 @@
 ###########################################
+# MS screwup:
+- fun to explore new ideas/articles/ like false sharing
+
+- half knowledge about Idisposable pattern
+
+- managed and unmanaged code - could have said more clearly
+
+- sandep strengths more clearly
+
+###########################################
 # Sum carry 3 bits
 a , b, c
 
@@ -13,6 +23,9 @@ terabyte (TB) 10^12  2^40
 
 # nCr = n-1Cr + n-1Cr-1
 ###########################################
+# GOOGLE/AMAZon:
+  Design an API that will support constant time add, remove, search and random find operations. Random find will get a random number and return that element. Note: Only hash map will not be sufficient since it cannot support random read.
+###########################################
 Given a list of natural numbers d1,., dn, show how to decide in polynomial time if there exists an undirected graph G = (V, E) where the node degrees are precisely the numbers d1,.,dn.
 
 Answer:
@@ -20,8 +33,8 @@ Answer:
 
     If any of the degrees is 0, this should be an isolated node in the graph; so we can just delete that degree from the list.
 
-    Let us now sort the list so that d1 . . . dn > 0. Let dn = k.
-    Now consider the list L = {d1 . 1, ., dk . 1, dk + 1, ., dn . 1}. 
+    Let us now sort the list so that d1 > > > dn > 0. Let dn = k.
+    Now consider the list L = {d1 - 1, , dk - 1, dk + 1, ., dn - 1}. 
 
     Claim: the graph we want exists iff there is a graph whose degrees are the items of L. 
 
@@ -59,6 +72,16 @@ Value value_new_integer(int v)
 http://stackoverflow.com/questions/3572640/interview-question-find-median-from-mega-number-of-integers?rq=1
   - 1 - either do external sort and then count the items during merging 
   - 2 - divide the numbers into ranges/buckets. Find the bucket containing the median, then find median within that
+  - 3:
+    Create an array of 8-byte longs that has 2^16 entries. Take your input numbers, shift off the bottom sixteen bits, and create a histogram.
+
+    Now you count up in that histogram until you reach the bin that covers the midpoint of the values.
+
+    Pass through again, ignoring all numbers that don't have that same set of top bits, and make a histogram of the bottom bits.
+
+    Count up through that histogram until you reach the bin that covers the midpoint of the (entire list of) values.
+
+    Now you know the median, in O(n) time and O(1) space (in practice, under 1 MB).'
 
 ###########################################
 # two nos. are given in form of linked list, ones digit at head
@@ -67,7 +90,13 @@ How you add ?
 Neat solution is recursive:   Page 191 - Gayle boook
 
 ###########################################
-# edit distance "algorithm" to "altruistic"
+# edit distance "algorithmm" to "altruistic"
+
+#  // for all i and j, d[i,j] will hold the Levenshtein distance between
+#  // the first i characters of s and the first j characters of t;
+
+http://stackoverflow.com/questions/5849139/levenshtein-distance-inferring-the-edit-operations-from-the-matrix
+http://www.hakank.org/edit_distances/edit_distances.cgi?s1=algorithm&s2=altruistic&submit=ok
 
     int compute_edit_distance(string x, string y)
     {
@@ -109,8 +138,6 @@ while(t--){cin>>b;a.push_back(b);}
 
 ###########################################
 # http://stackoverflow.com/questions/245878/how-do-i-choose-between-a-hash-table-and-a-trie-prefix-tree
-
-# 
 
 # +# External sort (wiki) says 2 methods:
   - using K way merge (when chunks are not too muchi. Else read/write page cost will be bad)
@@ -247,8 +274,6 @@ class RC
     http://msdn.microsoft.com/en-us/library/vstudio/hh279674.aspx
 
 
-
-
 ###########################################
 # memcpy    : no overlap check
 #include <stddef.h> /* size_t */
@@ -372,33 +397,46 @@ node *pred (node *r, node *given) {
 # MS : given a BST, find the CEILing value for a given key
 http://www.careercup.com/question?id=17833665 '??/
 
-node *ceil (node *r, int x) {
-  if (!r)
-  return 0;
+# Floor and ceiling. 
+  If a given key key is less than the key at the root of a BST, then the floor of key (the largest key in the BST less than or equal to key) must be in the left subtree. If key is greater than the key at the root, then the floor of key could be in the right subtree, but only if there is a key smaller than or equal to key in the right subtree; if not (or if key is equal to the key at the root) then the key at the root is the floor of key. Finding the ceiling is similar, interchanging right and left.
+'
 
-  node *succ=0, curr=r;
+    private Node ceiling(Node x, Key key) {
+        if (x == null) return null;
+        int cmp = key.compareTo(x.key);
+        if (cmp == 0) return x;
+        if (cmp < 0) { 
+            Node t = ceiling(x.left, key); 
+            if (t != null) return t;
+            else return x; 
+        } 
+        return ceiling(x.right, key); 
+    } 
 
-  while (r) {
-    if (r->data == x) {
-      node *inoSucc = findSucc (r);
-      // you have to compare inoSucc v/s succ for below scenario
-      /*
-          8
-        /
-       6
-        \
-          7
-      */
-      break;
-    }
-    else if (r->data < x) {
-      succ = r;
-      r = r->left;
-    }
-    else 
-      r = r->right;
-  }
-}
+     # Iterative #
+      Node* FindCeiling(Node* head, int key)
+      {
+        if(!head)
+          return head;
+        
+        Stack<Node*> myStack = new Stack();
+        Node* current = head;
+        
+        while(current)
+        {
+          if(current->data > key)
+          {
+            myStack.push(current);
+            current = current->left;
+          }
+          if(current->data <= key)
+            current = current->right;
+        }
+        
+        return myStack.Pop();
+      }
+    
+
 
 ###########################################
 # Amazon: Given bst, root, http://www.careercup.com/question?id=17952669
@@ -413,7 +451,7 @@ node *closestk (node *r, node*given) {
 
 ###########################################
 # How to find the closest element to a given key value in a binary search tree?
-as you move down, keep on recording the diff for each node
+    as you move down, keep on recording the diff for each node
 
 ###########################################
 # morris traversal    inorder & preorder
@@ -602,6 +640,11 @@ You are trying to rob houses on a street. Each house has some +ve amount of cash
   see "amz_sort_char_array.cpp" where u can impl. class which overloads operator() (int i, int j)
   For C++ string, u can use macroo like tr(), all()
 
+  bool operator() (char c, char d) {
+    return (mymap[c] < mymap[d]);
+  }
+  
+
 # MEDIAN of stream of nos. :
   # http://codercareer.blogspot.com/2012/01/no-30-median-in-stream.html
       Soln:   Use min-heap and max-heap and keep on putting new elements 
@@ -778,40 +821,69 @@ A set of n points in the plane can be preprocessed in O(nlogn) time into a data 
   -> Can do        :  #of point lying b/w (x1,y1) (x2,y2)
   
 
-# Intersection of horizontal/vertical lines:
+# Intersection of horizontal/vertical lines: GRAMA
         Events in Plane Sweep
         . Bottom endpoint of v
-        - Action:
-            insert v into Status(L)
+          - Action:
+              insert v into Status(L)
         . Top endpoint of v
-        - Action:
-            delete v from Status(L)
+          - Action:
+              delete v from Status(L)
         . Horizontal segment h
-        - Action:
-            range query on Status(L) with x-range of h
+          - Action:
+              range query on Status(L) with x-range of h
 
 
 ###########################################
 # bellman-ford : (single source shortest path)
-# Bellman.Ford runs in O(|V|·|E|) time, where |V| and |E| are the number of vertices and edges respectively.
-  Main loop runs for V-1 times. 
-  In LAST:     if (for every edge u-v)  
-                  u.distance + uv.weight < v.distance:
-                 error "Graph contains a negative-weight cycle"
+# Bellman.Ford runs in O(|V|·|E|) time, where |V| and |E| are the number of vertices and edges respectively. Make a dist[] to keep single source distance from 
+# other nodes
 
-    for (int i = 1; i <= V-1; i++)
+   step 1: Main loop runs for V-1 times. 
+   step 2:   In LAST:  check for -ve cycle
+
+        void BellmanFord(struct Graph* graph, int src)
         {
-            for (int j = 0; j < E; j++)
+            int V = graph->V;
+            int E = graph->E;
+            int dist[V];
+         
+            // Step 1: Initialize distances from src to all other vertices as INFINITE
+            for (int i = 0; i < V; i++)
+                dist[i]   = INT_MAX;
+            dist[src] = 0;
+         
+            // Step 2: Relax all edges |V| - 1 times. A simple shortest path from src
+            // to any other vertex can have at-most |V| - 1 edges
+            for (int i = 1; i <= V-1; i++)
             {
-                int u = graph->edge[j].src;
-                int v = graph->edge[j].dest;
-                int weight = graph->edge[j].weight;
-                if (dist[u] + weight < dist[v])
-                    dist[v] = dist[u] + weight;
+                for (int j = 0; j < E; j++)
+                {
+                    int u = graph->edge[j].src;
+                    int v = graph->edge[j].dest;
+                    int weight = graph->edge[j].weight;
+                    if (dist[u] + weight < dist[v])
+                        dist[v] = dist[u] + weight;
+                }
             }
+         
+            // Step 3: check for negative-weight cycles.  The above step guarantees
+            // shortest distances if graph doesn't contain negative weight cycle.  
+            // If we get a shorter path, then there is a cycle.
+            for (int i = 0; i < E; i++)
+            {
+                int u = graph->edge[i].src;
+                int v = graph->edge[i].dest;
+                int weight = graph->edge[i].weight;
+                if (dist[u] + weight < dist[v])
+                    printf("Graph contains negative weight cycle");
+            }
+         
+            printArr(dist, V);
+         
+            return;
         }
-                 
-    # http://www.geeksforgeeks.org/dynamic-programming-set-23-bellman-ford-algorithm/
+# http://www.geeksforgeeks.org/dynamic-programming-set-23-bellman-ford-algorithm/
 
 # -ve weight cycle means that it has a cycle with summing -ve cost. Hence it keeps on rotating
 
@@ -819,6 +891,37 @@ A set of n points in the plane can be preprocessed in O(nlogn) time into a data 
       Time Complexity of the implementation is O(V^2). If the input graph is represented using adjacency list, it can be reduced to O(E log V) with the help of binary heap. We will soon be discussing O(E Log V) algorithm as a separate post.
       # Matrix impl @ http://www.geeksforgeeks.org/greedy-algorithms-set-6-dijkstras-shortest-path-algorithm/
 
+Dijkstra's algorithm does not work with negative edge weights. For instance, consider the following graph (assume the edges are all directed from left to right):
+       2
+    A-----B
+     \   /
+    3 \ / -2
+       C
+
+http://www.ics.uci.edu/~eppstein/161/960208.html
+  This runs in linear time (with the possible exception of finding the ordering), and works even when the graph has negative length edges. You can even use it to find longest paths: just negate the lengths of all the edges. The only catch is that it only works when we can find a topological ordering.
+       
+'
+
+# http://www.ics.uci.edu/~eppstein/161/960208.html
+# Negative cycle detection in directed Graph: 
+#
+  Given directed graph G with arbirary edge lengths, does it have a negative length cycle?
+
+    Bellman-Ford checks whether there is a negative cycle C that is reachable from a specic vertex s. There may negative cycles
+    not reachable from s.
+ Sol 1:    Run Bellman-Ford V times, once from each node u?
+ Sol 2: Make a new graph with a new vertex which connects to every other node with cost = 0. Run bellman from new vertex now.
+
+    If we have a DAG then it has no negative length cycle and hence
+    shortest paths exists even with negative lengths. One can
+    compute single-source shortest paths in a DAG in linear time.
+    This implies that one can also compute longest paths in a DAG
+    in linear time.
+
+    using DP:
+    http://moodle.bracu.ac.bd/pluginfile.php/4784/mod_resource/content/1/longest-path-in-dag.pdf
+ 
 
 # Floyd-Warshall algorithm O(V^3) | weighted, directed graph | NO negative cycle
       let dist be a |V| × |V| array of minimum distances initialized to 8 (infinity)
@@ -846,12 +949,14 @@ A set of n points in the plane can be preprocessed in O(nlogn) time into a data 
            return Path(i, intermediate) + intermediate + Path(intermediate, j)
 
 
-          >> Hence, to detect negative cycles using the Floyd–Warshall algorithm, one can inspect the diagonal of the path matrix, and the presence of a negative number indicates that the graph contains at least one negative cycle.[2] Obviously, in an undirected graph a negative edge creates a negative cycle (i.e., a closed walk) involving its incident vertices.
+          >>WIKI: Hence, to detect negative cycles using the Floyd–Warshall algorithm, one can inspect the diagonal of the path matrix, and the presence of a negative number indicates that the graph contains at least one negative cycle.[2] Obviously, in an undirected graph a negative edge creates a negative cycle (i.e., a closed walk) involving its incident vertices.
           >> The idea is to one by one pick all vertices and update all shortest paths which include the picked vertex as an intermediate vertex in the shortest path. When we pick vertex number k as an intermediate vertex, we already have considered vertices {0, 1, 2, .. k-1} as intermediate vertices. 
           >> Find cycle of shortest length in a directed graph with positive weights @ http://stackoverflow.com/questions/3911626/find-cycle-of-shortest-length-in-a-directed-graph-with-positive-weights/3912537#3912537
             => collorary: You can use Dijkstra to find the shortest-Cycle passing through vertex v    http://goo.gl/BsYU0
+                once you have dist[] poppulated by Dijkstra with source node v; then for each cost in dist[] , check if there is an edge from that
+                node to v to form a cycle of min cost
 
-
+'
 ###########################################
 # Graph datastructure:
 
@@ -933,7 +1038,7 @@ A set of n points in the plane can be preprocessed in O(nlogn) time into a data 
                      int i, w;
                      int K[n+1][W+1];
                    
-                     // Build table K[][] in bottom up manner
+                     // Build table K[][] in bottom up manner // item index outside
                      for (i = 0; i <= n; i++)
                      {
                          for (w = 0; w <= W; w++)
@@ -994,11 +1099,11 @@ A set of n points in the plane can be preprocessed in O(nlogn) time into a data 
               {
                int *M = new int[C+1];
                int i, j, tmp, pos;
-               for(i=1; i<= C; i++)
+               for(i=1; i<= C; i++)   // for every capacity
                {
                    M[i] = M[i-1];
                    pos = i-1;             
-                   for(j=0; j< n; j++)
+                   for(j=0; j< n; j++)    // find best item for this this capacity
                    {
                        if (i >= weight[j])
                            tmp = M[i-weight[j]] + value[j];
@@ -1065,9 +1170,9 @@ A set of n points in the plane can be preprocessed in O(nlogn) time into a data 
               isSum[0] = 1;
               for(i=0;i<n;i++)
               {
-                isSum[set[i]] = 1 (possible, TRUE);
+                isSum[set[i]] = 1         //(possible, TRUE);
               }
-              for (i = 0; i < n; i++) {
+              for (i = 0; i < n; i++) {   // items
                   for (j = sum - set[i]; j >= 0; j--) {
                       if (isSum[j] == 1)
                           isSum[j+set[i]] = 1;
@@ -1143,8 +1248,11 @@ A set of n points in the plane can be preprocessed in O(nlogn) time into a data 
   n ==> Number of Eggs
   eggDrop(n, k) ==> Minimum number of trails needed to find the critical
                     floor in worst case.
-  eggDrop(n, k) = 1 + min{max(eggDrop(n - 1, x - 1), eggDrop(n, k - x)): 
-                 x in {1, 2, ..., k}}
+  eggDrop(n, k) = 1 + min{
+                        max
+                          (eggDrop(n - 1, x - 1), eggDrop(n, k - x)
+                          )
+                         x in {1, 2, ..., k}}
 
 # 
 ###########################################
@@ -1168,12 +1276,9 @@ A set of n points in the plane can be preprocessed in O(nlogn) time into a data 
     Initialize fin[v] = 0 for all vertices v.
 
   Mtd1:
-    Consider vertices v in topological order:
+    Consider vertices v in topological order:   time[w] means, time to finish task 'w'
       for each edge v-w, set fin[w] = max(fin[w], fin[v] + time[w])
       # https://docs.google.com/viewer?a=v&q=cache:-rOBI5bAIMwJ:www.cs.princeton.edu/courses/archive/spr04/cos226/demo/demo-pert.ppt+&hl=en&gl=us&pid=bl&srcid=ADGEESjN3gpAsSK0W0prLG1FsRmWsLvU9y6V4qsjcgAc9Lpj8ATYIegZJe4UvErIvMOC4Rf5qaaa6XZE97TLWrOp7ossjwGADKSyidpKSQvFsbGvCNzDavAIVkp5TMYa6d_8HQJ1BLEl&sig=AHIEtbSfaaUpPsMNt69HXymF60frphH7QQ
-
-  Mtd2:
-    http://goo.gl/Y7wn3
 
 ###########################################
 # impl. Queue using Stacks:
@@ -1229,8 +1334,9 @@ http://stackoverflow.com/questions/69192/how-to-implement-a-queue-using-two-stac
     }
 
     # using auto_ptr , their copy ctor and assignment operator make either one of them null. So, one pointer points always to resource
-    # using shared_ptr, when u copy, then 2 pointers point to same resouce. ..... Containters can have <shared_ptr> NOT <auto_ptr>
+    # using shared_ptr, when u copy, then 2 pointers point to same resouce. ..... Containters can have <shared_ptr> *NOT* <auto_ptr>
 
+###########################################
 ###########################################
 # binary stream divisble by 3:
 
@@ -1519,7 +1625,7 @@ which is used in lock-free and wait-free algorithms. Here is an example: conside
 
 
 ###########################################
-# largest subarray with 0's = 1's       (use cumulative sums)
+# largest subarray with 0's = 1's       (use cumulative sums)   uses N time and N space via hashtable
 # http://www.geeksforgeeks.org/archives/20586
 #
 # http://tech-queries.blogspot.com/2011/09/find-largest-sub-matrix-with-all-1s-not.html
@@ -1966,6 +2072,9 @@ return abs(cross/2.0);
 # AMzN:
 # Tree with internal nodes, and leaves ... Given preorder, form the tree .... 
 # http://tech-queries.blogspot.com/search/label/Amazon%20Interview
+
+Given an array pre[] that represents Preorder traversal of a spacial Binary Tree where every node has either 0 or 2 children. 
+One more array preLN[] is given which has only two possible values ‘L’ and ‘N’. The value ‘L’ in preLN[] indicates that the corresponding node in Binary Tree is a leaf node and value ‘N’ indicates that the corresponding node is non-leaf node. Construcvt the tree
 #
 tree* newnode(char c)
 {
@@ -2531,15 +2640,15 @@ Now this is equal to the left subtree's sequence and hence voila
 
 # how to produce this L R L L R sequence:
 
-int arr[100];
-static int index = 0;
-void Inorder (node *n, int which_child) {
-  if (!n)
-    return;
-  Inorder (n->left, 0);
-  arr [index++] = which_child;
-  Inorder (n->right, 1);
-}
+        int arr[100];
+        static int index = 0;
+        void Inorder (node *n, int which_child) {
+          if (!n)
+            return;
+          Inorder (n->left, 0);
+          arr [index++] = which_child;
+          Inorder (n->right, 1);
+        }
 
 '
 ###########################################
@@ -3281,7 +3390,6 @@ void numTostr(int n) {
 
 ###########################################'//\\\.'
 # this method will make a copy of BST:
-
 # convert sorted  link list to bst	(bottom up)  # same to : convert sorted doubly link list to bst
 
 BinaryTree* sortedListToBST(ListNode *& list, int start, int end) {
@@ -4058,6 +4166,7 @@ int rotated_binary_search(int A[], int N, int key) {
     }
   }
   return -1;
+  }
 
 
 
@@ -4613,7 +4722,7 @@ N=4, Coins = {1,2,3}; with infinite supply | table can be 1D or 2D    | http://w
         Given a value N, if we want to make change for N cents, and we have infinite supply of each of S = { S1, S2, .. , Sm} valued coins, how many ways can we make the change? The order of coins doesn’t matter.
         For example, for N = 4 and S = {1,2,3}, there are four solutions: {1,1,1,1},{1,1,2},{2,2},{1,3}. So output should be 4. For N = 10 and S = {2, 5, 3, 6}, there are five solutions: {2,2,2,2,2}, {2,2,3,3}, {2,2,6}, {2,3,5} and {5,5}. So the output should be 5.
 
-        # Just give no. of ways. Not the min. # of coins
+        # Just give no. of ways. *Not* the min. # of coins
         Let count(S[], m, n) be the function to count the number of solutions, then it can be written as sum of count(S[], m-1, n) and count(S[], m, n-Sm).
 
         # 2D table 
@@ -5963,6 +6072,7 @@ Let us try an extended verision of the problem. Write a one line function Logn(n
       }
 ##########################################
 # Amz: ancestor problem:  http://www.careercup.com/question?id=19032665
+  (uses postOrder traversal)
 
       int a[n][n] = 0;
 

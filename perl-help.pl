@@ -2,6 +2,18 @@ intitle:"index.of" linkin (mp3|mp4|flv|avi|mpg|wmv) -html-htm-php-jsp-asp
 http://www.ihas1337code.com/2010/04/hacking-google-interview-from-mit.html
 
 ###########################################
+# sem_init etc. calls:
+# This tells , when a semValue == 0, then subsequent calls block
+
+sem_init(&mutex, 0, 1);
+
+Thread 1	              Thread 2	
+sem_wait (&mutex);	--
+---
+                    sem_wait (&mutex);	
+a = data;	          /* blocked */
+            
+###########################################
 # quicksort : wiki
 Quicksort also competes with mergesort, another recursive sort algorithm but with the benefit of worst-case O(n log n) running time. Mergesort is a stable sort, unlike standard in-place quicksort and heapsort, and can be easily adapted to operate on linked lists and very large lists stored on slow-to-access media such as disk storage or network attached storage. Like mergesort, quicksort can be implemented as an in-place stable sort,[15] but this is seldom done. Although quicksort can be written to operate on linked lists, it will often suffer from poor pivot choices without random access. The main disadvantage of mergesort is that, when operating on arrays, efficient implementations require O(n) auxiliary space, whereas the variant of quicksort with in-place partitioning and tail recursion uses only O(log n) space. (Note that when operating on linked lists, mergesort only requires a small, constant amount of auxiliary storage.)
 
@@ -241,6 +253,7 @@ With optimizations turned on, assuming my foo() did something more than it does,
 the temprovary variables are created on the stack by the compiler and are used during reference initialization and during evaluation of expressions including standard type conversions, argument passing, function returns.
 
 
+###########################################
 ###########################################
 # epoll simple explanation: http://kovyrin.net/2006/04/13/epoll-asynchronous-network-programming/
 

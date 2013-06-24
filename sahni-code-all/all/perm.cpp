@@ -1,7 +1,16 @@
 // output all permutations of n elements
 
-#include <iostream.h>
-#include "swap.h"
+#include <iostream>
+//#include "swap.h"
+using namespace std;
+
+void Swap (char &x, char &y)
+{
+    char temp;
+    temp = x;
+    x = y;
+    y = temp;
+}
 
 template<class T>
 void Perm(T list[], int k, int m)
@@ -21,10 +30,11 @@ void Perm(T list[], int k, int m)
             }
 }
 
-void main(void)
+int main(void)
 {
    char a[] = {'1', '2', '3', '4'};
-   int n = 3;
+   int n = 4;
    cout << "The permutations of 123 are" << endl;
    Perm(a, 0, n-1);
+   return 0;
 }

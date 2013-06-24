@@ -5141,6 +5141,8 @@ void Perm(T list[], int k, int m)
 }
 
 
+# Odometer types permutation in FDSProjects.sln
+
 # if duplicates are thr:
 # A simple solution would be to keep track of all characters used at a stack call while permuting.
 
@@ -6116,5 +6118,25 @@ Now use matrix multiplication/division  to get the answer
 # Code  for determinant simply writtein HanoiNK.sln
       
 ##########################################
+# Kth smallest in A[] B[] ,,,, unqeual size
+  http://stackoverflow.com/questions/4607945/how-to-find-the-kth-smallest-element-in-the-union-of-two-sorted-arrays?rq=1
+
+        i = k/2
+        j = k - i
+        step = k/4
+        while step > 0
+            if a[i-1] > b[j-1]
+                i -= step
+                j += step
+            else
+                i += step
+                j -= step
+            step /= 2
+
+        if a[i-1] > b[j-1]
+            return a[i-1]
+        else
+            return b[j-1]
+
 ##########################################
 ##########################################

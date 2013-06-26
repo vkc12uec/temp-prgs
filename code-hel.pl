@@ -8,6 +8,44 @@
 
 - sandep strengths more clearly
 
+# google:
+  http://www.slideshare.net/esumit/why-googlewillnothireyou-24thmay2013sumitarora
+
+###########################################
+# Skip lists: (look in prep folder lecture-11-skiplist.pdf)
+
+Search Algorithm  : Page 2 http://cg.scs.carleton.ca/~morin/teaching/5408/refs/p90b.pdf
+                We search for an element by traversing forward
+                pointers that do not overshoot the node containing the
+                element being searched for (Figure 2). When no more
+                progress can be made at the current level of forward
+                pointers, the search moves down to the next level.
+                When we can make no more progress at level 1, we
+                must be immediately in front of the node that contains
+                the desired element (if it is in the list).
+
+# CATALAN:
+  Successive applications of a binary operator can be represented in terms of a full binary tree. (A rooted binary tree is full if every vertex has either two children or no children.) It follows that Cn is the number of full binary trees with n + 1 leaves:
+
+###########################################
+# reservoir sampling: http://en.wikipedia.org/wiki/Reservoir_sampling
+# choose k random nos. from a very very large link list in O(n)
+
+        array R[k];    // result
+        integer i, j;
+
+        // fill the reservoir array
+        for each i in 1 to k do
+            R[i] := S[i]
+        done;
+
+        // replace elements with gradually decreasing probability
+        for each i in k+1 to length(S) do
+            j := random(1, i);   // important: inclusive range
+            if j <= k then
+                R[j] := S[i]
+            fi
+        done
 ###########################################
 # Sum carry 3 bits
 a , b, c

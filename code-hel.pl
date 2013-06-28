@@ -12,6 +12,20 @@
   http://www.slideshare.net/esumit/why-googlewillnothireyou-24thmay2013sumitarora
 
 ###########################################
+# Hashtable:
+    No matter what the hash function, there is the possibility that two keys could resolve to the same hash key. This situation is known as a collision.
+
+    When this occurs, there are two simple solutions:
+
+    -chaining
+    - linear probe (aka linear open addressing)
+    
+    And two slightly more difficult solutions
+
+    -Quadratic Probe
+    -Double Hashing
+
+ 
 # Skip lists: (look in prep folder lecture-11-skiplist.pdf)
 
 Search Algorithm  : Page 2 http://cg.scs.carleton.ca/~morin/teaching/5408/refs/p90b.pdf
@@ -3066,6 +3080,10 @@ http://cs.fit.edu/~ryan/cse1002/sedgewick/42sort.pdf	slide:38
 - just calculate the max. prefix length
 
 
+###########################################
+# SUFFIX TREE: (how to implement)
+
+http://www.cs.sunysb.edu/~algorith/implement/nelson/distrib/streed2006.cpp
 ###########################################
 # for maximum contiguous product, if no. of negative nos. is even , no problem.
 # if their no. is odd, you have to leave one of the -ve no. which is at the boundary ....

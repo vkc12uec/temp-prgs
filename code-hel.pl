@@ -42,6 +42,42 @@ Search Algorithm  : Page 2 http://cg.scs.carleton.ca/~morin/teaching/5408/refs/p
   Successive applications of a binary operator can be represented in terms of a full binary tree. (A rooted binary tree is full if every vertex has either two children or no children.) It follows that Cn is the number of full binary trees with n + 1 leaves:
 
 ###########################################
+# Cups , pyramid fill water:
+                            struct nodeInfo
+                            {
+                              int level;
+                              int water;
+                            }
+
+
+                            int fillWater(int L, int C, int i /*0 based*/)
+                            {
+                              struct nodes[2*i] = {0};
+                              
+                              nodes[0].level = 0;
+                              nodes[0].water = L;
+                              
+                              int index = 0;
+                              while(index <= i)
+                              {
+                                       int level = nodes[index].level;
+                                 int child1Index = index + level + 1;
+                                 int child2Index = index + level + 2;
+
+                                 nodes[child1Index].level = level + 1;
+                                 nodes[child2Index].level = level + 1;
+
+                                 if(nodeInfo[index].water > C)
+                                 {
+                                           nodes[child1Index].water += (nodes[index].water - C)/2;
+                                     nodes[child2Index].water += (nodes[index].water - C)/2;
+                                 }
+                                       index++;
+                              }
+                              return nodeInfo[i].water;
+                            }
+
+###########################################
 # reservoir sampling: http://en.wikipedia.org/wiki/Reservoir_sampling
 # choose k random nos. from a very very large link list in O(n)
 
@@ -60,6 +96,38 @@ Search Algorithm  : Page 2 http://cg.scs.carleton.ca/~morin/teaching/5408/refs/p
                 R[j] := S[i]
             fi
         done
+
+      // A function to randomly select k items from stream[0..n-1].
+      void selectKItems(int stream[], int n, int k)
+      {
+          int i;  // index for elements in stream[]
+       
+          // reservoir[] is the output array. Initialize it with
+          // first k elements from stream[]
+          int reservoir[k];
+          for (i = 0; i < k; i++)
+              reservoir[i] = stream[i];
+       
+          // Use a different seed value so that we don't get
+          // same result each time we run this program
+          srand(time(NULL));
+       
+          // Iterate from the (k+1)th element to nth element
+          for (; i < n; i++)
+          {
+              // Pick a random index from 0 to i.
+              int j = rand() % (i+1);
+       
+              // If the randomly  picked index is smaller than k, then replace
+              // the element present at the index with new element from stream
+              if (j < k)
+                reservoir[j] = stream[i];
+          }
+       
+          printf("Following are k randomly selected items \n");
+          printArray(reservoir, k);
+      }
+'
 ###########################################
 # Sum carry 3 bits
 a , b, c
@@ -444,6 +512,44 @@ node *pred (node *r, node *given) {
 
   return pre;
 }
+
+###########################################
+Google:
+      Given (i) a non-empty binary search tree with double values (e.g. 3.5) in each node and (ii) a key value K 
+
+      Write a method to find the closest value to K.
+
+Why not find ceiling and floor for that key; and return whichever gives the min.
+
+###########################################
+
+# DOUBLE COMPARISON , EPLISON COMPARISON
+
+1:
+#include <cmath>
+#include <limits>
+
+                  bool AreSame(double a, double b) {
+                      return std::fabs(a - b) < std::numeric_limits<double>::epsilon();
+                  }
+
+2:  http://floating-point-gui.de/errors/comparison/
+                public static boolean nearlyEqual(float a, float b, float epsilon) {
+                  final float absA = Math.abs(a);
+                  final float absB = Math.abs(b);
+                  final float diff = Math.abs(a - b);
+
+                  if (a == b) { // shortcut, handles infinities
+                    return true;
+                  } else if (a == 0 || b == 0 || diff < Float.MIN_NORMAL) {
+                    // a or b is zero or both are extremely close to it
+                    // relative error is less meaningful here
+                    return diff < (epsilon * Float.MIN_NORMAL);
+                  } else { // use relative error
+                    return diff / (absA + absB) < epsilon;
+                  }
+                }
+
 
 
 # MS : given a BST, find the CEILing value for a given key
@@ -1327,8 +1433,9 @@ http://www.ics.uci.edu/~eppstein/161/960208.html
 
     Initialize fin[v] = 0 for all vertices v.
 
-  Mtd1:
-    Consider vertices v in topological order:   time[w] means, time to finish task 'w'
+  # Mtd1:
+    Consider vertices v in topological order:   time[w] means, 
+    -> time to finish task 'w'
       for each edge v-w, set fin[w] = max(fin[w], fin[v] + time[w])
       # https://docs.google.com/viewer?a=v&q=cache:-rOBI5bAIMwJ:www.cs.princeton.edu/courses/archive/spr04/cos226/demo/demo-pert.ppt+&hl=en&gl=us&pid=bl&srcid=ADGEESjN3gpAsSK0W0prLG1FsRmWsLvU9y6V4qsjcgAc9Lpj8ATYIegZJe4UvErIvMOC4Rf5qaaa6XZE97TLWrOp7ossjwGADKSyidpKSQvFsbGvCNzDavAIVkp5TMYa6d_8HQJ1BLEl&sig=AHIEtbSfaaUpPsMNt69HXymF60frphH7QQ
 

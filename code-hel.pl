@@ -5011,7 +5011,8 @@ Towards a recurrence relation for making change
 http://www.ccs.neu.edu/home/jaa/CSG713.04F/Information/Handouts/dyn_prog.pdf
 
 ###########################################
-
+    http://stackoverflow.com/questions/13557979/why-does-the-greedy-coin-change-algorithm-not-work-for-some-coin-sets
+    http://www.cs.ucsb.edu/~suri/cs130b/greedy1.txt
 # 
 ###########################################
 Maximum sub-sequence problem: in an interger arrray containing +ve and -ve nos..

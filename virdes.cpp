@@ -1,4 +1,5 @@
  #include <iostream>
+ #include "topcoder_header.h"
  using namespace std;
  
 class Base
@@ -17,6 +18,19 @@ class Derived: public Base
  };
 int  main()
 {
+
+  vector<int> arr;
+  arr.pb (1);
+  arr.pb(2);
+  arr.pb(3);
+  arr.pb(4);
+
+  arr.erase (arr.begin()+1);
+
+  tr(arr, it) {
+    cout << "\n --- " << *it;
+  }
+
 #if 0
 int x=2, y=4;
  x += 1;

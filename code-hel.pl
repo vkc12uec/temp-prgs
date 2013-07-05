@@ -25,6 +25,24 @@
     -Quadratic Probe
     -Double Hashing
 
+# How to resize a hashtable: Incremental resizing[edit]
+
+Some hash table implementations, notably in real-time systems, cannot pay the price of enlarging the hash table all at once, because it may interrupt time-critical operations. If one cannot avoid dynamic resizing, a solution is to perform the resizing gradually:
+    During the resize, allocate the new hash table, but keep the old table unchanged.
+    In each lookup or delete operation, check both tables.
+    Perform insertion operations only in the new table.
+    At each insertion also move r elements from the old table to the new table.
+    When all elements are removed from the old table, deallocate it.
+To ensure that the old table is completely copied over before the new table itself needs to be enlarged, it is necessary to increase the size of the table by a factor of at least (r + 1)/r during resizing.
+
+###########################################
+http://www.linfo.org/context_switch.html
+
+# User and kernel mode switching[edit]
+When a transition between user mode and kernel mode is required in an operating system, a context switch is not necessary; a mode transition is not by itself a context switch. However, depending on the operating system, a context switch may also take place at this time.
+
+###########################################
+
  
 # Skip lists: (look in prep folder lecture-11-skiplist.pdf)
 
@@ -40,6 +58,8 @@ Search Algorithm  : Page 2 http://cg.scs.carleton.ca/~morin/teaching/5408/refs/p
 
 # CATALAN:
   Successive applications of a binary operator can be represented in terms of a full binary tree. (A rooted binary tree is full if every vertex has either two children or no children.) It follows that Cn is the number of full binary trees with n + 1 leaves:
+
+# 3SUM problem can be solved in O(n2) time
 
 ###########################################
 # Cups , pyramid fill water:

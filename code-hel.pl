@@ -781,6 +781,9 @@ http://www.cs.pitt.edu/~kirk/algorithmcourses/index.html
 http://basicalgos.blogspot.com/2012/03/10-regular-expression-matching.html
 http://stackoverflow.com/questions/500607/what-are-the-lesser-known-but-useful-data-structures
 
+#probability tutorial
+http://community.topcoder.com/tc?module=Static&d1=tutorials&d2=probabilities
+
 # list of trading firms:  http:/tradertestorg/list.php
 codechef.com
 codeeval.com
@@ -4342,7 +4345,7 @@ E:\My eBooks\Algo\Sahni Codes\all\network.h
     Refer for above:
     link = http://www.cse.ohio-state.edu/~lai/6331/5.graph.pdf
 
-    # GFG:
+    # GFG:    When DFS of a nodes finishes, then you insert in Stack
           void Graph::topologicalSortUtil(int v, bool visited[], stack<int> &Stack)
           {
               // Mark the current node as visited

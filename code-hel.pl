@@ -59,7 +59,9 @@ Search Algorithm  : Page 2 http://cg.scs.carleton.ca/~morin/teaching/5408/refs/p
 # CATALAN:
   Successive applications of a binary operator can be represented in terms of a full binary tree. (A rooted binary tree is full if every vertex has either two children or no children.) It follows that Cn is the number of full binary trees with n + 1 leaves:
 
+###########################################
 # 3SUM problem can be solved in O(n2) time
+    choose one sum, and use 2 pointer approach to find the location of other two nos.
 
 ###########################################
 # Cups , pyramid fill water:
@@ -80,7 +82,7 @@ Search Algorithm  : Page 2 http://cg.scs.carleton.ca/~morin/teaching/5408/refs/p
                               int index = 0;
                               while(index <= i)
                               {
-                                       int level = nodes[index].level;
+                                 int level = nodes[index].level;
                                  int child1Index = index + level + 1;
                                  int child2Index = index + level + 2;
 
@@ -89,10 +91,10 @@ Search Algorithm  : Page 2 http://cg.scs.carleton.ca/~morin/teaching/5408/refs/p
 
                                  if(nodeInfo[index].water > C)
                                  {
-                                           nodes[child1Index].water += (nodes[index].water - C)/2;
+                                     nodes[child1Index].water += (nodes[index].water - C)/2;
                                      nodes[child2Index].water += (nodes[index].water - C)/2;
                                  }
-                                       index++;
+                                 index++;
                               }
                               return nodeInfo[i].water;
                             }
@@ -116,6 +118,8 @@ Search Algorithm  : Page 2 http://cg.scs.carleton.ca/~morin/teaching/5408/refs/p
                 R[j] := S[i]
             fi
         done
+
+# Gog: same idea
 
       // A function to randomly select k items from stream[0..n-1].
       void selectKItems(int stream[], int n, int k)
@@ -174,12 +178,22 @@ Answer:
     If any of the degrees is 0, this should be an isolated node in the graph; so we can just delete that degree from the list.
 
     Let us now sort the list so that d1 > > > dn > 0. Let dn = k.
-    Now consider the list L = {d1 - 1, , dk - 1, dk + 1, ., dn - 1}. 
+    Now consider the list L = {d1 - 1, , dk - 1, dk + 1, ., dn - 1}.  # i.e. decrease the degress of first K nodes by 1
 
     Claim: the graph we want exists iff there is a graph whose degrees are the items of L. 
 
     Note that L has one less element than the original list. So we can proceed recursively to check if G satisfies the desired property.
 
+    # for counting no. of shortest path using Dijkstra
+                  for each node v adjacent to u
+                          if d[v] > d[u] + w(u, v)
+                               d[v] = d[u] + w(u, v)
+                               count[v] = count[u]
+                          else if d[v] = d[u] + w(u, v)
+                                count[v] = count[v] + count[u]
+
+
+###########################################
 ###########################################
 # C union example
 #
@@ -278,8 +292,9 @@ while(t--){cin>>b;a.push_back(b);}
 
 ###########################################
 # http://stackoverflow.com/questions/245878/how-do-i-choose-between-a-hash-table-and-a-trie-prefix-tree
+  hashtable is more space efficient that trie
 
-# +# External sort (wiki) says 2 methods:
+# External sort (wiki) says 2 methods:
   - using K way merge (when chunks are not too muchi. Else read/write page cost will be bad)
     - pass 0 - sort individual chunks
     - pass 1 - K way merge
@@ -289,6 +304,8 @@ while(t--){cin>>b;a.push_back(b);}
     - instead of choosing a direct K way merge. Do some k < K way merge.
     - smth similar to chapeter 11 - dbsys course
 
+###########################################
+    
 # C++ doubly link list = std::list
 
 # in c++ , u can pass 2d like:
@@ -410,9 +427,11 @@ class RC
       return --count;
     }
 };
+
+
+
   #   Always create smart pointers on a separate line of code, never in a parameter list, so that a subtle resource leak won't occur due to certain parameter list allocation rules.
     http://msdn.microsoft.com/en-us/library/vstudio/hh279674.aspx
-
 
 ###########################################
 # memcpy    : no overlap check
@@ -539,7 +558,7 @@ Google:
 
       Write a method to find the closest value to K.
 
-Why not find ceiling and floor for that key; and return whichever gives the min.
+>>> Why not find ceiling and floor for that key; and return whichever gives the min.
 
 ###########################################
 
@@ -614,6 +633,38 @@ http://www.careercup.com/question?id=17833665 '??/
         return myStack.Pop();
       }
     
+
+
+###########################################
+# Gooogle: Given 2 bst, print elements in sorted fashion 
+
+# CAN USE EXTRA SPACE ?
+                      public static void print2BSTInorder(Node n1, Node n2) {
+                              Stack<Node> stack1 = new Stack<Node>();
+                              Stack<Node> stack2 = new Stack<Node>();
+                       
+                              while (true) {
+                                  while (n1 != null) {
+                                    stack1.push(n1);
+                                    n1 = n1.left;
+                                  } 
+                                  while (n2 != null) {
+                                    stack2.push(n2);
+                                    n2 = n2.left;
+                                  }
+                                  if (stack1.isEmpty() && stack2.isEmpty()) break;
+                                  if (stack2.isEmpty() || stack1.peek().value < stack2.peek().value) {
+                                      n1 = stack1.pop();
+                                      System.out.print(n1.value+",");
+                                      n1 = n1.right;
+                                  } else {
+                                      n2 = stack2.pop();
+                                      System.out.print(n2.value+",");
+                                      n2 = n2.right;
+                                  }
+                              }
+                              System.out.println();
+                          }
 
 
 ###########################################
@@ -1079,7 +1130,6 @@ Dijkstra's algorithm does not work with negative edge weights. For instance, con
 http://www.ics.uci.edu/~eppstein/161/960208.html
   This runs in linear time (with the possible exception of finding the ordering), and works even when the graph has negative length edges. You can even use it to find longest paths: just negate the lengths of all the edges. The only catch is that it only works when we can find a topological ordering.
        
-'
 
 # http://www.ics.uci.edu/~eppstein/161/960208.html
 # Negative cycle detection in directed Graph: 
@@ -1340,6 +1390,55 @@ http://www.ics.uci.edu/~eppstein/161/960208.html
           part[i][j] = true if a subset of {arr[0], arr[1], ..arr[j-1]} has sum 
                        equal to i, otherwise false
 
+        # GeekforGeek: 2D table as above
+        # If you want to save what nos. form the subset sum, you have to keep it building in same manner
+        # like:
+         struct State {
+           bool ispossible;
+           int prevx, prevy;
+           int curr_item;
+         }
+
+
+        // Returns true if there is a subset of set[] with sun equal to given sum
+        bool isSubsetSum(int set[], int n, int sum)
+        {
+            // The value of subset[i][j] will be true if there is a subset of set[0..j-1]
+            //  with sum equal to i
+            bool subset[sum+1][n+1];
+
+            # State dp[sum+1][n+1] to store the same as "bool subset", but knows its prev parent.
+            # Hence u have to move backward from final state to 0th state
+            #
+            # 2nd way:
+            # Store vector of items in each cell so that u don't have to move backwards
+
+            # http://en.wikipedia.org/wiki/File:Partition_Prob_DP_table_example.jpg   LOOK AT THIS IMAGE
+         
+            // If sum is 0, then answer is true
+            for (int i = 0; i <= n; i++)
+              subset[0][i] = true;
+         
+            // If sum is not 0 and set is empty, then answer is false
+            for (int i = 1; i <= sum; i++)
+              subset[i][0] = false;
+         
+             // Fill the subset table in botton up manner
+             for (int i = 1; i <= sum; i++)
+             {
+               for (int j = 1; j <= n; j++)
+               {
+                 subset[i][j] = subset[i][j-1];     # add to selfVector if its True and skip
+                 if (i >= set[j-1])
+                   subset[i][j] = subset[i][j] || subset[i - set[j-1]][j-1];    # if you are using ur parent and its True; selfVector = parentVector+selfItem
+               }
+             }
+         
+             return subset[sum][n];
+        }
+
+
+
         # 1 D table:
           int isSubsetSum(int set[], int n, int sum)
           {
@@ -1447,17 +1546,14 @@ http://www.ics.uci.edu/~eppstein/161/960208.html
         1-> -1 //not possible
 
 ###########################################
-# longest path in DAG:   or Atalleh
-
-    Compute topological order of vertices: A B C D E F G H I.
-
-    Initialize fin[v] = 0 for all vertices v.
-
-  # Mtd1:
+# longest path in DAG:  (used to compute the longest time on a plant line)
+#
+# https://docs.google.com/viewer?a=v&q=cache:-rOBI5bAIMwJ:www.cs.princeton.edu/courses/archive/spr04/cos226/demo/demo-pert.ppt+&hl=en&gl=us&pid=bl&srcid=ADGEESjN3gpAsSK0W0prLG1FsRmWsLvU9y6V4qsjcgAc9Lpj8ATYIegZJe4UvErIvMOC4Rf5qaaa6XZE97TLWrOp7ossjwGADKSyidpKSQvFsbGvCNzDavAIVkp5TMYa6d_8HQJ1BLEl&sig=AHIEtbSfaaUpPsMNt69HXymF60frphH7QQ
+    1. Compute topological order of vertices: A B C D E F G H I.
+    2. Initialize fin[v] = 0 for all vertices v.
     Consider vertices v in topological order:   time[w] means, 
     -> time to finish task 'w'
       for each edge v-w, set fin[w] = max(fin[w], fin[v] + time[w])
-      # https://docs.google.com/viewer?a=v&q=cache:-rOBI5bAIMwJ:www.cs.princeton.edu/courses/archive/spr04/cos226/demo/demo-pert.ppt+&hl=en&gl=us&pid=bl&srcid=ADGEESjN3gpAsSK0W0prLG1FsRmWsLvU9y6V4qsjcgAc9Lpj8ATYIegZJe4UvErIvMOC4Rf5qaaa6XZE97TLWrOp7ossjwGADKSyidpKSQvFsbGvCNzDavAIVkp5TMYa6d_8HQJ1BLEl&sig=AHIEtbSfaaUpPsMNt69HXymF60frphH7QQ
 
 ###########################################
 # impl. Queue using Stacks:
@@ -1515,7 +1611,6 @@ http://stackoverflow.com/questions/69192/how-to-implement-a-queue-using-two-stac
     # using auto_ptr , their copy ctor and assignment operator make either one of them null. So, one pointer points always to resource
     # using shared_ptr, when u copy, then 2 pointers point to same resouce. ..... Containters can have <shared_ptr> *NOT* <auto_ptr>
 
-###########################################
 ###########################################
 # binary stream divisble by 3:
 
@@ -1801,12 +1896,21 @@ which is used in lock-free and wait-free algorithms. Here is an example: conside
         maxsum = max (maxsum, max(csum, node->val + lsum + rsum));
     }
 
-
-
 ###########################################
 # largest subarray with 0's = 1's       (use cumulative sums)   uses N time and N space via hashtable
-# http://www.geeksforgeeks.org/archives/20586
-#
+# http://www.geeksforgeeks.org/archives/20586   http://www.careercup.com/question?id=14409705
+
+                O(n) 
+                1. Make all zeros -1 
+                2. change array such that a[i] = a[i] + a[i-1] (cumulative sum) 
+                3.Now look for two location i,j such that a[i]=a[j] and choose 
+                such that j-i is maximum possible. Same numbers at two location means cumulative sum of numbers between them is zero. For largest such sub array this range should be maximum . This step can be done by hashing with key as number and storing first and last occurrence of that number 
+
+                But there can be one more possibility, i.e cumulative sum itself zero up to some point (a[k] =0). Choose maximum k , i.e farthest location where 0 is stored 
+
+                Return MAX( (j-i) , k)
+
+
 # http://tech-queries.blogspot.com/2011/09/find-largest-sub-matrix-with-all-1s-not.html
     Use largest area in histogram as helper | http://stackoverflow.com/questions/7332065/what-is-the-best-algorithm-to-find-the-largest-black-convex-area-in-an-image/7497967#7497967
     http://stackoverflow.com/questions/6945105/search-matrix-for-all-rectangles-of-given-dimensions-select-blocks-of-seats/7353193#7353193
@@ -1819,6 +1923,8 @@ which is used in lock-free and wait-free algorithms. Here is an example: conside
 
 # largest k*k submatrix with max sum (done by DP youtube vid)
 
+###########################################
+GOOGLe:
 # insert spaces or split a sentences into as many words as possible ( @ ggl2.cpp )
 
 # skyline for 2d points as buildings : 
@@ -1995,24 +2101,6 @@ typedef pair<int,int> ii;
           connectRecur(p->right);
         }
 
-
-        # WRONG #
-        class node {    // this code is for full binary tree
-          node *left;
-          node *right;
-          node *next;
-        }
-
-        void pre(node *n, node *pn) {
-          if (n) {
-            n->next = (pn == 0) ? 0 : pn->right;
-            if (n->next == pn->right) {
-              n->next = pn->next->left;     // this line is not correct
-            }
-            pre (n->left, n);   // it has to be 'preorder'
-            pre (n->right, n);
-          }
-        }
 
 # when this is not a full binary tree; for e.g. skewed tree
 
@@ -2311,6 +2399,43 @@ Therefore,  our target is to enumerate all possible sequences. There are several
 
 For a n node tree, the length of the sequence will be 2n+1 with n "1" and n+1 "0".
 For any position i in the sequence s and i != 2n,  the number of "1" should always be no smaller than the number of "0" in the sub-sequence s[0, i].
+
+          // rebuild the tree from a sequence such as "11000"     OR use Amazon above solution
+          TreeNode * rebuild_tree(int s[], int n)
+          {
+
+              TreeNode *root = create_node();
+              stack<TreeNode *> stk;
+              stk.push(root);
+              
+              for(int i=1; i<s.size(); i++)
+              {
+                 if(s[i])
+                 {
+                   
+                   TreeNode *node = create_node();
+                   if(s[i-1]) 
+                   {
+                     stk.top()->left = node;           
+                   }
+                   else
+                   {
+                     stk.top()->right = node;
+                     stk.pop();          
+                   }
+                   stk.push(node);
+                 }
+                 else 
+                 {
+                   if(!s[i-1]) stk.pop();
+                 }
+              
+              }
+              
+              return root;
+
+          }
+
 
       //print all possible trees
       void output_all_possible_trees(int *seq, int n, int num1, int num0)
@@ -2843,19 +2968,18 @@ Node *successor;
 # algo: if u do reverse inorder traversal, then at every node, u can assign its succ pointer
 # prpovided u keep its info
 #
-node *su = 0;     // pass su by ref
-void rIno (node *n, node *&su) {
-	if (n) {
-		rIno(n->right, su);
-		n->succ = su;
-		su = n;
-		rIno(n->left, su);
-	}
-}
+        node *su = 0;     // pass su by ref
+        void rIno (node *n, node *&su) {
+          if (n) {
+            rIno(n->right, su);
+            n->succ = su;
+            su = n;
+            rIno(n->left, su);
+          }
+        }
 
 YOU CALL ABOVE FUNCTION LIKE : rIno (root, 0);
 
-###########################################
 ###########################################
 # read a BST preorder string from a file and convert it to tree:
 #
@@ -2863,22 +2987,22 @@ Remember my post: Determine if a Binary Tree is a Binary Search Tree (BST)?
 
 We use the same idea here. We pass the valid range of the values from the parent node to its child nodes. When we are about to insert a node, we will check if the insert value is in the valid range. If it is, this is the right space to insert. If it is not, we will try the next empty space. Reconstructing the whole BST from a file will take only O(n) time.
 
-void readBST(BinaryTree *&root, ifstream &fin) {
-  int val;
-  fin >> val;
-  readBSTHelper(INT_MIN, INT_MAX, val, root, fin);
-}
+        void readBST(BinaryTree *&root, ifstream &fin) {
+          int val;
+          fin >> val;
+          readBSTHelper(INT_MIN, INT_MAX, val, root, fin);
+        }
 
-void readBSTHelper(int min, int max, int &insertVal,BinaryTree *&p, ifstream &fin) {
-  if (insertVal > min && insertVal < max) {
-    int val = insertVal;
-    p = new BinaryTree(val);
-    if (fin >> insertVal) {
-      readBSTHelper(min, val, insertVal, p->left, fin);   // IF THIS FAILS, IT MEANS THAT insertVal canNOT be in left child
-      readBSTHelper(val, max, insertVal, p->right, fin);
-    }
-  }
-}
+        void readBSTHelper(int min, int max, int &insertVal,BinaryTree *&p, ifstream &fin) {
+          if (insertVal > min && insertVal < max) {
+            int val = insertVal;
+            p = new BinaryTree(val);
+            if (fin >> insertVal) {
+              readBSTHelper(min, val, insertVal, p->left, fin);   // IF THIS FAILS, IT MEANS THAT insertVal canNOT be in left child
+              readBSTHelper(val, max, insertVal, p->right, fin);
+            }
+          }
+        }
 
 ###########################################
 # LCA of bt
@@ -2979,24 +3103,6 @@ Max of following 3:
 - diameter of right
 - path b/w left and right sub trees passing thru root
 
-# vkc code:
-int height (node *n) {
-		if (!n) return 0;
-		int hl = height (n->left);
-		int hr = height (n->right);
-		int myheight  = math.max (hl, hr) + 1;
-		if (n->left && n->right) {
-			int mypass_dia = math.max (hl+hr, n->left->dia, n->right->dia);
-			# assume chids dia's exixts
-			n->dia = mypass_dia;
-		}
-		if (!n->left && !n->right)
-			n->dia = 0;
-			#elseif (!n->left || !n->right)
-			#n->dia = 0;
-		return myheight;
-}
-
 # online code, calls Sahni's height from postorder diameter fn.
 #
 int diameter(struct node * tree)
@@ -3071,21 +3177,21 @@ int height(struct node* node)
 ###########################################
 # in a binary tree, find the minimum element at a given depth.
 
-Queue Q<int>;
-int g_min=INT_MAX;
+      Queue Q<int>;
+      int g_min=INT_MAX;
 
-void getminatd (node *n, int d) {
-	if (n) {
-		if (!d) {
-			#//Q.push(n->data);
-			g_min = (n->data < g_min) n->data  : g_min;
-			return; # quick return, dont call next recurs.
-		}
-		getminatd (n->left, d-1);
-		getminatd (n->right, d-1);
-	}
-	return;
-}
+      void getminatd (node *n, int d) {
+        if (n) {
+          if (!d) {
+            #//Q.push(n->data);
+            g_min = (n->data < g_min) n->data  : g_min;
+            return; # quick return, dont call next recurs.
+          }
+          getminatd (n->left, d-1);
+          getminatd (n->right, d-1);
+        }
+        return;
+      }
 
 ###########################################
 # median of 2 sorted arrays.
@@ -3327,7 +3433,7 @@ int maxSum (int a[], int length)
 
 Star mark then amp.
 
-void func(int*& rpInt);
+      void func(int*& rpInt);
 
 ###########################################
 # code to add n+1 w/o using any of plus/minus etc. operators
@@ -3572,27 +3678,28 @@ void numTostr(int n) {
 }
 
 ###########################################'//\\\.'
-# this method will make a copy of BST:
-# convert sorted  link list to bst	(bottom up)  # same to : convert sorted doubly link list to bst
+# convert sorted  link list to bst	(bottom up)  [ this will make a duplicate copy of nodes]
 
-BinaryTree* sortedListToBST(ListNode *& list, int start, int end) {
-  if (start > end) return NULL;
-  // same as (start+end)/2, avoids overflow
-  int mid = start + (end - start) / 2;
-  BinaryTree *leftChild = sortedListToBST(list, start, mid-1);
-  BinaryTree *parent = new BinaryTree(list->data);
-  parent->left = leftChild;
-  list = list->next;
-  parent->right = sortedListToBST(list, mid+1, end);
-  return parent;
-}
 
-BinaryTree* sortedListToBST(ListNode *head, int n) {
-  return sortedListToBST(head, 0, n-1);
-}
+                BinaryTree* sortedListToBST(ListNode *& list, int start, int end) {
+                  if (start > end) return NULL;
+                  // same as (start+end)/2, avoids overflow
+                  int mid = start + (end - start) / 2;
+                  BinaryTree *leftChild = sortedListToBST(list, start, mid-1);
+                  BinaryTree *parent = new BinaryTree(list->data);
+                  parent->left = leftChild;
+                  list = list->next;
+                  parent->right = sortedListToBST(list, mid+1, end);
+                  return parent;
+                }
+
+                BinaryTree* sortedListToBST(ListNode *head, int n) {
+                  return sortedListToBST(head, 0, n-1);
+                }
 
 ###########################################
 # 2nd method to code: O(n)
+# GeeksForGeek
 
         struct Node* sortedListToBST(struct Node *head)
         {
@@ -3618,69 +3725,28 @@ BinaryTree* sortedListToBST(ListNode *head, int n) {
 
 
 
-# covert a sorted array to bst, divide conquer:
+# covert a sorted array to bst, divide conquer: (simple)
 
-BinaryTree* sortedArrayToBST(int arr[], int start, int end) {
-  if (start > end) return NULL;
-  // same as (start+end)/2, avoids overflow.
-  int mid = start + (end - start) / 2;
-  BinaryTree *node = new BinaryTree(arr[mid]);
-  node->left = sortedArrayToBST(arr, start, mid-1);
-  node->right = sortedArrayToBST(arr, mid+1, end);
-  return node;
-}
+        BinaryTree* sortedArrayToBST(int arr[], int start, int end) {
+          if (start > end) return NULL;
+          // same as (start+end)/2, avoids overflow.
+          int mid = start + (end - start) / 2;
+          BinaryTree *node = new BinaryTree(arr[mid]);
+          node->left = sortedArrayToBST(arr, start, mid-1);
+          node->right = sortedArrayToBST(arr, mid+1, end);
+          return node;
+        }
 
-BinaryTree* sortedArrayToBST(int arr[], int n) {
-  return sortedArrayToBST(arr, 0, n-1);
-}
+        BinaryTree* sortedArrayToBST(int arr[], int n) {
+          return sortedArrayToBST(arr, 0, n-1);
+        }
 
 
 ###########################################
-# A sorted doubly linked list is created from bst in O(n) time
+# Tree to list:
 
-# mtd 1: http://www.ihas1337code.com/2010/11/convert-binary-search-tree-bst-to.html
-
-// This is a modified in-order traversal adapted to this problem.
-// prev (init to NULL) is used to keep track of previously traversed node.
-// head pointer is updated with the list's head as recursion ends.'
-
-// SEEMS OF NO USE, USE THE ONE BELOW THIS
-                                                                                void treeToDoublyList(Node *p, Node *& prev, Node *& head) {
-                                                                                  if (!p) return;
-
-                                                                                  treeToDoublyList(p->left, prev, head);
-
-                                                                                  // current node's left points to previous node
-                                                                                  p->left = prev;
-
-                                                                                  if (prev)
-                                                                                    prev->right = p;  // previous node's right points to current node
-                                                                                  else
-                                                                                    head = p; // current node (smallest element) is head of
-                                                                                              // the list if previous node is not available
-
-                                                                                  // as soon as the recursion ends, the head's left pointer
-                                                                                  // points to the last node, and the last node's right pointer
-                                                                                  // points to the head pointer.
-
-                                                                                  Node *right = p->right;
-                                                                                  head->left = p;
-                                                                                  p->right = head;
-                                                                                  // updates previous node
-                                                                                  prev = p;
-
-                                                                                  treeToDoublyList(right, prev, head);
-                                                                                }
-
-                                                                            // Given an ordered binary tree, returns a sorted circular
-                                                                            // doubly-linked list. The conversion is done in-place.
-
-                                                                                Node* treeToDoublyList(Node *root) {
-                                                                                  Node *prev = NULL;
-                                                                                  Node *head = NULL;
-                                                                                  treeToDoublyList(root, prev, head);
-                                                                                  return head;
-                                                                                }
+# mtd 1:  
+#   http://www.ihas1337code.com/2010/11/convert-binary-search-tree-bst-to.html
 
 
 # 2nd method by stan:
@@ -3745,7 +3811,7 @@ typedef struct node* Node;
       }
 
 # mtd: 3:
-  or you can do Inorder to make a one directional list and the reverse connect it.
+  or you can do Inorder to make a one directional list and the reverse connect it.  THIS WILL MAKE DUPLICATE NODES
 
 ###########################################'
 # k-way merge
@@ -3845,8 +3911,8 @@ In this solution, it is possible that Parker should be renamed to be Car.
 ###########################################
 Given an integer array such that every element occurs 3 times except one element which occurs only once. how to find that single element in O(1) space and O(n) time complexity?
 
-http://www.quora.com/Algorithms/Given-an-integer-array-such-that-every-element-occurs-3-times-except-one-element-which-occurs-only-once-how-to-find-that-single-element-in-O-1-space-and-O-n-time-complexity
-http://www.geeksforgeeks.org/find-the-element-that-appears-once/
+  http://www.quora.com/Algorithms/Given-an-integer-array-such-that-every-element-occurs-3-times-except-one-element-which-occurs-only-once-how-to-find-that-single-element-in-O-1-space-and-O-n-time-complexity
+  http://www.geeksforgeeks.org/find-the-element-that-appears-once/
 
 ###########################################
 
@@ -4081,7 +4147,7 @@ void inOrderIterative(TREEPTR tree){
          {
              cursor = s.top();
 	           s.pop();
-             cout << cursor->data();
+             cout << cursor->data();      //VISIT step
              cursor = cursor->right();
          }
          else
@@ -4114,25 +4180,25 @@ void preOrderIterative(TREEPTR tree){
 
 # apeealing version
 
-void preIter (node *n) {
-	Stack s<node*>;
-	node *curr = n;
-	if (!curr) return;
+                    void preIter (node *n) {
+                      Stack s<node*>;
+                      node *curr = n;
+                      if (!curr) return;
 
-	while (1) {
-		while (curr) {
-			cout << curr->Data;
-			s.push (curr->rC);
-			curr = curr->lc;
-		}
-		if (!s.isempty () ) {
-			curr = S.pop();
-      //cout << curr->data;
-    }
-		else
-			break;
-	}
-}
+                      while (1) {
+                        while (curr) {
+                          cout << curr->Data;
+                          s.push (curr->rC);      //PUSH the future node
+                          curr = curr->lc;
+                        }
+                        if (!s.isempty () ) {
+                          curr = S.pop();
+                          //cout << curr->data;
+                        }
+                        else
+                          break;
+                      }
+                    }
 
 ## MS interview: write a class Inorder iterator
 
@@ -4273,28 +4339,34 @@ E:\My eBooks\Algo\Sahni Codes\all\network.h
 
     # another trick is to start dfs(v) from a random node v , and the end of dfs(v) insert v into a list L
     # list of the nodes in descending order of finish nos. gives the topological order.
+    Refer for above:
+    link = http://www.cse.ohio-state.edu/~lai/6331/5.graph.pdf
 
-# Idea of Topological Sorting: Run the DFS on the DAG and output the vertices in reverse order of finishing time.
-#
-            Problem: given a directed acyclic graph G = (V; E), obtain a linear ordering
-            of the vertices such that for every edge (u; v) . E, u appears before v in the
-            ordering.
-
-            Solution:
-            . Use depth-.rst search, with an initially empty list L.
-            . At the end of procedure dfs(v), insert v to the front of L.
-            . L gives a topological sort of the vertices.
-
-            Observation: the list of nodes in the descending order of .nish numbers
-            yields a topological sort .
+    # GFG:
+          void Graph::topologicalSortUtil(int v, bool visited[], stack<int> &Stack)
+          {
+              // Mark the current node as visited
+              visited[v] = true;
+           
+              // Recur for all the vertices adjacent to this vertex
+              list<AdjListNode>::iterator i;
+              for (i = adj[v].begin(); i != adj[v].end(); ++i)
+              {
+                  AdjListNode node = *i;
+                  if (!visited[node.getV()])
+                      topologicalSortUtil(node.getV(), visited, Stack);
+              }
+           
+              // Push current vertex to stack which stores topological sort
+              Stack.push(v);
+          }
 
 
 # shortest path in DAG:
   http://www.utdallas.edu/~sizheng/CS4349.d/l-notes.d/L17.pdf
   http://www.geeksforgeeks.org/shortest-path-for-directed-acyclic-graphs/
 
-  Can use Dijkstra : E + Vlog V
-  or use topological sort E + V
+  Dijkstra : E + Vlog V       V/s         Topological sort (E + V)
 
 ##########################################
 # articulation points
@@ -4498,6 +4570,7 @@ int cyclePresent (node *head) {
 }
 
 ###########################################
+# via BFS: http://www.geeksforgeeks.org/find-if-there-is-a-path-between-two-vertices-in-a-given-graph/
 
 1st Way:
 # foreach new nbr 
@@ -4505,7 +4578,6 @@ int cyclePresent (node *head) {
   -> recurse
   -> pop
 
-# via BFS: http://www.geeksforgeeks.org/find-if-there-is-a-path-between-two-vertices-in-a-given-graph/
 
 bool Network::findPath(int v, int w, int &length, int path[], int reach[])
 { 
@@ -4660,26 +4732,27 @@ void Network::dfs(int v, int reach[], int label)
 
 # using STACK:  mtd: 1
 
-DFS(G,v)   ( v is the vertex where the search starts )
-         Stack S := {};   ( start with an empty stack )
-         for each vertex u, 
-          set visited[u] := false;
-         push S, v;
-         while (S is not empty) do
-            u := pop S;
-            if (not visited[u]) then
-               visited[u] := true;
-               for each unvisited neighbour w of u
-                  push S, w;
-            end if
-         end while
-END DFS()
+              DFS(G,v)   ( v is the vertex where the search starts )
+                       Stack S := {};   ( start with an empty stack )
+                       for each vertex u, 
+                        set visited[u] := false;
+                       push S, v;
+                       while (S is not empty) do
+                          u := pop S;
+                          if (not visited[u]) then
+                             visited[u] := true;
+                             for each unvisited neighbour w of u
+                                push S, w;
+                          end if
+                       end while
+              END DFS()
 
 # mtd 2:  http://www.cs.mcgill.ca/~pnguyen/251F09/DFS.pdf
           important thing is that they use 2 functions to achieve that ...
 
           # Finding a cycle#
           # TODO: modify this to get the nodes in the cycle
+
           bool dfs (int v, L[]) {
             L[v] = GREY;
 
@@ -4906,7 +4979,9 @@ N=4, Coins = {1,2,3}; with infinite supply | table can be 1D or 2D    | http://w
         For example, for N = 4 and S = {1,2,3}, there are four solutions: {1,1,1,1},{1,1,2},{2,2},{1,3}. So output should be 4. For N = 10 and S = {2, 5, 3, 6}, there are five solutions: {2,2,2,2,2}, {2,2,3,3}, {2,2,6}, {2,3,5} and {5,5}. So the output should be 5.
 
         # Just give no. of ways. *Not* the min. # of coins
-        Let count(S[], m, n) be the function to count the number of solutions, then it can be written as sum of count(S[], m-1, n) and count(S[], m, n-Sm).
+        Let count(S[], m, n) be the function to count the number of solutions, then it can be written as 
+        
+        count(S[], m, n)  = sum of count(S[], m-1, n) and count(S[], m, n-Sm).
 
         # 2D table 
         table[n+1][m]     answer is table[n][m-1]     // always initialize base case
